@@ -20,30 +20,38 @@
     var CONFIG = {"hostname":"mooyi.xyz","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
-  <meta name="description" content="Live with fun">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Mooyi&#39;s Blog">
-<meta property="og:url" content="https://mooyi.xyz/index.html">
+  <meta name="description" content="前端主要学习html,CSS,JavaScript [TOC]">
+<meta property="og:type" content="article">
+<meta property="og:title" content="前端学习笔记">
+<meta property="og:url" content="https://mooyi.xyz/post/91ce7628.html">
 <meta property="og:site_name" content="Mooyi&#39;s Blog">
-<meta property="og:description" content="Live with fun">
+<meta property="og:description" content="前端主要学习html,CSS,JavaScript [TOC]">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207291021544.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207291024155.png">
+<meta property="article:published_time" content="2022-07-29T01:24:19.000Z">
+<meta property="article:modified_time" content="2022-07-29T02:33:54.262Z">
 <meta property="article:author" content="Mooyi">
+<meta property="article:tag" content="front-end">
+<meta property="article:tag" content="studying">
+<meta property="article:tag" content="coding">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207291021544.png">
 
-<link rel="canonical" href="https://mooyi.xyz/">
+<link rel="canonical" href="https://mooyi.xyz/post/91ce7628.html">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'en'
   };
 </script>
 
-  <title>Mooyi's Blog</title>
+  <title>前端学习笔记 | Mooyi's Blog</title>
   
 
 
@@ -179,9 +187,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
+
+    
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
@@ -197,10 +206,9 @@
       <meta itemprop="name" content="Mooyi's Blog">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/91ce7628.html" class="post-title-link" itemprop="url">前端学习笔记</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          前端学习笔记
+        </h1>
 
         <div class="post-meta">
 
@@ -267,17 +275,121 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>前端主要学习html,CSS,JavaScript</p>
+        <p>前端主要学习html,CSS,JavaScript</p>
 <p>[TOC]</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/91ce7628.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
+<span id="more"></span>
+
+<h2 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h2><p>HTML(Hypertext Makeup Language)，即超文本<strong>标记</strong>语言，主要负责网页内容的展示，大小写不敏感。</p>
+<h3 id="标记"><a href="#标记" class="headerlink" title="标记"></a>标记</h3><p>   一般以&lt;标签名&gt;…&lt;&#x2F;标签名&gt;的形式成对出现，自结束标签无需结束符</p>
+<p>   <strong>常见的标签</strong></p>
+<ul>
+<li><p>文档声明[html5]：<!doctype html>放在顶端</p>
+</li>
+<li><p>网页根标签：<code>&lt;html&gt;...&lt;/html&gt;</code></p>
+</li>
+<li><p><code>&lt;head&gt;...&lt;/head&gt;非用户可见，一般为告诉浏览器属性</code></p>
+</li>
+<li><p>head中的标题&#x2F;浏览器头部标题：<code>&lt;title&gt;text&lt;/title&gt;</code></p>
+<ul>
+<li><p><code>&lt;body&gt;...&lt;/body&gt;</code>用户可见，具体内容</p>
+</li>
+<li><p>标题：<code>&lt;hn&gt;text&lt;/hn&gt;</code>,n&#x3D;1~6</p>
+</li>
+<li><p>段落：<code>&lt;p&gt;text&lt;/p&gt;</code></p>
+</li>
+<li><p>超链接：<code>&lt;a&gt;text&lt;/a&gt;</code></p>
+</li>
+<li><p>换行：<code>&lt;br&gt;</code></p>
+</li>
+<li><p>粗体：<code>&lt;b&gt;text&lt;/b&gt;</code></p>
+<p><strong>Atten</strong>:<code>&lt;strong&gt;text&lt;/strong&gt;</code>也有加粗的效果，但是还表示重要呈现</p>
+</li>
+<li><p>按钮：<code>&lt;button&gt;text&lt;/button&gt;</code></p>
+</li>
+<li><p>文档中的节：<code>&lt;div&gt;text&lt;/div&gt;</code></p>
+</li>
+<li><p>文本中的节：<code>&lt;span&gt;text&lt;/span&gt;</code></p>
+</li>
+<li><p>斜体：<code>&lt;i&gt;text&lt;/i&gt;</code></p>
+<p><strong>Atten</strong>:<code>&lt;em&gt;text&lt;/em&gt;</code>也有斜体效果，同样表示重要呈现</p>
+</li>
+<li><p>输入：<code>&lt;input&gt;</code></p>
+</li>
+<li><p>高亮：<code>&lt;mark&gt;text&lt;/mark&gt;</code></p>
+</li>
+<li><p>下标：<code>1&lt;sub&gt;text&lt;/sub&gt;</code></p>
+</li>
+<li><p>上标：<code>1&lt;sup&gt;text&lt;/sup&gt;</code></p>
+</li>
+<li><p>删除线：<code>&lt;del&gt;text&lt;/del&gt;</code></p>
+</li>
+<li><p>插入&#x2F;下划线：<code>&lt;ins&gt;text&lt;/ins&gt;</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="标签属性"><a href="#标签属性" class="headerlink" title="标签属性"></a>标签属性</h3><p>   在开始标签中设置，属性是键值对结构(“key”&#x3D;”value”)</p>
+<p>   <strong>常见属性</strong></p>
+<ul>
+<li><p>id(唯一)</p>
+</li>
+<li><p>style:指定行内样式，多个样式以;分隔</p>
+<p>eg.:style&#x3D;”color:red;text-align:center”</p>
+</li>
+<li><p>title：额外信息&#x2F;工具条</p>
+</li>
+</ul>
+<ol start="3">
+<li><p>注释</p>
+<!--
+
+this is unshown.
+
+--></li>
+</ol>
+<h2 id="CSS"><a href="#CSS" class="headerlink" title="CSS"></a>CSS</h2><p>CSS(Cascading Style Sheets)，主要负责网页布局，描述HTML&#x2F;XML的呈现，即其如何被渲染。</p>
+<p>eg.:</p>
+<p>p{</p>
+<p>​	font-size: 20px;</p>
+<p>​	color:red;</p>
+<p>}</p>
+<p>&lt;<strong>p</strong>&gt;text&lt;&#x2F;p&gt;</p>
+<p>p:选择器</p>
+<p>font-size&#x2F;color:属性，冒号后为其值</p>
+<p>大括号括着的为声明，声明以;结束</p>
+<h3 id="选择器"><a href="#选择器" class="headerlink" title="选择器"></a>选择器</h3><ul>
+<li><p>id选择器</p>
+<p>以#定义，不以数字开头(避免在Mozilla&#x2F;Firefox不起作用)</p>
+<p>eg.: <strong>#test</strong>{</p>
+<p>​	text-align:center;</p>
+<p>​	color:red;</p>
+<p>}</p>
+<p>&lt;p <strong>id&#x3D;”test”</strong>&gt;text&lt;&#x2F;p&gt;</p>
+</li>
+<li><p>class选择器</p>
+<p>以.显示，多个用空格区分，类名第一个字符非数字</p>
+<p>eg.:</p>
+<p><strong>.center</strong>{</p>
+<p>​	text-align:center;</p>
+<p>}</p>
+<p>&lt;p <strong>class&#x3D;”center”</strong>&gt;text&lt;&#x2F;p&gt;</p>
+</li>
+</ul>
+<p>注释：<code>/*text*/</code></p>
+<h3 id="插入样式表"><a href="#插入样式表" class="headerlink" title="插入样式表"></a>插入样式表</h3><ul>
+<li><p>外部样式表(external style sheet)</p>
+<p>一般用于同一样式需用于很多页面，通过mystyle.css文件改变站点整体样式【页面使用<code>&lt;link&gt;</code>标签链接到样式表，该标签位于文档头部<code>&lt;head&gt;</code>中】</p>
+<p><code>&lt;link rel=&quot;stylesheet&quot; href=&quot;mystyle.css&quot;&gt;</code></p>
+</li>
+<li><p>内部样式表(internal style sheet)</p>
+<p>一般用于单个文件，利用<code>&lt;style&gt;</code>标签在头部文件内部定义。</p>
+<img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207291021544.png" alt="image-20220729102140460" style="zoom: 80%;" />
+</li>
+<li><p>内联样式(inline style)<br><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207291024155.png" alt="image-20220729102426112"></p>
+</li>
+</ul>
+<p><strong>Atten:多重样式优先级</strong><br>内联&gt;内部&gt;外部&gt;默认</p>
+<h2 id="JavaScript"><a href="#JavaScript" class="headerlink" title="JavaScript"></a>JavaScript</h2>
     </div>
 
     
@@ -285,249 +397,68 @@
     
 
     
+      <div>
+       <div>
+    
+        <div style="text-align:center;color: #3F92A4;font-size:15px;">-------------END OF TEXT <i class="fa fa-tree"></i> Thanks for reading(●'◡'●)-------------</div>
+    
+</div>
+      </div>
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Mooyi
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://mooyi.xyz/post/91ce7628.html" title="前端学习笔记">https://mooyi.xyz/post/91ce7628.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://mooyi.xyz/post/7b89dc1f.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/apple.png">
-      <meta itemprop="name" content="Mooyi">
-      <meta itemprop="description" content="Live with fun">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mooyi's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/7b89dc1f.html" class="post-title-link" itemprop="url">不同年纪对应的音乐喜爱度变化</a>
-        </h2>
-
-        <div class="post-meta">
+          <div class="post-tags">
+              <a href="/tags/front-end/" rel="tag"># front-end</a>
+              <a href="/tags/studying/" rel="tag"># studying</a>
+              <a href="/tags/coding/" rel="tag"># coding</a>
+          </div>
 
         
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2022-07-27 08:30:24 / Modified: 10:40:00" itemprop="dateCreated datePublished" datetime="2022-07-27T08:30:24+08:00">2022-07-27</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Let-s-think/" itemprop="url" rel="index"><span itemprop="name">Let's think</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Let-s-think/Music/" itemprop="url" rel="index"><span itemprop="name">Music</span></a>
-                </span>
-            </span>
 
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/post/7b89dc1f.html#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/7b89dc1f.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="Symbols count in article">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>1.6k</span>
-            </span>
-            <span class="post-meta-item" title="Reading time">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>1 mins.</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>随着年纪的增加，对不同音乐的喜好程度有了很大变化。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/7b89dc1f.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
         
-      
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/post/7b89dc1f.html" rel="prev" title="不同年纪对应的音乐喜爱度变化">
+      <i class="fa fa-chevron-left"></i> 不同年纪对应的音乐喜爱度变化
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
       </footer>
+    
   </article>
   
   
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://mooyi.xyz/post/72693323.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/apple.png">
-      <meta itemprop="name" content="Mooyi">
-      <meta itemprop="description" content="Live with fun">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mooyi's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/72693323.html" class="post-title-link" itemprop="url">关于拖延以及失去动力</a>
-        </h2>
-
-        <div class="post-meta">
-
-        
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-07-26 00:27:59" itemprop="dateCreated datePublished" datetime="2022-07-26T00:27:59+08:00">2022-07-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-07-27 10:40:14" itemprop="dateModified" datetime="2022-07-27T10:40:14+08:00">2022-07-27</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Let-s-think/" itemprop="url" rel="index"><span itemprop="name">Let's think</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Let-s-think/Life/" itemprop="url" rel="index"><span itemprop="name">Life</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/post/72693323.html#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/72693323.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="Symbols count in article">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>380</span>
-            </span>
-            <span class="post-meta-item" title="Reading time">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>1 mins.</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>  这是从大二上一直到这学期期末周末尾都给自己定下的目标，没有想过现在才实现，也没有想过现在居然实现了。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/72693323.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-
   
 
 
 
           </div>
           
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -574,6 +505,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTML"><span class="nav-number">1.</span> <span class="nav-text">HTML</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%87%E8%AE%B0"><span class="nav-number">1.1.</span> <span class="nav-text">标记</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%87%E7%AD%BE%E5%B1%9E%E6%80%A7"><span class="nav-number">1.2.</span> <span class="nav-text">标签属性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CSS"><span class="nav-number">2.</span> <span class="nav-text">CSS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E5%99%A8"><span class="nav-number">2.1.</span> <span class="nav-text">选择器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%92%E5%85%A5%E6%A0%B7%E5%BC%8F%E8%A1%A8"><span class="nav-number">2.2.</span> <span class="nav-text">插入样式表</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript"><span class="nav-number">3.</span> <span class="nav-text">JavaScript</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -741,6 +673,26 @@
   }
   // defer loading until the whole page loading is completed
   window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://mooyi.xyz/post/91ce7628.html";
+    this.page.identifier = "post/91ce7628.html";
+    this.page.title = "前端学习笔记";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://mooyi.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
 </script>
 
 </body>
