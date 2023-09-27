@@ -446,7 +446,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-09-27 23:32:57" itemprop="dateModified" datetime="2023-09-27T23:32:57+08:00">2023-09-27</time>
+                <time title="Modified: 2023-09-27 23:38:29" itemprop="dateModified" datetime="2023-09-27T23:38:29+08:00">2023-09-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -482,7 +482,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>801</span>
+              <span>815</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
@@ -501,25 +501,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <span id="more"></span>
-
-
-
-<ol>
-<li><p>maven直接引入jdbc失败，搜索后发现时maven3后oracle不支持直接引入了，手动下载jdbc引入，使用如下命令：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn install:install-file -Dfile=D:\Code\oracle\ojdbc11.jar -DgroupId=com.oracle -DartifactId=ojdbc11 -Dversion=11 -Dpackaging=jar -DgeneratePom=true</span><br></pre></td></tr></table></figure>
-
-<p>但是报错误：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[ERROR] Unknown lifecycle phase &quot;.oracle&quot;. You must specify a valid lifecycle phase or a goal in the format &lt;plugin-pre</span><br><span class="line">fix&gt;:&lt;goal&gt; or &lt;plugin-group-id&gt;:&lt;plugin-artifact-id&gt;[:&lt;plugin-version&gt;]:&lt;goal&gt;. </span><br></pre></td></tr></table></figure>
-
-<p>查询后发现为使用powershell的问题，应该是powershell对<code>.</code>的判定规则引起，切换到cmd后正常</p>
-<p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/without_mercy/article/details/81474648">https://blog.csdn.net/without_mercy/article/details/81474648</a></p>
-</li>
-<li><p><a target="_blank" rel="noopener" href="https://jasonkayzk.github.io/2020/01/25/%E5%85%B3%E4%BA%8EMybatis-plus%E8%B0%83%E7%94%A8baseMapper%E6%8A%A5%E9%94%99Invalid-bound-statement%E7%9A%84%E8%A7%A3%E5%86%B3/">https://jasonkayzk.github.io/2020/01/25/%E5%85%B3%E4%BA%8EMybatis-plus%E8%B0%83%E7%94%A8baseMapper%E6%8A%A5%E9%94%99Invalid-bound-statement%E7%9A%84%E8%A7%A3%E5%86%B3/</a></p>
-<p>以及记得关闭下划线驼峰转换：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mybatis:</span><br><span class="line">  configuration:</span><br><span class="line">    map-underscore-to-camel-case: false #下划线转驼峰</span><br></pre></td></tr></table></figure></li>
-</ol>
-
+          <p>一些开发过程中的问题rec.</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/post/0.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -573,7 +563,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-09-27 23:35:06" itemprop="dateModified" datetime="2023-09-27T23:35:06+08:00">2023-09-27</time>
+                <time title="Modified: 2023-09-27 23:35:19" itemprop="dateModified" datetime="2023-09-27T23:35:19+08:00">2023-09-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
