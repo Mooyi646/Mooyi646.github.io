@@ -212,7 +212,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2023-09-27 23:15:28 / Modified: 23:19:29" itemprop="dateCreated datePublished" datetime="2023-09-27T23:15:28+08:00">2023-09-27</time>
+              <time title="Created: 2023-09-27 23:15:28 / Modified: 23:27:44" itemprop="dateCreated datePublished" datetime="2023-09-27T23:15:28+08:00">2023-09-27</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -267,7 +267,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="数位dp解题"><a href="#数位dp解题" class="headerlink" title="数位dp解题"></a>数位dp解题</h1><p>一般用于统计某个范围的数，而这个范围一般都很大，难以直接暴力枚举求解，所以一般将其每位数拆分，一位一位地看。</p>
+          <p>一般用于统计某个范围的数，而这个范围一般都很大，难以直接暴力枚举求解，所以一般将其每位数拆分，一位一位地看。</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/post/da4a5ffe.html#more" rel="contents">
@@ -310,7 +310,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/0.html" class="post-title-link" itemprop="url">Untitled</a>
+            <a href="/post/0.html" class="post-title-link" itemprop="url">集成JWT实现token验证与注销</a>
         </h2>
 
         <div class="post-meta">
@@ -329,8 +329,21 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-09-27 23:19:29" itemprop="dateModified" datetime="2023-09-27T23:19:29+08:00">2023-09-27</time>
+                <time title="Modified: 2023-09-27 23:27:26" itemprop="dateModified" datetime="2023-09-27T23:27:26+08:00">2023-09-27</time>
               </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Coding/Mo1isting/" itemprop="url" rel="index"><span itemprop="name">Mo1isting</span></a>
+                </span>
+            </span>
 
           
   
@@ -371,79 +384,15 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="集成JWT实现token验证与注销"><a href="#集成JWT实现token验证与注销" class="headerlink" title="集成JWT实现token验证与注销"></a>集成JWT实现token验证与注销</h1><p>JWT（Java Web Token）定义了一种简洁的，自包含的方法用于通信双方之间以 <code>JSON</code> 对象的形式安全的传递信息。因为数字签名的存在，这些信息是可信的，JWT 可以使用 <code>HMAC</code> 算法或者是 <code>RSA</code> 的公私秘钥对进行签名。</p>
-<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309022123414.png" alt="图片.png"></p>
-<ol>
-<li>用户使用账号和面发出 post 请求；</li>
-<li>服务器使用私钥创建一个 jwt；</li>
-<li>服务器返回这个 jwt 给浏览器；</li>
-<li>浏览器将该 jwt 串在请求头中向服务器发送请求；</li>
-<li>服务器验证该 jwt；</li>
-<li>返回响应的资源给浏览器。</li>
-</ol>
-<h2 id="JWT结构"><a href="#JWT结构" class="headerlink" title="JWT结构"></a>JWT结构</h2><p>包含三个部分：</p>
-<ol>
-<li>Header 头部 (包含了令牌的元数据，并且包含签名和 &#x2F; 或加密算法的类型)</li>
-<li>Payload 负载 (类似于飞机上承载的物品)</li>
-<li>Signature 签名 &#x2F; 签证</li>
-</ol>
-<p>以上三段信息用<code>.</code>连接在一起，构成了JWT字符串</p>
-<h3 id="Header"><a href="#Header" class="headerlink" title="Header"></a>Header</h3><p>包含两部分信息：</p>
-<ol>
-<li>token类型</li>
-<li>采用的加密算法</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123; </span><br><span class="line">  &quot;alg&quot;: &quot;HS256&quot;,//加密算法，通常直接用HMAC SHA256</span><br><span class="line">   &quot;typ&quot;: &quot;JWT&quot; //类型</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="Payload"><a href="#Payload" class="headerlink" title="Payload"></a>Payload</h3><p>载荷就是存放有效信息的地方</p>
-<p>有效信息包含：</p>
-<ol>
-<li>标准中注册的声明</li>
-<li>公共的声明</li>
-<li>私有的声明</li>
-</ol>
-<h3 id="1-标准中注册的声明"><a href="#1-标准中注册的声明" class="headerlink" title="1. 标准中注册的声明"></a>1. 标准中注册的声明</h3><p>建议但不强制使用</p>
-<ul>
-<li>iss: jwt 签发者</li>
-<li>sub: 面向的用户 (jwt 所面向的用户)</li>
-<li>aud: 接收 jwt 的一方</li>
-<li>exp: 过期时间戳 (jwt 的过期时间，这个过期时间必须要大于签发时间)</li>
-<li>nbf: 定义在什么时间之前，该 jwt 都是不可用的.</li>
-<li>iat: jwt 的签发时间</li>
-<li>jti: jwt 的唯一身份标识，主要用来作为一次性 token, 从而回避重放攻击。</li>
-</ul>
-<h4 id="2-公共的声明"><a href="#2-公共的声明" class="headerlink" title="2. 公共的声明"></a>2. 公共的声明</h4><p>可以添加任何信息。一般添加用户的相关信息或其他业务需要的必要信息。</p>
-<p>不建议添加敏感信息，因为该部分在客户端可解密。</p>
-<h4 id="3-私有的声明"><a href="#3-私有的声明" class="headerlink" title="3. 私有的声明"></a>3. 私有的声明</h4><p>为提供者和消费者所共同定义的声明。</p>
-<p>不建议存放敏感信息，因为base64是对称解密的，即该部分信息可以归类为明文信息</p>
-<h3 id="Signature"><a href="#Signature" class="headerlink" title="Signature"></a>Signature</h3><p>签证信息，包含以下三部分：</p>
-<ol>
-<li>header(base64后)</li>
-<li>payload(base64后)</li>
-<li>seceret</li>
-</ol>
-<p>需要 base64 加密后的 header 和 base64 加密后的 payload 使用<code>. </code>连接组成的字符串，然后通过 header 中声明的加密方式进行加盐 secret 组合加密，然后就构成了 jwt 的第三部分。<br>密钥 secret 是保存在服务端的，服务端会根据这个密钥进行生成 token 和进行验证，所以需要保护好。</p>
-<h2 id="Springboot和jwt集成"><a href="#Springboot和jwt集成" class="headerlink" title="Springboot和jwt集成"></a>Springboot和jwt集成</h2><ol>
-<li><p>引入jwt依赖</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.auth0<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>java-jwt<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.4.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>自定义注解</p>
-<p>如需登录才能进行操作的注解</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target(&#123;ElementType.METHOD, ElementType.TYPE&#125;)</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> UserLoginToken &#123;</span><br><span class="line">    <span class="comment">//是否进行校验</span></span><br><span class="line">    <span class="type">boolean</span> <span class="title function_">required</span><span class="params">()</span> <span class="keyword">default</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><code>@Tagert</code>：注解的作用目标</p>
-<p>@Target(ElementType.TYPE)—— 接口、类、枚举、注解<br>@Target(ElementType.FIELD)—— 字段、枚举的常量<br>@Target(ElementType.METHOD)—— 方法<br>@Target(ElementType.PARAMETER)—— 方法参数<br>@Target(ElementType.CONSTRUCTOR) —— 构造函数<br>@Target(ElementType.LOCAL_VARIABLE)—— 局部变量<br>@Target(ElementType.ANNOTATION_TYPE)—— 注解<br>@Target(ElementType.PACKAGE)—— 包</p>
-<p><code>@Retention</code>：注解的保留位置</p>
-<p><code>RetentionPolicy.SOURCE</code>：只在源代码级别保留，编译时自动忽略</p>
-<p><code>RetentionPolicy.CLASS</code>：编译时被保留，是默认的保留策略。在class文件中存在，但JWM会忽略，运行时无法获得。</p>
-<p><code>RetentionPolicy.RUNTIME</code>：被JVM保留，在运行时可被JVM或其他使用反射机制的代码读取使用。</p>
-<p><code>@Document</code>：该注解将被包含在javadoc中</p>
-<p><code>@Inherited</code>：子类可以继承父类中的该注解</p>
-</li>
-</ol>
-
+          <p>JWT（Java Web Token）定义了一种简洁的，自包含的方法用于通信双方之间以 <code>JSON</code> 对象的形式安全的传递信息。因为数字签名的存在，这些信息是可信的，JWT 可以使用 <code>HMAC</code> 算法或者是 <code>RSA</code> 的公私秘钥对进行签名。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/post/0.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -478,7 +427,7 @@
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
           
-            <a href="/post/0.html" class="post-title-link" itemprop="url">Untitled</a>
+            <a href="/post/0.html" class="post-title-link" itemprop="url">遇到的问题及思路</a>
         </h2>
 
         <div class="post-meta">
@@ -497,8 +446,21 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-09-27 23:19:29" itemprop="dateModified" datetime="2023-09-27T23:19:29+08:00">2023-09-27</time>
+                <time title="Modified: 2023-09-27 23:27:17" itemprop="dateModified" datetime="2023-09-27T23:27:17+08:00">2023-09-27</time>
               </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Coding/" itemprop="url" rel="index"><span itemprop="name">Coding</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Coding/Mo1isting/" itemprop="url" rel="index"><span itemprop="name">Mo1isting</span></a>
+                </span>
+            </span>
 
           
   
@@ -520,7 +482,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>808</span>
+              <span>801</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
@@ -539,7 +501,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="遇到的问题记录"><a href="#遇到的问题记录" class="headerlink" title="遇到的问题记录"></a>遇到的问题记录</h1><ol>
+          <span id="more"></span>
+
+<ol>
 <li><p>maven直接引入jdbc失败，搜索后发现时maven3后oracle不支持直接引入了，手动下载jdbc引入，使用如下命令：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mvn install:install-file -Dfile=D:\Code\oracle\ojdbc11.jar -DgroupId=com.oracle -DartifactId=ojdbc11 -Dversion=11 -Dpackaging=jar -DgeneratePom=true</span><br></pre></td></tr></table></figure>
 
@@ -1225,13 +1189,13 @@
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">16</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
