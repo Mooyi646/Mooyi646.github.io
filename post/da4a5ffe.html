@@ -20,22 +20,21 @@
     var CONFIG = {"hostname":"mooyi.xyz","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
   </script>
 
-  <meta name="description" content="这是从大二上一直到这学期期末周末尾都给自己定下的目标，没有想过现在才实现，也没有想过现在居然实现了。">
+  <meta name="description" content="数位dp解题一般用于统计某个范围的数，而这个范围一般都很大，难以直接暴力枚举求解，所以一般将其每位数拆分，一位一位地看。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="关于拖延以及失去动力">
-<meta property="og:url" content="https://mooyi.xyz/post/72693323.html">
+<meta property="og:title" content="数位DP思路">
+<meta property="og:url" content="https://mooyi.xyz/post/da4a5ffe.html">
 <meta property="og:site_name" content="Mooyi&#39;s Blog">
-<meta property="og:description" content="这是从大二上一直到这学期期末周末尾都给自己定下的目标，没有想过现在才实现，也没有想过现在居然实现了。">
+<meta property="og:description" content="数位dp解题一般用于统计某个范围的数，而这个范围一般都很大，难以直接暴力枚举求解，所以一般将其每位数拆分，一位一位地看。">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2022-07-25T16:27:59.000Z">
-<meta property="article:modified_time" content="2022-07-27T02:40:14.966Z">
+<meta property="article:published_time" content="2023-09-27T15:15:28.000Z">
+<meta property="article:modified_time" content="2023-09-27T15:19:29.413Z">
 <meta property="article:author" content="Mooyi">
-<meta property="article:tag" content="thoughts">
-<meta property="article:tag" content="doer">
-<meta property="article:tag" content="procrastination">
+<meta property="article:tag" content="数位DP">
+<meta property="article:tag" content="算法">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://mooyi.xyz/post/72693323.html">
+<link rel="canonical" href="https://mooyi.xyz/post/da4a5ffe.html">
 
 
 <script id="page-configurations">
@@ -48,7 +47,7 @@
   };
 </script>
 
-  <title>关于拖延以及失去动力 | Mooyi's Blog</title>
+  <title>数位DP思路 | Mooyi's Blog</title>
   
 
 
@@ -191,7 +190,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://mooyi.xyz/post/72693323.html">
+    <link itemprop="mainEntityOfPage" href="https://mooyi.xyz/post/da4a5ffe.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/apple.png">
@@ -204,7 +203,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          关于拖延以及失去动力
+          数位DP思路
         </h1>
 
         <div class="post-meta">
@@ -215,27 +214,21 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2022-07-26 00:27:59" itemprop="dateCreated datePublished" datetime="2022-07-26T00:27:59+08:00">2022-07-26</time>
+              <time title="Created: 2023-09-27 23:15:28 / Modified: 23:19:29" itemprop="dateCreated datePublished" datetime="2023-09-27T23:15:28+08:00">2023-09-27</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-07-27 10:40:14" itemprop="dateModified" datetime="2022-07-27T10:40:14+08:00">2022-07-27</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">In</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Let-s-think/" itemprop="url" rel="index"><span itemprop="name">Let's think</span></a>
+                  <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
                 </span>
                   , 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Let-s-think/Life/" itemprop="url" rel="index"><span itemprop="name">Life</span></a>
+                  <a href="/categories/Learning/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a>
                 </span>
             </span>
 
@@ -248,8 +241,8 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/post/72693323.html#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/72693323.html" itemprop="commentCount"></span>
+    <a title="disqus" href="/post/da4a5ffe.html#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/da4a5ffe.html" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -259,7 +252,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>380</span>
+              <span>1.2k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
@@ -278,13 +271,95 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>  这是从大二上一直到这学期期末周末尾都给自己定下的目标，没有想过现在才实现，也没有想过现在居然实现了。</p>
- <span id="more"></span>
+        <h1 id="数位dp解题"><a href="#数位dp解题" class="headerlink" title="数位dp解题"></a>数位dp解题</h1><p>一般用于统计某个范围的数，而这个范围一般都很大，难以直接暴力枚举求解，所以一般将其每位数拆分，一位一位地看。</p>
+<span id="more"></span>
 
-<p>  上大学以来一直都是行动力底下。高中的自己还能夸夸自己说“我觉得我的自制力还算不错啊”，到大学过后，从不敢说出这话了。</p>
-<p>  两年了，说什么事情也没做成的话，倒也是给自己的人生转了个弯。从工商管理大类到了如今的软工，你说没付出努力，别人说你骗谁呢，说我真的努力了啊，我说这是骗自己啊。</p>
-<p>  经常会想到底是什么让我失去了动力，亦或者说是向上的精神与对等的行动。我不知道。高中真的算是过得最快乐的三年的吧，中考的幸运延续，使得高中初始就算站在了还不错的起点，然后一直保持，偶尔徘徊，偶尔向上，总体都还算不错，为什么大学就截然不同了呢？或许是我没有从一开始就在相对的高处吧，我又怎么能够站得到高处呢？</p>
-<p>  总归是絮絮叨叨，实力与行动配不上自己的“野心”，确实是“卷也卷不赢，摆也不敢摆”。</p>
+<p>如：判断在<code>[0,x]</code>范围中，满足某条件的数的个数</p>
+<p><strong>先做规约：</strong></p>
+<ul>
+<li>0特殊判断，然后数位dp判断<code>[1,x]</code></li>
+<li>不填前导0，即保证每个数的最高位为正数</li>
+</ul>
+<p><strong>填数过程，遵循以下：</strong></p>
+<ul>
+<li>从高位往低位枚举数位</li>
+<li>在第<code>i</code>位填上了数，则其后面的数位都需填上数，保证数据不重复</li>
+<li>保证填入的数组成的数据不大于x</li>
+</ul>
+<p>如：令<code>x = 324783729</code>，求<code>[1,x]</code>内有多少个数满足其数位上的数字之和为16</p>
+<ol>
+<li>先看第一位：<ul>
+<li>不填</li>
+<li>填：可以填1, 2, 3</li>
+</ul>
+</li>
+<li>再看第二位：<ul>
+<li>不填</li>
+<li>填：<ul>
+<li>第一位没填数：可以填[1,9]任意一个数</li>
+<li>第一位填数了：<ul>
+<li>第一位填的1或2：可以填[0,9]任意一个数</li>
+<li>第一位填的3：可以填[0,2]任意一个数</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>…</li>
+<li>如处理到第七位：<ul>
+<li>不填</li>
+<li>填：<ul>
+<li>前面都没有填数：可以填[1,9]任意一个数</li>
+<li>前面填了：<ul>
+<li>前面位数没满，即前面填的数没有六位：可以填[0,9]任意一位数</li>
+<li>前面数位满了：<ul>
+<li>前面存在一位，其数字小于其对应的数字，即nums[i]：可以填[0,9]任意一位数</li>
+<li>前面所有数字都与对应数字相同：可以填[0,7]任意一位</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p><strong>规律分析总结：</strong></p>
+<p>第<code>i</code>位填数：</p>
+<ul>
+<li>前面都没有填数：[1,9]</li>
+<li>前面没填满或填满了但存在一位所填的数小于x中对应位数的数值：[0,9]</li>
+<li>前面所有数字都与x中对应数字相同：[0, nums[i]]</li>
+</ul>
+<p>所以，可以引入变量<code>limit</code>来判断前面所填数字是否都与x中对应数字相同</p>
+<p>则在填入第一个数时，即情况1，前面都没有填数时，对<code>limit</code>进行初始化</p>
+<p>第二种情况下：limit &#x3D; 0</p>
+<p>第三种情况下： limit &#x3D; 1</p>
+<p><strong>limit转移：</strong></p>
+<p>填完第<code>i</code>个数字，<code>limit</code>怎么转移到第<code>i + 1</code>位：</p>
+<p>当前limit &#x3D; 1且填入的数字为nums[i]，则下一位的limt &#x3D; 1;</p>
+<p>否则下一位的limit &#x3D; 0;</p>
+<p><strong>特殊情况处理：</strong></p>
+<p>即最高位，第0位的处理</p>
+<p>其填入的值的范围：[1, nums[0]]</p>
+<p>其limit &#x3D; 填值 &#x3D;&#x3D; nums[i] ? 1 : 0</p>
+<p>分析转移方程：使用<code>dp[i][limit][sum]</code>表示在前<code>i</code>位数字和为sum的数据个数</p>
+<ul>
+<li><p>前面都没有填数：[1,9]</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//初始化</span></span><br><span class="line"><span class="comment">//填入数字为c,取值为1，9</span></span><br><span class="line">dp[i][<span class="number">0</span>][c] = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>前面没填满或填满了但存在一位所填的数小于x中对应位数的数值：[0,9]</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dp[i][<span class="number">0</span>][cur_sum + c] += dp[i - <span class="number">1</span>][<span class="number">0</span>][cur_sum];</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>前面所有数字都与x中对应数字相同：[0, nums[i]]</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">c != nums[i]</span><br><span class="line">dp[i][<span class="number">0</span>][cur_sum + c] += dp[i - <span class="number">1</span>][<span class="number">1</span>][cur_sum];</span><br><span class="line"><span class="keyword">else</span> c == nums[i]</span><br><span class="line">dp[i][<span class="number">1</span>][cur_sum + c] += dp[i - <span class="number">1</span>][<span class="number">1</span>][cur_sum];</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>最终答案为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dp[n - <span class="number">1</span>][<span class="number">0</span>][sum] + dp[n - <span class="number">1</span>][<span class="number">1</span>][sum]</span><br></pre></td></tr></table></figure></li>
+</ul>
 
     </div>
 
@@ -310,7 +385,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>Post link: </strong>
-    <a href="https://mooyi.xyz/post/72693323.html" title="关于拖延以及失去动力">https://mooyi.xyz/post/72693323.html</a>
+    <a href="https://mooyi.xyz/post/da4a5ffe.html" title="数位DP思路">https://mooyi.xyz/post/da4a5ffe.html</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
@@ -321,9 +396,8 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/thoughts/" rel="tag"># thoughts</a>
-              <a href="/tags/doer/" rel="tag"># doer</a>
-              <a href="/tags/procrastination/" rel="tag"># procrastination</a>
+              <a href="/tags/%E6%95%B0%E4%BD%8DDP/" rel="tag"># 数位DP</a>
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
           </div>
 
         
@@ -331,11 +405,11 @@
 
         
     <div class="post-nav">
-      <div class="post-nav-item"></div>
       <div class="post-nav-item">
-    <a href="/post/7b89dc1f.html" rel="next" title="不同年纪对应的音乐喜爱度变化">
-      不同年纪对应的音乐喜爱度变化 <i class="fa fa-chevron-right"></i>
+    <a href="/post/0.html" rel="prev" title="">
+      <i class="fa fa-chevron-left"></i> 
     </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -401,6 +475,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B0%E4%BD%8Ddp%E8%A7%A3%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">数位dp解题</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -571,9 +646,9 @@
 </script>
 <script>
   var disqus_config = function() {
-    this.page.url = "https://mooyi.xyz/post/72693323.html";
-    this.page.identifier = "post/72693323.html";
-    this.page.title = "关于拖延以及失去动力";
+    this.page.url = "https://mooyi.xyz/post/da4a5ffe.html";
+    this.page.identifier = "post/da4a5ffe.html";
+    this.page.title = "数位DP思路";
     };
   NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
     if (window.DISQUS) {
