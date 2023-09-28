@@ -17,23 +17,17 @@
 <link rel="stylesheet" href="/css/style.css">
 
     
+        <link rel="shortcut icon" href="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281527777.png">
     
-<link rel="stylesheet" href="/font/css/fontawesome.min.css">
-
-    
-<link rel="stylesheet" href="/font/css/regular.min.css">
-
-    
-<link rel="stylesheet" href="/font/css/solid.min.css">
-
-    
-<link rel="stylesheet" href="/font/css/brands.min.css">
-
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.1/source/font/css/fontawesome.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.1/source/font/css/regular.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.1/source/font/css/solid.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.1/source/font/css/brands.min.css">
     
     <script class="keep-theme-configurations">
     const KEEP = window.KEEP || {}
     KEEP.hexo_config = {"hostname":"mooyi646.github.io","root":"/","language":"en","path":"search.json"}
-    KEEP.theme_config = {"toc":{},"style":{},"local_search":{},"code_block":{},"pjax":{},"lazyload":{},"comment":{},"post":{},"website_count":{},"version":"3.8.1"}
+    KEEP.theme_config = {"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true,"layout":"right"},"style":{"primary_color":"#0066cc","logo":"https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281527777.png","favicon":"https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281527777.png","avatar":"https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281528071.png","first_screen":{"enable":true,"header_transparent":true,"background_img":"https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281528910.png","description":"Welcome to Mooyi's Blog","hitokoto":false},"scroll":{"progress_bar":false,"percent":true}},"local_search":{"enable":true,"preload":true},"code_block":{"tools":{"enable":true,"style":"mac"},"highlight_theme":"default"},"pjax":{"enable":true},"lazyload":{"enable":true},"comment":{"enable":true,"use":"gitalk","valine":{"appid":null,"appkey":null,"server_urls":null,"placeholder":null},"gitalk":{"github_id":"Mooyi646","github_admins":null,"repository":"BlogComment","client_id":"f24994458c0080cb79bd","client_secret":"8320ee58f49ec513f3fbe6a7aad4c99a92b18b24","proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.21"},"waline":{"server_url":null,"reaction":false,"version":2},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false}},"post":{"author_label":{"enable":false,"auto":true,"custom_label_list":["Trainee","Engineer","Architect"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm","copyright_info":true,"share":false,"reward":{"enable":false,"img_link":null,"text":null}},"website_count":{"busuanzi_count":{"enable":false,"site_uv":true,"site_pv":true,"page_pv":true}},"version":"3.8.1"}
     KEEP.language_ago = {"second":"%s seconds ago","minute":"%s minutes ago","hour":"%s hours ago","day":"%s days ago","week":"%s weeks ago","month":"%s months ago","year":"%s years ago"}
     KEEP.language_code_block = {"copy":"Copy code","copied":"Copied","fold":"Fold code block","folded":"Folded"}
     KEEP.language_copy_copyright = {"copy":"Copy copyright info","copied":"Copied","title":"Original article title","author":"Original article author","link":"Original article link"}
@@ -45,6 +39,9 @@
 <div class="progress-bar-container">
     
 
+    
+        <span class="pjax-progress-bar"></span>
+        <i class="pjax-progress-icon fas fa-circle-notch fa-spin"></i>
     
 </div>
 
@@ -62,6 +59,10 @@
 
     <div class="border-box header-content">
         <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281527777.png">
+                </a>
             
             <a class="site-name border-box" href="/">
                Mooyi&#39;s Blog
@@ -88,10 +89,40 @@
                             </a>
                         </li>
                     
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >
+                                TAGS
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >
+                                CATEGORIES
+                            </a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >
+                                ABOUT
+                            </a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas fa-search"></i>
+                        </li>
                     
                 </ul>
             </div>
             <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
                 
                 <div class="icon-item menu-bar">
                     <div class="menu-bar-middle"></div>
@@ -111,6 +142,21 @@
                 <li class="drawer-menu-item flex-center">
                     <a class=""
                        href="/archives">ARCHIVES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags">TAGS</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories">CATEGORIES</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about">ABOUT</a>
                 </li>
             
         </ul>
@@ -146,6 +192,10 @@
                 
                     <div class="article-header border-box">
                         
+                            <div class="avatar-box border-box">
+                                <img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281528071.png">
+                            </div>
+                        
                         <div class="info-box">
                             <div class="author">
                                 <span class="name">Mooyi</span>
@@ -162,13 +212,13 @@
         
             <span class="meta-info-item article-create-date">
                 <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
-                <span class="pc">2022-07-29 09:24:19</span>
+                <span class="pc">2022-07-29 09:24</span>
                 <span class="mobile">2022-07-29 09:24</span>
             </span>
 
             <span class="meta-info-item article-update-date">
                 <i class="icon fa-solid fa-file-pen"></i>&nbsp;
-                <span class="pc" data-updated="Wed Aug 03 2022 15:06:52 GMT+0800">2022-08-03 15:06:52</span>
+                <span class="pc" data-updated="Wed Aug 03 2022 15:06:52 GMT+0800">2022-08-03 15:06</span>
             </span>
         
 
@@ -214,6 +264,14 @@
 
         
         
+            <span class="meta-info-item article-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>6k Words</span>
+            </span>
+        
+        
+            <span class="meta-info-item article-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>25 Mins</span>
+            </span>
         
         
     </div>
@@ -376,24 +434,44 @@
 <h3 id="组合选择符"><a href="#组合选择符" class="headerlink" title="组合选择符"></a>组合选择符</h3><h4 id="后代选择器"><a href="#后代选择器" class="headerlink" title="后代选择器"></a>后代选择器</h4><p>选取某元素的后代元素，以空格<code> </code> 分离。</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css"><span class="selector-tag">div</span> <span class="selector-tag">p</span></span></span><br><span class="line"><span class="language-css">&#123;</span></span><br><span class="line"><span class="language-css">	<span class="attribute">background-color</span>:yellow;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>段落 1。 在 div 中。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>段落 2。 在 div 中。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>段落 3。不在 div 中。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>段落 4。不在 div 中。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-<img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207311311428.png" alt="image-20220731131103323" style="zoom:67%;" />
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207311311428.png"
+                      alt="image-20220731131103323" style="zoom:67%;" 
+                >
 
 <h4 id="子元素选择器"><a href="#子元素选择器" class="headerlink" title="子元素选择器"></a>子元素选择器</h4><p>只能选择作为某元素<span style="background-color:#E0FFFF">直接&#x2F;一级子元素的元素</span>，大于符号<code>&gt;</code>分隔。</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css"><span class="selector-tag">div</span>&gt;<span class="selector-tag">p</span></span></span><br><span class="line"><span class="language-css">&#123;</span></span><br><span class="line"><span class="language-css">	<span class="attribute">background-color</span>:yellow;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Welcome to My Homepage<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">h2</span>&gt;</span>My name is Donald<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">p</span>&gt;</span>I live in Duckburg.<span class="tag">&lt;/<span class="name">p</span>&gt;</span>//highlight</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">span</span>&gt;</span><span class="tag">&lt;<span class="name">p</span>&gt;</span>I will not be styled.<span class="tag">&lt;/<span class="name">p</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span>//no highlight with the first child &quot;span&quot;</span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">span</span>&gt;</span>I will be styled.<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span>//highlight because &quot;p&quot; is the first child</span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>My best friend is Mickey.<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-<img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207311322609.png" alt="image-20220731132236565" style="zoom: 50%;" />
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207311322609.png"
+                      alt="image-20220731132236565" style="zoom: 50%;" 
+                >
 
 <h4 id="相邻兄弟选择器"><a href="#相邻兄弟选择器" class="headerlink" title="相邻兄弟选择器"></a>相邻兄弟选择器</h4><p>选择<span style="background-color:#E0FFFF"><strong>紧接</strong>在另一元素后的元素，且二者有相同父元素</span>，用<code>+</code>分隔。</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css"><span class="selector-tag">div</span>+<span class="selector-tag">p</span></span></span><br><span class="line"><span class="language-css">&#123;</span></span><br><span class="line"><span class="language-css">	<span class="attribute">background-color</span>:yellow;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h2</span>&gt;</span>DIV 内部标题<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>DIV 内部段落。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>DIV 之后的第一个 P 元素。<span class="tag">&lt;/<span class="name">p</span>&gt;</span>//adjacent to the &quot;div&quot;</span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>DIV 之后的第二个 P 元素。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-<img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207311326422.png" alt="image-20220731132642385" style="zoom:67%;" />
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207311326422.png"
+                      alt="image-20220731132642385" style="zoom:67%;" 
+                >
 
 
 
 <h4 id="后续兄弟元素"><a href="#后续兄弟元素" class="headerlink" title="后续兄弟元素"></a>后续兄弟元素</h4><p>后续兄弟选择器选取<span style="background-color:#E0FFFF">所有指定元素<strong>之后</strong>的相邻兄弟元素</span>。用<code>~</code>隔开。</p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="language-css"></span></span><br><span class="line"><span class="language-css"><span class="selector-tag">div</span>~<span class="selector-tag">p</span></span></span><br><span class="line"><span class="language-css">&#123;</span></span><br><span class="line"><span class="language-css">	<span class="attribute">background-color</span>:yellow;</span></span><br><span class="line"><span class="language-css">&#125;</span></span><br><span class="line"><span class="language-css"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>之前段落，不会添加背景颜色。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>段落 1。 在 div 中。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>段落 2。 在 div 中。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>段落 3。不在 div 中。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>段落 4。不在 div 中。<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-<img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207311331016.png" alt="image-20220731133141976" style="zoom: 67%;" />
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207311331016.png"
+                      alt="image-20220731133141976" style="zoom: 67%;" 
+                >
 
 
 
@@ -403,7 +481,12 @@
 <h3 id="插入样式表"><a href="#插入样式表" class="headerlink" title="插入样式表"></a>插入样式表</h3><h4 id="外部样式表-external-style-sheet"><a href="#外部样式表-external-style-sheet" class="headerlink" title="外部样式表(external style sheet)"></a>外部样式表(external style sheet)</h4><p>  一般用于<em>同一样式需用于很多页面</em>，通过mystyle.css文件改变站点整体样式【页面使用<code>&lt;link&gt;</code>标签链接到样式表，该标签位于文档头部<code>&lt;head&gt;</code>中】</p>
 <p>  <code>&lt;link rel=&quot;stylesheet&quot; href=&quot;mystyle.css&quot;&gt;</code></p>
 <h4 id="内部样式表-internal-style-sheet"><a href="#内部样式表-internal-style-sheet" class="headerlink" title="内部样式表(internal style sheet)"></a>内部样式表(internal style sheet)</h4><p>  一般用于<em>单个文件</em>，利用<code>&lt;style&gt;</code>标签在头部文件内部定义。</p>
-  <img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207291021544.png" alt="image-20220729102140460" style="zoom: 80%;" />
+  <img  
+                     lazyload
+                     alt="image"
+                     data-src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207291021544.png"
+                      alt="image-20220729102140460" style="zoom: 80%;" 
+                >
 
 <h4 id="内联样式-inline-style"><a href="#内联样式-inline-style" class="headerlink" title="内联样式(inline style)"></a>内联样式(inline style)</h4><p><code>&lt;p style=&quot;color:sienna;margin-left:20px&quot;&gt;text&lt;/p&gt;</code></p>
 <p style="color:sienna;margin-left:20px">text</p>
@@ -490,8 +573,18 @@
 <p>  <span style="background-color:#E0FFFF">Example</span></p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">button</span> <span class="attr">onclick</span>=<span class="string">&quot;test()&quot;</span>&gt;</span>test1<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript"> <span class="variable language_">document</span>.<span class="title function_">write</span>(<span class="string">&quot;document1&quot;</span>);</span></span><br><span class="line"><span class="language-javascript"> 	<span class="keyword">function</span> <span class="title function_">test</span>(<span class="params"></span>)&#123;</span></span><br><span class="line"><span class="language-javascript"> 	<span class="variable language_">document</span>.<span class="title function_">write</span>(<span class="string">&quot;refreshing&quot;</span>);</span></span><br><span class="line"><span class="language-javascript"> 	&#125;</span></span><br><span class="line"><span class="language-javascript"> </span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-<p>   result:<img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207312149397.png" alt="image-20220731212404112" style="zoom:67%;" /></p>
-<p>   After clicking the botton:<img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207312150251.png" alt="image-20220731213114137" style="zoom:80%;" /></p>
+<p>   result:<img  
+                     lazyload
+                     alt="image"
+                     data-src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207312149397.png"
+                      alt="image-20220731212404112" style="zoom:67%;" 
+                ></p>
+<p>   After clicking the botton:<img  
+                     lazyload
+                     alt="image"
+                     data-src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207312150251.png"
+                      alt="image-20220731213114137" style="zoom:80%;" 
+                ></p>
 <ul>
 <li>innerHTML写入到HTML文档中</li>
 </ul>
@@ -527,7 +620,12 @@
 <li><p>函数(Function)：<code>function myFunction()&#123;&#125;</code></p>
 </li>
 </ul>
-<h4 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h4><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207312329738.png" alt="image-20220731232911606" style="zoom: 67%;" />
+<h4 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h4><img  
+                     lazyload
+                     alt="image"
+                     data-src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207312329738.png"
+                      alt="image-20220731232911606" style="zoom: 67%;" 
+                >
 
 
 
@@ -552,15 +650,35 @@
 <li><p>函数体外声明的变量为全局变量，函数内声明的变量为局部变量(var)</p>
 </li>
 <li><p><span style="color:green">在块中声明var变量，其在块外依然可被访问</span></p>
-<img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207312223668.png" alt="image-20220731222319625" style="zoom: 80%;" />
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207312223668.png"
+                      alt="image-20220731222319625" style="zoom: 80%;" 
+                >
 </li>
 <li><p>使用<span style="background-color:#B4EEB4">let</span>关键字可实现只在块内有效</p>
-<img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207312225564.png" alt="image-20220731222514523" style="zoom:80%;" />
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207312225564.png"
+                      alt="image-20220731222514523" style="zoom:80%;" 
+                >
 </li>
 <li><p>重新定义变量</p>
 <ul>
-<li>var：可在任意地方修改,<img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207312231711.png" alt="image-20220731223151672" style="zoom:67%;" /></li>
-<li>let：<img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207312231209.png" alt="image-20220731223135155" style="zoom:67%;" /></li>
+<li>var：可在任意地方修改,<img  
+                     lazyload
+                     alt="image"
+                     data-src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207312231711.png"
+                      alt="image-20220731223151672" style="zoom:67%;" 
+                ></li>
+<li>let：<img  
+                     lazyload
+                     alt="image"
+                     data-src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207312231209.png"
+                      alt="image-20220731223135155" style="zoom:67%;" 
+                ></li>
 <li>相同作用域&#x2F;块级作用域中，不能用let关键字重置var&#x2F;let声明的变量</li>
 <li>相同作用域&#x2F;块级作用域中，不能用 var关键字重置let声明的变量</li>
 <li>相同作用域&#x2F;块级作用域中，不能用 const关键字重置var&#x2F;let&#x2F;const声明的变量</li>
@@ -642,7 +760,12 @@
 <li><p>return语句自动看作加分号的语句（代码结束[默认为最后一句]）</p>
 </li>
 </ul>
-<h5 id="比较运算符"><a href="#比较运算符" class="headerlink" title="比较运算符"></a>比较运算符</h5><p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207312312796.png" alt="image-20220731231259574"></p>
+<h5 id="比较运算符"><a href="#比较运算符" class="headerlink" title="比较运算符"></a>比较运算符</h5><p><img  
+                     lazyload
+                     alt="image"
+                     data-src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207312312796.png"
+                      alt="image-20220731231259574"
+                ></p>
 <ul>
 <li>普通比较”&#x3D;=“忽略数据类型，严格比较”&#x3D;&#x3D;&#x3D;”同时检查值与类型</li>
 <li>switch语句中case的比较为严格比较(&#x3D;&#x3D;&#x3D;)</li>
@@ -726,7 +849,12 @@
 </ul>
 </li>
 <li><p>自动转换</p>
-<img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207312347452.png" alt="image-20220731234708405" style="zoom:80%;" />
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202207312347452.png"
+                      alt="image-20220731234708405" style="zoom:80%;" 
+                >
 </li>
 <li><p>自动转换为字符串</p>
 <p>尝试输出一个对象或一个变量时 JavaScript 会自动调用变量的 toString() 方法</p>
@@ -766,13 +894,28 @@
 </ul>
 <h4 id="正则表达式模式"><a href="#正则表达式模式" class="headerlink" title="正则表达式模式"></a>正则表达式模式</h4><ul>
 <li><p>方括号用于查找某个范围内的字符</p>
-<img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202208010007126.png" alt="image-20220801000731016" style="zoom:90%;" />
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202208010007126.png"
+                      alt="image-20220801000731016" style="zoom:90%;" 
+                >
 </li>
 <li><p>元字符拥有特殊含义</p>
-<img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202208010008921.png" alt="image-20220801000804874" style="zoom:80%;" />
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202208010008921.png"
+                      alt="image-20220801000804874" style="zoom:80%;" 
+                >
 </li>
 <li><p>量词</p>
-<img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202208010008243.png" alt="image-20220801000823200" style="zoom:90%;" /></li>
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202208010008243.png"
+                      alt="image-20220801000823200" style="zoom:90%;" 
+                ></li>
 </ul>
 <h4 id="RegExp对象"><a href="#RegExp对象" class="headerlink" title="RegExp对象"></a>RegExp对象</h4><p>一个预定义了属性和方法的正则表达式对象。</p>
 <h5 id="test"><a href="#test" class="headerlink" title="test()"></a>test()</h5><p>用于检测一个字符串是否匹配某个模式，如果字符串中含有匹配的文本，则返回 true，否则返回 false。</p>
@@ -801,7 +944,12 @@
 </ul>
 <h4 id="约束验证DOM属性"><a href="#约束验证DOM属性" class="headerlink" title="约束验证DOM属性"></a>约束验证DOM属性</h4><ul>
 <li><p>validity：布尔属性值，返回 input 输入值是否合法</p>
-<img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202208011500025.png" alt="image-20220801150057861" style="zoom:67%;" align="left" />
+<img  
+                     lazyload
+                     alt="image"
+                     data-src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202208011500025.png"
+                      alt="image-20220801150057861" style="zoom:67%;" align="left" 
+                >
 
 
 </li>
@@ -904,6 +1052,57 @@
                 </div>
 
                 
+                        <div class="article-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="post-title border-box text-ellipsis">
+                前端学习笔记
+            </div>
+
+            <div class="post-link border-box text-ellipsis">
+                post/91ce7628.html
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="post-author bottom-item">
+                <div class="type">
+                    Author
+                </div>
+                <div class="content">Mooyi</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    Published
+                </div>
+                <div class="content">2022-07-29 09:24</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    License
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">
+                        <i class="fa-brands fa-creative-commons"></i>
+                        <i class="fa-brands fa-creative-commons-by"></i>
+                        <i class="fa-brands fa-creative-commons-nc"></i>
+                        <i class="fa-brands fa-creative-commons-sa"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="Copy copyright info" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
 
                 <div class="post-bottom-tags-and-share border-box">
                     <div>
@@ -975,6 +1174,57 @@
                     
 
 
+    <div class="comments-container border-box">
+        <div id="comments-anchor" class="comment-area-title border-box">
+            <i class="fas fa-comments"></i>&nbsp;Comments
+        </div>
+        
+            
+
+    <div class="gitalk-comment-container">
+        <div id="gitalk-container"></div>
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk/dist/gitalk.css">
+        <script data-pjax src="//cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js"></script>
+        <script data-pjax>
+          function loadGitalk() {
+            let __gitalk__pathname = decodeURI(location.pathname);
+            const __gitalk__pathnameLength = __gitalk__pathname.length;
+            const __gitalk__pathnameMaxLength = 50;
+            if (__gitalk__pathnameLength > __gitalk__pathnameMaxLength) {
+              __gitalk__pathname = __gitalk__pathname.substring(0, __gitalk__pathnameMaxLength - 3) + '...';
+            }
+
+            try {
+              Gitalk && new Gitalk({
+                clientID: 'f24994458c0080cb79bd',
+                clientSecret: '8320ee58f49ec513f3fbe6a7aad4c99a92b18b24',
+                repo: 'BlogComment',
+                owner: 'Mooyi646',
+                admin: 'Mooyi646',
+                id: __gitalk__pathname,
+                proxy: '',
+                language: 'en'
+              }).render('gitalk-container');
+            } catch (e) {
+              window.Gitalk = null;
+            }
+          }
+
+          if ('true' === 'true') {
+            const loadGitalkTimeout = setTimeout(() => {
+              loadGitalk();
+              clearTimeout(loadGitalkTimeout);
+            }, 1000);
+          } else {
+            window.addEventListener('DOMContentLoaded', loadGitalk);
+          }
+        </script>
+    </div>
+
+
+        
+    </div>
+
 
 
 
@@ -983,6 +1233,15 @@
             </div>
         </div>
 
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Before-Reading"><span class="nav-number">1.</span> <span class="nav-text">Before Reading</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTML"><span class="nav-number">2.</span> <span class="nav-text">HTML</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%87%E8%AE%B0"><span class="nav-number">2.1.</span> <span class="nav-text">标记</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E6%A0%87%E7%AD%BE"><span class="nav-number">2.1.1.</span> <span class="nav-text">常见的标签</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%87%E7%AD%BE%E5%B1%9E%E6%80%A7"><span class="nav-number">2.2.</span> <span class="nav-text">标签属性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E5%B1%9E%E6%80%A7"><span class="nav-number">2.2.1.</span> <span class="nav-text">常见属性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E9%87%8A"><span class="nav-number">2.3.</span> <span class="nav-text">注释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTML%E4%BA%8B%E4%BB%B6"><span class="nav-number">2.4.</span> <span class="nav-text">HTML事件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AA%97%E5%8F%A3%E4%BA%8B%E4%BB%B6%E5%B1%9E%E6%80%A7-Window-Event-Attributes"><span class="nav-number">2.4.1.</span> <span class="nav-text">窗口事件属性(Window Event Attributes)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A1%A8%E5%8D%95%E4%BA%8B%E4%BB%B6-Form-Events"><span class="nav-number">2.4.2.</span> <span class="nav-text">表单事件(Form Events)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%94%AE%E7%9B%98%E4%BA%8B%E4%BB%B6-Mouse-Events"><span class="nav-number">2.4.3.</span> <span class="nav-text">键盘事件(Mouse Events)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%BC%A0%E6%A0%87%E4%BA%8B%E4%BB%B6-Mouse-Events"><span class="nav-number">2.4.4.</span> <span class="nav-text">鼠标事件(Mouse Events)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E5%AA%92%E4%BD%93%E4%BA%8B%E4%BB%B6-Media-Events"><span class="nav-number">2.4.5.</span> <span class="nav-text">多媒体事件(Media Events)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E4%BA%8B%E4%BB%B6"><span class="nav-number">2.4.6.</span> <span class="nav-text">其他事件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CSS"><span class="nav-number">3.</span> <span class="nav-text">CSS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E5%99%A8"><span class="nav-number">3.1.</span> <span class="nav-text">选择器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#id%E9%80%89%E6%8B%A9%E5%99%A8"><span class="nav-number">3.1.1.</span> <span class="nav-text">id选择器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#class%E9%80%89%E6%8B%A9%E5%99%A8"><span class="nav-number">3.1.2.</span> <span class="nav-text">class选择器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E5%90%88%E9%80%89%E6%8B%A9%E7%AC%A6"><span class="nav-number">3.2.</span> <span class="nav-text">组合选择符</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%8E%E4%BB%A3%E9%80%89%E6%8B%A9%E5%99%A8"><span class="nav-number">3.2.1.</span> <span class="nav-text">后代选择器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%90%E5%85%83%E7%B4%A0%E9%80%89%E6%8B%A9%E5%99%A8"><span class="nav-number">3.2.2.</span> <span class="nav-text">子元素选择器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%B8%E9%82%BB%E5%85%84%E5%BC%9F%E9%80%89%E6%8B%A9%E5%99%A8"><span class="nav-number">3.2.3.</span> <span class="nav-text">相邻兄弟选择器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%8E%E7%BB%AD%E5%85%84%E5%BC%9F%E5%85%83%E7%B4%A0"><span class="nav-number">3.2.4.</span> <span class="nav-text">后续兄弟元素</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%92%E5%85%A5%E6%A0%B7%E5%BC%8F%E8%A1%A8"><span class="nav-number">3.3.</span> <span class="nav-text">插入样式表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%96%E9%83%A8%E6%A0%B7%E5%BC%8F%E8%A1%A8-external-style-sheet"><span class="nav-number">3.3.1.</span> <span class="nav-text">外部样式表(external style sheet)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%85%E9%83%A8%E6%A0%B7%E5%BC%8F%E8%A1%A8-internal-style-sheet"><span class="nav-number">3.3.2.</span> <span class="nav-text">内部样式表(internal style sheet)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%85%E8%81%94%E6%A0%B7%E5%BC%8F-inline-style"><span class="nav-number">3.3.3.</span> <span class="nav-text">内联样式(inline style)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">3.4.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E9%BD%90"><span class="nav-number">3.5.</span> <span class="nav-text">对齐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%AA%E7%B1%BB-Pseudo-classes-amp-%E4%BC%AA%E5%85%83%E7%B4%A0"><span class="nav-number">3.6.</span> <span class="nav-text">伪类(Pseudo-classes)&amp;伪元素</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%AA%E7%B1%BB"><span class="nav-number">3.6.1.</span> <span class="nav-text">伪类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%AA%E5%85%83%E7%B4%A0"><span class="nav-number">3.6.2.</span> <span class="nav-text">伪元素</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript"><span class="nav-number">4.</span> <span class="nav-text">JavaScript</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">4.1.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%87%BA-x2F-%E6%98%BE%E7%A4%BA%E6%95%B0%E6%8D%AE"><span class="nav-number">4.2.</span> <span class="nav-text">输出&#x2F;显示数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95"><span class="nav-number">4.3.</span> <span class="nav-text">语法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%97%E9%9D%A2%E9%87%8F-%E5%9B%BA%E5%AE%9A%E5%80%BC"><span class="nav-number">4.3.1.</span> <span class="nav-text">字面量(固定值)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">4.3.2.</span> <span class="nav-text">数据类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%98%E9%87%8F"><span class="nav-number">4.3.3.</span> <span class="nav-text">变量</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-number">4.3.3.1.</span> <span class="nav-text">变量作用域</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E5%9D%97%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-number">4.3.3.2.</span> <span class="nav-text">程序块作用域</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%A3%B0%E6%98%8E%E6%8F%90%E5%8D%87"><span class="nav-number">4.3.3.3.</span> <span class="nav-text">声明提升</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%AD%E5%8F%A5"><span class="nav-number">4.3.4.</span> <span class="nav-text">语句</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%AF%94%E8%BE%83%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">4.3.4.1.</span> <span class="nav-text">比较运算符</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#For-x2F-In%E5%BE%AA%E7%8E%AF"><span class="nav-number">4.3.4.2.</span> <span class="nav-text">For&#x2F;In循环</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Typeof-x2F-null-x2F-undefined"><span class="nav-number">4.3.4.3.</span> <span class="nav-text">Typeof&#x2F;null&#x2F;undefined</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="nav-number">4.3.4.4.</span> <span class="nav-text">类型转换</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F-Regular-Expression-x2F-regex-x2F-regexp-x2F-RE"><span class="nav-number">4.4.</span> <span class="nav-text">正则表达式(Regular Expression&#x2F;regex&#x2F;regexp&#x2F;RE)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95-1"><span class="nav-number">4.4.1.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%96%B9%E6%B3%95"><span class="nav-number">4.4.2.</span> <span class="nav-text">使用字符串方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A8%A1%E5%BC%8F"><span class="nav-number">4.4.3.</span> <span class="nav-text">正则表达式模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RegExp%E5%AF%B9%E8%B1%A1"><span class="nav-number">4.4.4.</span> <span class="nav-text">RegExp对象</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#test"><span class="nav-number">4.4.4.1.</span> <span class="nav-text">test()</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#exec"><span class="nav-number">4.4.4.2.</span> <span class="nav-text">exec()</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%EF%BC%9Athrow-try-catch"><span class="nav-number">4.5.</span> <span class="nav-text">错误处理：throw, try, catch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E8%AF%95"><span class="nav-number">4.6.</span> <span class="nav-text">调试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81API"><span class="nav-number">4.7.</span> <span class="nav-text">验证API</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BA%A6%E6%9D%9F%E9%AA%8C%E8%AF%81DOM%EF%BC%88Document-Object-Model%EF%BC%89%E6%96%B9%E6%B3%95"><span class="nav-number">4.7.1.</span> <span class="nav-text">约束验证DOM（Document Object Model）方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BA%A6%E6%9D%9F%E9%AA%8C%E8%AF%81DOM%E5%B1%9E%E6%80%A7"><span class="nav-number">4.7.2.</span> <span class="nav-text">约束验证DOM属性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSON"><span class="nav-number">4.8.</span> <span class="nav-text">JSON</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95%E8%A7%84%E5%88%99"><span class="nav-number">4.8.1.</span> <span class="nav-text">语法规则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JSON%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E6%8D%A2%E4%B8%BAJS%E5%AF%B9%E8%B1%A1"><span class="nav-number">4.8.2.</span> <span class="nav-text">JSON字符串转换为JS对象</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Atten"><span class="nav-number">4.8.2.1.</span> <span class="nav-text">Atten</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JS%E5%AF%B9%E8%B1%A1%E8%BD%AC%E6%8D%A2%E4%B8%BA%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">4.8.3.</span> <span class="nav-text">JS对象转换为字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Atten-1"><span class="nav-number">4.8.3.1.</span> <span class="nav-text">Atten</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#javascript-void-0"><span class="nav-number">4.9.</span> <span class="nav-text">javascript:void(0)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#href-x3D-%E2%80%9D-%E2%80%9D%E4%B8%8Ehref-x3D-%E2%80%9Djavascript-void-0-%E2%80%9D%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">4.9.1.</span> <span class="nav-text">href&#x3D;”#”与href&#x3D;”javascript:void(0)”的区别</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ES6"><span class="nav-number">5.</span> <span class="nav-text">ES6</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
         
     </div>
 </div>
@@ -999,7 +1258,7 @@
     <div class="border-box website-info-box default">
         
             <div class="copyright-info info-item default">
-                &copy;&nbsp;2023
+                &copy;&nbsp;<span>2020</span>&nbsp;-&nbsp;2023
                 
                     &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Mooyi</a>
                 
@@ -1012,9 +1271,20 @@
             
 
             
+                <div class="deploy-info info-item default">
+                    
+                        This site is deployed on <span class="tooltip" data-tooltip-content="GitHub Pages"><img src="/images/deploy-provider/github.png"></span>
+                        
+                </div>
+            
         
 
         <div class="count-item info-item default">
+            
+                <span class="count-box border-box word">
+                    <span class="item-type border-box">Total words</span>
+                    <span class="item-value border-box word">11.4k</span>
+                </span>
             
 
             
@@ -1034,8 +1304,17 @@
     <ul class="tools-list border-box">
         <!-- PC TOC show toggle -->
         
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
 
         <!-- PC go comment -->
+        
+            <li class="tools-item flex-center go-to-comments">
+                <i class="fas fa-comment"></i>
+                <span class="post-comments-count"></span>
+            </li>
         
     </ul>
 </div>
@@ -1069,7 +1348,15 @@
 
     <ul class="exposed-tools-list border-box">
         
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
 
+        
+            <li class="tools-item go-to-comments-tablet flex-center">
+                <i class="fas fa-comment"></i>
+            </li>
         
 
         <li class="tools-item tool-toggle-show flex-center">
@@ -1093,48 +1380,84 @@
 
     <!-- local search -->
     
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="Search..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
 
     <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Before-Reading"><span class="nav-number">1.</span> <span class="nav-text">Before Reading</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTML"><span class="nav-number">2.</span> <span class="nav-text">HTML</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%87%E8%AE%B0"><span class="nav-number">2.1.</span> <span class="nav-text">标记</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E6%A0%87%E7%AD%BE"><span class="nav-number">2.1.1.</span> <span class="nav-text">常见的标签</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%87%E7%AD%BE%E5%B1%9E%E6%80%A7"><span class="nav-number">2.2.</span> <span class="nav-text">标签属性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E5%B1%9E%E6%80%A7"><span class="nav-number">2.2.1.</span> <span class="nav-text">常见属性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E9%87%8A"><span class="nav-number">2.3.</span> <span class="nav-text">注释</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTML%E4%BA%8B%E4%BB%B6"><span class="nav-number">2.4.</span> <span class="nav-text">HTML事件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AA%97%E5%8F%A3%E4%BA%8B%E4%BB%B6%E5%B1%9E%E6%80%A7-Window-Event-Attributes"><span class="nav-number">2.4.1.</span> <span class="nav-text">窗口事件属性(Window Event Attributes)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%A1%A8%E5%8D%95%E4%BA%8B%E4%BB%B6-Form-Events"><span class="nav-number">2.4.2.</span> <span class="nav-text">表单事件(Form Events)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%94%AE%E7%9B%98%E4%BA%8B%E4%BB%B6-Mouse-Events"><span class="nav-number">2.4.3.</span> <span class="nav-text">键盘事件(Mouse Events)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%BC%A0%E6%A0%87%E4%BA%8B%E4%BB%B6-Mouse-Events"><span class="nav-number">2.4.4.</span> <span class="nav-text">鼠标事件(Mouse Events)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E5%AA%92%E4%BD%93%E4%BA%8B%E4%BB%B6-Media-Events"><span class="nav-number">2.4.5.</span> <span class="nav-text">多媒体事件(Media Events)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E4%BA%8B%E4%BB%B6"><span class="nav-number">2.4.6.</span> <span class="nav-text">其他事件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CSS"><span class="nav-number">3.</span> <span class="nav-text">CSS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E5%99%A8"><span class="nav-number">3.1.</span> <span class="nav-text">选择器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#id%E9%80%89%E6%8B%A9%E5%99%A8"><span class="nav-number">3.1.1.</span> <span class="nav-text">id选择器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#class%E9%80%89%E6%8B%A9%E5%99%A8"><span class="nav-number">3.1.2.</span> <span class="nav-text">class选择器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E5%90%88%E9%80%89%E6%8B%A9%E7%AC%A6"><span class="nav-number">3.2.</span> <span class="nav-text">组合选择符</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%8E%E4%BB%A3%E9%80%89%E6%8B%A9%E5%99%A8"><span class="nav-number">3.2.1.</span> <span class="nav-text">后代选择器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%90%E5%85%83%E7%B4%A0%E9%80%89%E6%8B%A9%E5%99%A8"><span class="nav-number">3.2.2.</span> <span class="nav-text">子元素选择器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%9B%B8%E9%82%BB%E5%85%84%E5%BC%9F%E9%80%89%E6%8B%A9%E5%99%A8"><span class="nav-number">3.2.3.</span> <span class="nav-text">相邻兄弟选择器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%8E%E7%BB%AD%E5%85%84%E5%BC%9F%E5%85%83%E7%B4%A0"><span class="nav-number">3.2.4.</span> <span class="nav-text">后续兄弟元素</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%92%E5%85%A5%E6%A0%B7%E5%BC%8F%E8%A1%A8"><span class="nav-number">3.3.</span> <span class="nav-text">插入样式表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%96%E9%83%A8%E6%A0%B7%E5%BC%8F%E8%A1%A8-external-style-sheet"><span class="nav-number">3.3.1.</span> <span class="nav-text">外部样式表(external style sheet)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%85%E9%83%A8%E6%A0%B7%E5%BC%8F%E8%A1%A8-internal-style-sheet"><span class="nav-number">3.3.2.</span> <span class="nav-text">内部样式表(internal style sheet)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%86%85%E8%81%94%E6%A0%B7%E5%BC%8F-inline-style"><span class="nav-number">3.3.3.</span> <span class="nav-text">内联样式(inline style)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">3.4.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E9%BD%90"><span class="nav-number">3.5.</span> <span class="nav-text">对齐</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%AA%E7%B1%BB-Pseudo-classes-amp-%E4%BC%AA%E5%85%83%E7%B4%A0"><span class="nav-number">3.6.</span> <span class="nav-text">伪类(Pseudo-classes)&amp;伪元素</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%AA%E7%B1%BB"><span class="nav-number">3.6.1.</span> <span class="nav-text">伪类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%AA%E5%85%83%E7%B4%A0"><span class="nav-number">3.6.2.</span> <span class="nav-text">伪元素</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript"><span class="nav-number">4.</span> <span class="nav-text">JavaScript</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">4.1.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%87%BA-x2F-%E6%98%BE%E7%A4%BA%E6%95%B0%E6%8D%AE"><span class="nav-number">4.2.</span> <span class="nav-text">输出&#x2F;显示数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95"><span class="nav-number">4.3.</span> <span class="nav-text">语法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%97%E9%9D%A2%E9%87%8F-%E5%9B%BA%E5%AE%9A%E5%80%BC"><span class="nav-number">4.3.1.</span> <span class="nav-text">字面量(固定值)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">4.3.2.</span> <span class="nav-text">数据类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%98%E9%87%8F"><span class="nav-number">4.3.3.</span> <span class="nav-text">变量</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%98%E9%87%8F%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-number">4.3.3.1.</span> <span class="nav-text">变量作用域</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%A8%8B%E5%BA%8F%E5%9D%97%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-number">4.3.3.2.</span> <span class="nav-text">程序块作用域</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%A3%B0%E6%98%8E%E6%8F%90%E5%8D%87"><span class="nav-number">4.3.3.3.</span> <span class="nav-text">声明提升</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%AD%E5%8F%A5"><span class="nav-number">4.3.4.</span> <span class="nav-text">语句</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%AF%94%E8%BE%83%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-number">4.3.4.1.</span> <span class="nav-text">比较运算符</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#For-x2F-In%E5%BE%AA%E7%8E%AF"><span class="nav-number">4.3.4.2.</span> <span class="nav-text">For&#x2F;In循环</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Typeof-x2F-null-x2F-undefined"><span class="nav-number">4.3.4.3.</span> <span class="nav-text">Typeof&#x2F;null&#x2F;undefined</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2"><span class="nav-number">4.3.4.4.</span> <span class="nav-text">类型转换</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F-Regular-Expression-x2F-regex-x2F-regexp-x2F-RE"><span class="nav-number">4.4.</span> <span class="nav-text">正则表达式(Regular Expression&#x2F;regex&#x2F;regexp&#x2F;RE)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95-1"><span class="nav-number">4.4.1.</span> <span class="nav-text">语法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%96%B9%E6%B3%95"><span class="nav-number">4.4.2.</span> <span class="nav-text">使用字符串方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%A8%A1%E5%BC%8F"><span class="nav-number">4.4.3.</span> <span class="nav-text">正则表达式模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RegExp%E5%AF%B9%E8%B1%A1"><span class="nav-number">4.4.4.</span> <span class="nav-text">RegExp对象</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#test"><span class="nav-number">4.4.4.1.</span> <span class="nav-text">test()</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#exec"><span class="nav-number">4.4.4.2.</span> <span class="nav-text">exec()</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%EF%BC%9Athrow-try-catch"><span class="nav-number">4.5.</span> <span class="nav-text">错误处理：throw, try, catch</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E8%AF%95"><span class="nav-number">4.6.</span> <span class="nav-text">调试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81API"><span class="nav-number">4.7.</span> <span class="nav-text">验证API</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BA%A6%E6%9D%9F%E9%AA%8C%E8%AF%81DOM%EF%BC%88Document-Object-Model%EF%BC%89%E6%96%B9%E6%B3%95"><span class="nav-number">4.7.1.</span> <span class="nav-text">约束验证DOM（Document Object Model）方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BA%A6%E6%9D%9F%E9%AA%8C%E8%AF%81DOM%E5%B1%9E%E6%80%A7"><span class="nav-number">4.7.2.</span> <span class="nav-text">约束验证DOM属性</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JSON"><span class="nav-number">4.8.</span> <span class="nav-text">JSON</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95%E8%A7%84%E5%88%99"><span class="nav-number">4.8.1.</span> <span class="nav-text">语法规则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JSON%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E6%8D%A2%E4%B8%BAJS%E5%AF%B9%E8%B1%A1"><span class="nav-number">4.8.2.</span> <span class="nav-text">JSON字符串转换为JS对象</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Atten"><span class="nav-number">4.8.2.1.</span> <span class="nav-text">Atten</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JS%E5%AF%B9%E8%B1%A1%E8%BD%AC%E6%8D%A2%E4%B8%BA%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">4.8.3.</span> <span class="nav-text">JS对象转换为字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Atten-1"><span class="nav-number">4.8.3.1.</span> <span class="nav-text">Atten</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#javascript-void-0"><span class="nav-number">4.9.</span> <span class="nav-text">javascript:void(0)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#href-x3D-%E2%80%9D-%E2%80%9D%E4%B8%8Ehref-x3D-%E2%80%9Djavascript-void-0-%E2%80%9D%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">4.9.1.</span> <span class="nav-text">href&#x3D;”#”与href&#x3D;”javascript:void(0)”的区别</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ES6"><span class="nav-number">5.</span> <span class="nav-text">ES6</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
     
 </main>
 
 
 
 <!-- common -->
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/header-shrink.js"></script>
-
-<script src="/js/back2top.js"></script>
-
-<script src="/js/dark-light-toggle.js"></script>
-
-<script src="/js/main.js"></script>
-
-<script src="/js/libs/anime.min.js"></script>
-
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.1/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.1/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.1/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.1/source/js/dark-light-toggle.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.1/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.1/source/js/libs/anime.min.js"></script>
 
 <!-- local-search -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.1/source/js/local-search.js"></script>
 
 
 <!-- code-block -->
 
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.1/source/js/code-block.js"></script>
+
 
 <!-- lazyload -->
 
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.1/source/js/lazyload.js"></script>
 
-<div class="">
+
+<div class="pjax">
     
         <!-- post-helper -->
-        
-<script src="/js/post/post-helper.js"></script>
-
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.1/source/js/post/post-helper.js"></script>
 
         <!-- toc -->
         
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.1/source/js/post/toc.js"></script>
+        
 
         <!-- copyright-info -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.1/source/js/post/copyright-info.js"></script>
         
 
         <!-- share -->
@@ -1149,6 +1472,38 @@
 </div>
 
 <!-- pjax -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@3.8.1/source/js/libs/pjax.min.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        window.pjax = new Pjax({
+            selectors: [
+                'head title',
+                '.page-container',
+                '.pjax'
+            ],
+            history: true,
+            debug: false,
+            cacheBust: false,
+            timeout: 0,
+            analytics: false,
+            currentUrlFullReload: false,
+            scrollRestoration: false,
+            scrollTo: true,
+        });
+
+        document.addEventListener('pjax:send', () => {
+            KEEP.utils.pjaxProgressBarStart()
+        });
+
+        document.addEventListener('pjax:complete', () => {
+            KEEP.utils.pjaxProgressBarEnd()
+            window.pjax.executeScripts(document.querySelectorAll('script[data-pjax], .pjax script'))
+            KEEP.initExecute()
+        });
+    });
+</script>
+
 
 
 
