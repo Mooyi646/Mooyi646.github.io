@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281527777.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281527777.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281527777.png">
+  <link rel="mask-icon" href="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281527777.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"mooyi646.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="Helm0 概述为什么使用Helm? K8s能够很好地组织和编排容器，但是缺少一个更高层次的应用打包工具。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Helm">
+<meta property="og:url" content="https://mooyi646.github.io/post/cbb39f4b.html">
+<meta property="og:site_name" content="Mooyi&#39;s Blog">
+<meta property="og:description" content="Helm0 概述为什么使用Helm? K8s能够很好地组织和编排容器，但是缺少一个更高层次的应用打包工具。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-12-13T11:16:00.000Z">
+<meta property="article:modified_time" content="2023-12-13T11:18:16.211Z">
+<meta property="article:author" content="Mooyi">
+<meta property="article:tag" content="k8s">
+<meta property="article:tag" content="Helm Chart">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://mooyi646.github.io/post/cbb39f4b.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Helm | Mooyi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta custom-logo">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Mooyi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://mooyi646.github.io/post/cbb39f4b.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281528071.png">
+      <meta itemprop="name" content="Mooyi">
+      <meta itemprop="description" content="Live with fun">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Helm
+        </h1>
+
+        <div class="post-meta">
+
+        
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-12-13 19:16:00 / Modified: 19:18:16" itemprop="dateCreated datePublished" datetime="2023-12-13T19:16:00+08:00">2023-12-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Learning/K8S/" itemprop="url" rel="index"><span itemprop="name">K8S</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/post/cbb39f4b.html#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/cbb39f4b.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>5.8k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>5 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Helm"><a href="#Helm" class="headerlink" title="Helm"></a>Helm</h1><h2 id="0-概述"><a href="#0-概述" class="headerlink" title="0 概述"></a>0 概述</h2><p><strong>为什么使用Helm?</strong></p>
+<p>K8s能够很好地组织和编排容器，但是缺少一个更高层次的应用打包工具。</p>
+<span id="more"></span>
+
+<p>组织应用的服务多时，k8s对其组织和管理会出现的问题：</p>
+<ul>
+<li>很难管理、编辑和维护大量服务。每个服务都有若干配置，缺乏更高层次的工具将这些配置组织起来</li>
+<li>不容易将这些服务作为一个整体统一发布。缺少工具定义应用与服务、服务与服务之间的依赖关系</li>
+<li>不能高效地共享和重用服务，不支持参数化配置和多环境配置</li>
+<li>不支持应用级别地版本管理。通过<code>kubectl rollout undo</code>只能进行单个Deployment的回滚，不支持整个应用的回滚</li>
+<li>不支持对部署的应用状态进行验证</li>
+</ul>
+<p>而通过Helm就可以解决以上问题。</p>
+<p><strong>Helm作用</strong>：通过合并配置文件到一个可重用的包，从而可以自动创建、打包、配置、部署k8s应用。简单来说，Helm也就是一个Package manager。</p>
+<p><strong>概念介绍</strong>：</p>
+<p><code>Chart</code>：一个描述K8s相关资源的文件集合。</p>
+<p><code>Release</code>：一个运行的<code>chart</code>实例。</p>
+<p><code>Helm repositories</code>：即存放<code>helm charts</code>的库。 Artifact Hub: 类似于docker hub</p>
+<p><strong>Helm的适用场景</strong>：</p>
+<p>适用场景：</p>
+<ul>
+<li>有多个需被统一管理和部署的k8s应用</li>
+<li>K8s应用经常更新与部署</li>
+<li>多团队多用户合作开发部署k8s应用</li>
+</ul>
+<h2 id="1-Chart"><a href="#1-Chart" class="headerlink" title="1 Chart"></a>1 Chart</h2><h3 id="1-1-文件目录结构"><a href="#1-1-文件目录结构" class="headerlink" title="1.1 文件目录结构"></a>1.1 文件目录结构</h3><p>如下：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mychart/</span><br><span class="line">  Chart.yaml          # 包含了chart信息的YAML文件</span><br><span class="line">  LICENSE             # 可选: 包含chart许可证的纯文本文件</span><br><span class="line">  README.md           # 可选: 可读的README文件</span><br><span class="line">  values.yaml         # chart 默认的配置值</span><br><span class="line">  values.schema.json  # 可选: 一个使用JSON结构的values.yaml文件</span><br><span class="line">  charts/             # 包含chart依赖的其他chart</span><br><span class="line">  crds/               # 自定义资源的定义</span><br><span class="line">  templates/          # 模板目录， 当和values 结合时，可生成有效的Kubernetes manifest文件</span><br><span class="line">  templates/NOTES.txt # 可选: 包含简要使用说明的纯文本文件</span><br></pre></td></tr></table></figure>
+
+<p><strong>NOTE.txt</strong></p>
+<p>为用户提供说明。在<code>helm install</code> &#x2F; <code>helm upgrade</code> 的最后，会打印出对用户有用的信息。</p>
+<p>虽然<code>NOTES.txt</code>是纯文本，但是会像模板一样处理，所有正常的模板函数和对象都是可用的</p>
+<h3 id="1-2-Chart-dependency"><a href="#1-2-Chart-dependency" class="headerlink" title="1.2 Chart dependency"></a>1.2 Chart dependency</h3><p>Helm中，chart可以依赖其他任意个chart，所依赖的chart称为子chart。</p>
+<p><strong>依赖可以通过两种方式配置</strong>：</p>
+<ul>
+<li><p>使用<code>Chart.yaml</code>文件中的<code>dependencies</code>字段动态链接</p>
+<p>定义好依赖后，运行<code>helm dependency update</code>会使用依赖文件下载所指定的chart包到<code>chart/</code>目录</p>
+</li>
+<li><p>带入到<code>chart/</code>目录手动配置</p>
+</li>
+</ul>
+<h2 id="2-Values"><a href="#2-Values" class="headerlink" title="2 Values"></a>2 Values</h2><h3 id="2-1-Values对象"><a href="#2-1-Values对象" class="headerlink" title="2.1 Values对象"></a>2.1 Values对象</h3><p>作用：提供传递值到chart的方法。</p>
+<p>内容来源：</p>
+<ul>
+<li><p><code>values.yaml</code>文件</p>
+</li>
+<li><p>子chart不可访问父chart的值，但是可以被覆盖</p>
+</li>
+<li><p>使用<code>-f</code>参数传递到<code>helm install</code>&#x2F;<code>helm upgrade</code>的values文件</p>
+</li>
+<li><p>使用<code>--set</code>传递的单个参数</p>
+<p>顺序：默认使用<code>values.yaml</code>，可以被父chart的<code>values.yaml</code>覆盖，继而被用户提供values文件覆盖， 最后会被<code>--set</code>参数覆盖，优先级为<code>values.yaml</code>最低，<code>--set</code>参数最高。</p>
+</li>
+</ul>
+<p>即Helm相当于将<code>config value</code>与具体的资源的yaml解耦，即将具体的配置字段即其值提取出来成一个<code>values.yaml</code>文件。</p>
+<p>在资源具体的yaml文件中，字段值不直接配置，而是使用占位符代替。</p>
+<p>针对不同的运行环境，无需更改具体的yaml配置文件，而是更改<code>values.yaml</code>，类似于抽象出接口提供修改，而不是每次都到具体文件中修改。</p>
+<h3 id="2-2全局值"><a href="#2-2全局值" class="headerlink" title="2.2全局值"></a>2.2全局值</h3><p>使用完全一样的名字在所有的chart及子chart中都能访问的值。全局变量需要显式声明。不能将现有的非全局值作为全局值使用。</p>
+<p>可以在<code>values.yaml</code>中设置<code>global</code>字段来设置全局值</p>
+<h3 id="2-3-其他内置对象"><a href="#2-3-其他内置对象" class="headerlink" title="2.3 其他内置对象"></a>2.3 其他内置对象</h3><ul>
+<li>Release</li>
+<li>Chart</li>
+<li>Files</li>
+<li>Capabilities</li>
+<li>Template</li>
+</ul>
+<h2 id="3-模板Template"><a href="#3-模板Template" class="headerlink" title="3 模板Template"></a>3 模板Template</h2><h3 id="3-1-模板函数和流水线"><a href="#3-1-模板函数和流水线" class="headerlink" title="3.1 模板函数和流水线"></a>3.1 模板函数和流水线</h3><h4 id="3-1-1-模板函数"><a href="#3-1-1-模板函数" class="headerlink" title="3.1.1 模板函数"></a>3.1.1 模板函数</h4><p>已知：通过占位key可以将value传入到模板中，但传入的信息无法修改，需转换所提供的数据格式该怎么办？</p>
+<p>用模板函数解决。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">functionName arg1 arg2 ...</span><br></pre></td></tr></table></figure>
+
+<p>如：将传入的字符串用括号括起来放入模板中</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">data:</span><br><span class="line">  testvalue: &#123;&#123; quote .Values.test&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>即为调用<code>quote</code>函数并传递了一个参数为<code>.Values.test</code></p>
+<p><a target="_blank" rel="noopener" href="https://helm.sh/zh/docs/chart_template_guide/function_list/">模板函数列表</a></p>
+<h4 id="3-1-2-管道符"><a href="#3-1-2-管道符" class="headerlink" title="3.1.2 管道符"></a>3.1.2 管道符</h4><p>即为按顺序完成一系列任务的方式</p>
+<p>使用管道符重写上述模板函数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">data:</span><br><span class="line">  testvalue: &#123;&#123;  .Values.test | quote&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以上并不是调用<code>quote</code>函数，而是倒置命令，使用管道符( <code>|</code> )将参数发送给函数<code>quote</code></p>
+<p>使用管道符可以链接多个函数，如：<code>testvalue: &#123;&#123; .Values.test |upper |  quote&#125;&#125;</code></p>
+<h4 id="3-1-3-default函数"><a href="#3-1-3-default函数" class="headerlink" title="3.1.3 default函数"></a>3.1.3 default函数</h4><p>作用：设置默认值</p>
+<p>如：<code>testvalue: &#123;&#123;.Values.test | default "my-test" | quote &#125;&#125;</code></p>
+<p>即设置<code>.Values.test</code>的默认值为<code>&quot;my-test&quot;</code></p>
+<h4 id="3-1-4-空白控制"><a href="#3-1-4-空白控制" class="headerlink" title="3.1.4 空白控制"></a>3.1.4 空白控制</h4><p>错误的空白&#x2F;空格会导致错误的YAML，缩进需正确。</p>
+<p>模板引擎运行时，会移除<code>&#123;&#123;`和`&#125;&#125;</code>里的内容，但是所留下的空白保持。</p>
+<p><code>&#123;&#123;-`(包括添加的横杠和空格)表示向左删除空白， 而` -&#125;&#125;</code>表示右边的空格应该被去掉。</p>
+<p>要确保<code>-</code>和其他命令之间有一个空格。</p>
+<p> <strong>一定注意空格就是换行</strong></p>
+<p>有时使用<code>indent</code>更好，如：<code>&#123;&#123; indent 2 "mug:true" &#125;&#125;</code></p>
+<h3 id="3-2-流控制"><a href="#3-2-流控制" class="headerlink" title="3.2 流控制"></a>3.2 流控制</h3><h4 id="3-2-1-if-x2F-else"><a href="#3-2-1-if-x2F-else" class="headerlink" title="3.2.1 if&#x2F;else"></a>3.2.1 if&#x2F;else</h4><p>作用：创建条件语句</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123; if PIPELINE &#125;&#125;</span><br><span class="line">  # Do something</span><br><span class="line">&#123;&#123; else if OTHER PIPELINE &#125;&#125;</span><br><span class="line">  # Do something else</span><br><span class="line">&#123;&#123; else &#125;&#125;</span><br><span class="line">  # Default case</span><br><span class="line">&#123;&#123; end &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注</strong>：条件是<code>pipeline</code>而不是值，即控制结构可以执行整个管道而不仅仅是计算一个值</p>
+<p>管道<code>false</code>的情况：</p>
+<ul>
+<li>false</li>
+<li>0</li>
+<li>空串</li>
+<li>空集合</li>
+<li>nil（空或null）</li>
+</ul>
+<h4 id="3-2-2-with"><a href="#3-2-2-with" class="headerlink" title="3.2.2 with"></a>3.2.2 with</h4><p>作用：指定范围</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123; with PIPELINE &#125;&#125;</span><br><span class="line">  # restricted scope</span><br><span class="line">&#123;&#123; end &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注</strong>：<code>with</code>后的块只有在<code>pipeline</code>不为空时才执行</p>
+<p>如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;- with .Values &#125;&#125;</span><br><span class="line">testvalue: &#123;&#123; test | default &quot;my-test&quot; | quote &#125;&#125;</span><br><span class="line">&#123;&#123;- end &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>注</strong>：在指定作用域中，无法使用<code>.</code>访问父作用域的对象。但是可以通过<code>$</code>到根作用域访问，即限定为<code>$.xxxx</code></p>
+<h4 id="3-2-3-rang"><a href="#3-2-3-rang" class="headerlink" title="3.2.3 rang"></a>3.2.3 rang</h4><p>作用：提供类似<code>for each</code>类型的循环</p>
+<p>如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">lists: |-</span><br><span class="line">  &#123;&#123;- range .Values.lists &#125;&#125;</span><br><span class="line">  - &#123;&#123; . | title | quote &#125;&#125;</span><br><span class="line">  &#123;&#123;- end &#125;&#125;    </span><br></pre></td></tr></table></figure>
+
+<p>使用<code>rang</code>后，类似于<code>with</code>的作用域，每次循环，<code>.</code>都会设置为当前的值，</p>
+<h3 id="3-3-变量"><a href="#3-3-变量" class="headerlink" title="3.3 变量"></a>3.3 变量</h3><p>变量为对另一个对象的命名引用，遵循<code>$name</code>变量的格式且使用<code>:=</code>赋值</p>
+<p>如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">lists: |-</span><br><span class="line">  &#123;&#123;- range $index, $list := .Values.lists &#125;&#125;</span><br><span class="line">    &#123;&#123; $index &#125;&#125;: &#123;&#123; $list &#125;&#125;</span><br><span class="line">  &#123;&#123;- end &#125;&#125;    </span><br></pre></td></tr></table></figure>
+
+<p>以上会将整型索引（从0开始）赋值给<code>$index</code>并将<code>lists</code>每项值赋值给<code>$list</code></p>
+<h3 id="3-4-命名模板"><a href="#3-4-命名模板" class="headerlink" title="3.4 命名模板"></a>3.4 命名模板</h3><p>也叫部分&#x2F;子模板。是仅仅在文件内部定义的模板，并使用了一个名字。</p>
+<p><strong>注</strong>：模板名称是全局的，使用相同名称时，会使用最后出现那个</p>
+<p>常见命名惯例是用chart名称作为模板前缀</p>
+<h4 id="3-4-1-define"><a href="#3-4-1-define" class="headerlink" title="3.4.1 define"></a>3.4.1 define</h4><p>作用：创建命名模板</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;- define &quot;chartname.subname&quot; &#125;&#125;</span><br><span class="line">  # body of template here</span><br><span class="line">&#123;&#123;- end &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="3-4-2-template"><a href="#3-4-2-template" class="headerlink" title="3.4.2 template"></a>3.4.2 template</h4><p>作用：导入命名模板</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123; template &quot;chartname.subname&quot; &#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当模板引擎读取包含<code>define</code>和<code>template</code>的文件时，它会存储<code>chartname.subname</code>的引用直到<code>template &quot;chartname.subname&quot;</code>被调用。 然后会按行渲染模板。</p>
+<p><strong>注</strong>：使用的命名模板包含对象时，在<code>template</code>中需传入范围。</p>
+<p>如：<code>&#123;&#123;- template "mychart.labels" . &#125;&#125;</code></p>
+<p><strong>使用<code>template</code>的问题</strong>：<code>template</code>是一个行为而不是方法，数据只能简单地按行插入，解决空格缩进就很麻烦</p>
+<h4 id="3-4-3-include"><a href="#3-4-3-include" class="headerlink" title="3.4.3 include"></a>3.4.3 include</h4><p>作用：可以将模板内容导入当前管道，然后传递给管道中的其他方法。</p>
+<p>如：<code>&#123;&#123; include "mychart.app" | indent 4 &#125;&#125;</code></p>
+<h2 id="4-helmignore文件"><a href="#4-helmignore文件" class="headerlink" title="4 .helmignore文件"></a>4 .helmignore文件</h2><p>指定不想包含在helm chart中的文件，如果文件存在，helm package命令在打包时会忽略所有在其中匹配的文件</p>
+<p>支持unix shell的全局匹配、相对路径匹配、反向匹配，每行只考虑一种模式</p>
+<h2 id="5-Chart-Hook"><a href="#5-Chart-Hook" class="headerlink" title="5 Chart Hook"></a>5 Chart Hook</h2><p>作用：允许开发者在发布生命周期的某些点进行干预。</p>
+<p>Hook的工作方式与常规模板类似，但是因为Helm对其不同的使用方式，会有一些特殊的注释。</p>
+<h3 id="5-1-可用的Hook"><a href="#5-1-可用的Hook" class="headerlink" title="5.1 可用的Hook"></a>5.1 可用的Hook</h3><ul>
+<li><code>pre-install</code>：模板渲染之后，k8s资源创建之前执行</li>
+<li><code>post-install</code>：所有资源加载到k8s之后执行</li>
+<li><code>pre-delete</code>：在K8s删除之前，执行删除请求</li>
+<li><code>post-delete</code>：在所有的版本资源删除之后执行删除请求</li>
+<li><code>pre-upgrade</code>： 在模板渲染之后，资源更新之前执行一个升级请求</li>
+<li><code>post-upgrade</code>：所有资源升级之后执行一个升级请求</li>
+<li><code>pre-rollback</code>：在模板渲染之后，资源回滚之前，执行一个回滚请求</li>
+<li><code>post-rollback</code>： 在所有资源被修改之后执行一个回滚请求</li>
+<li><code>test</code>：调用<code>helm test</code>子命令执行</li>
+</ul>
+<p>【可用的hook】</p>
+<h3 id="5-2-钩子和发布生命周期"><a href="#5-2-钩子和发布生命周期" class="headerlink" title="5.2 钩子和发布生命周期"></a>5.2 钩子和发布生命周期</h3><p>如为install定义的两个钩子：<code>pre-install</code>, <code>post-install</code>，在chart开发时两个钩子都执行，则整个<code>install</code>周期会变为：</p>
+<ol>
+<li>用户执行 <code>helm install foo</code></li>
+<li>Helm库调用安装API</li>
+<li>在 <code>crds/</code>目录中的CRD会被安装</li>
+<li>在一些验证之后，库会渲染<code>foo</code>模板</li>
+</ol>
+<blockquote>
+<ol start="5">
+<li>库准备执行<code>pre-install</code>钩子(将hook资源加载到Kubernetes中)</li>
+<li>库按照权重对钩子排序(默认将权重指定为0)，然后在资源种类排序，最后按名称正序排列。</li>
+<li>库先加载最小权重的钩子(从负到正)</li>
+<li>库会等到钩子是 “Ready”状态(CRD除外)</li>
+</ol>
+</blockquote>
+<ol start="9">
+<li>库将生成的资源加载到Kubernetes中。注意如果设置了<code>--wait</code>参数，库会等所有资源是ready状态， 且所有资源准备就绪后才会执行<code>post-install</code>钩子。</li>
+</ol>
+<blockquote>
+<ol start="10">
+<li>库执行<code>post-install</code>钩子(加载钩子资源)。</li>
+<li>库会等到钩子是”Ready”状态</li>
+</ol>
+</blockquote>
+<ol start="12">
+<li>库会返回发布对象(和其他数据)给客户端</li>
+<li>客户端退出</li>
+</ol>
+<p>什么叫等到钩子是<code>Ready</code>状态？</p>
+<ul>
+<li>资源是<code>Job</code>或<code>Pod</code>类型，Helm会等到直到其成功运行完成。若钩子失败，发布就会失败。这是一个阻塞操作，所以Helm客户端会在这个任务执行时暂停</li>
+<li>其他种类资源，一旦k8s将资源标记为已加载，资源会被认为是<code>Ready</code>。</li>
+</ul>
+<p>当一个钩子中声明了很多资源时， 资源会串行执行。如果有钩子权重，会按照权重顺序执行。</p>
+<p><strong>钩子资源不使用对应版本管理</strong></p>
+<p>钩子创建的资源无法作为发布的一部分进行跟踪和管理。</p>
+<p>一旦Helm验证钩子达到<code>Ready</code>状态，将不再使用钩子资源。</p>
+<p>在钩子中创建了资源，不能依靠<code>helm uninstall</code>去删除资源。要删除这些资源，要么在钩子模板文件中 添加一个自定义的<code>helm.sh/hook-delete-policy</code> 注释，要么设置任务资源的生存时间（TTL）字段。</p>
+<p><code>helm.sh/hook-delete-policy</code> 注释值：</p>
+<ul>
+<li><code>before-hook-creation</code>：新钩子启动前删除之前的资源（默认）</li>
+<li><code>hook-succeeded</code>：钩子成功执行后删除资源</li>
+<li><code>hook-failed</code>：如果钩子执行失败，删除资源</li>
+</ul>
+<h3 id="5-3-编写一个hook"><a href="#5-3-编写一个hook" class="headerlink" title="5.3 编写一个hook"></a>5.3 编写一个hook</h3><p>hook是在<code>metadata</code>字段下指定了特殊的<code>annotations</code>的k8s清单文件</p>
+<p>如：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">metadata:</span></span><br><span class="line">  <span class="attr">annotations:</span></span><br><span class="line">    <span class="attr">&quot;helm.sh/hook&quot;:</span> <span class="string">post-install</span> <span class="comment">#指定hook</span></span><br><span class="line">    <span class="attr">&quot;helm.sh/hook-weight&quot;:</span> <span class="string">&quot;5&quot;</span></span><br><span class="line">    <span class="attr">&quot;helm.sh/hook-delete-policy&quot;:</span> <span class="string">hook-succeeded</span></span><br></pre></td></tr></table></figure>
+
+<p>一个资源可以实现多个钩子</p>
+
+    </div>
+
+    
+    
+    
+
+    
+      <div>
+       <div>
+    
+        <div style="text-align:center;color: #3F92A4;font-size:15px;">-------------END OF TEXT <i class="fa fa-tree"></i> Thanks for reading(●'◡'●)-------------</div>
+    
+</div>
+      </div>
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Mooyi
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://mooyi646.github.io/post/cbb39f4b.html" title="Helm">https://mooyi646.github.io/post/cbb39f4b.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/k8s/" rel="tag"># k8s</a>
+              <a href="/tags/Helm-Chart/" rel="tag"># Helm Chart</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/post/bae4ff13.html" rel="prev" title="Redis">
+      <i class="fa fa-chevron-left"></i> Redis
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Helm"><span class="nav-number">1.</span> <span class="nav-text">Helm</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0-%E6%A6%82%E8%BF%B0"><span class="nav-number">1.1.</span> <span class="nav-text">0 概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Chart"><span class="nav-number">1.2.</span> <span class="nav-text">1 Chart</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.1 文件目录结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-Chart-dependency"><span class="nav-number">1.2.2.</span> <span class="nav-text">1.2 Chart dependency</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Values"><span class="nav-number">1.3.</span> <span class="nav-text">2 Values</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-Values%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.3.1.</span> <span class="nav-text">2.1 Values对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2%E5%85%A8%E5%B1%80%E5%80%BC"><span class="nav-number">1.3.2.</span> <span class="nav-text">2.2全局值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E5%85%B6%E4%BB%96%E5%86%85%E7%BD%AE%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.3.3.</span> <span class="nav-text">2.3 其他内置对象</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%A8%A1%E6%9D%BFTemplate"><span class="nav-number">1.4.</span> <span class="nav-text">3 模板Template</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E6%A8%A1%E6%9D%BF%E5%87%BD%E6%95%B0%E5%92%8C%E6%B5%81%E6%B0%B4%E7%BA%BF"><span class="nav-number">1.4.1.</span> <span class="nav-text">3.1 模板函数和流水线</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-1-%E6%A8%A1%E6%9D%BF%E5%87%BD%E6%95%B0"><span class="nav-number">1.4.1.1.</span> <span class="nav-text">3.1.1 模板函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-2-%E7%AE%A1%E9%81%93%E7%AC%A6"><span class="nav-number">1.4.1.2.</span> <span class="nav-text">3.1.2 管道符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-3-default%E5%87%BD%E6%95%B0"><span class="nav-number">1.4.1.3.</span> <span class="nav-text">3.1.3 default函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-4-%E7%A9%BA%E7%99%BD%E6%8E%A7%E5%88%B6"><span class="nav-number">1.4.1.4.</span> <span class="nav-text">3.1.4 空白控制</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E6%B5%81%E6%8E%A7%E5%88%B6"><span class="nav-number">1.4.2.</span> <span class="nav-text">3.2 流控制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-1-if-x2F-else"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">3.2.1 if&#x2F;else</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-2-with"><span class="nav-number">1.4.2.2.</span> <span class="nav-text">3.2.2 with</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-3-rang"><span class="nav-number">1.4.2.3.</span> <span class="nav-text">3.2.3 rang</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E5%8F%98%E9%87%8F"><span class="nav-number">1.4.3.</span> <span class="nav-text">3.3 变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-%E5%91%BD%E5%90%8D%E6%A8%A1%E6%9D%BF"><span class="nav-number">1.4.4.</span> <span class="nav-text">3.4 命名模板</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-1-define"><span class="nav-number">1.4.4.1.</span> <span class="nav-text">3.4.1 define</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-2-template"><span class="nav-number">1.4.4.2.</span> <span class="nav-text">3.4.2 template</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-4-3-include"><span class="nav-number">1.4.4.3.</span> <span class="nav-text">3.4.3 include</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-helmignore%E6%96%87%E4%BB%B6"><span class="nav-number">1.5.</span> <span class="nav-text">4 .helmignore文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Chart-Hook"><span class="nav-number">1.6.</span> <span class="nav-text">5 Chart Hook</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%E5%8F%AF%E7%94%A8%E7%9A%84Hook"><span class="nav-number">1.6.1.</span> <span class="nav-text">5.1 可用的Hook</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%E9%92%A9%E5%AD%90%E5%92%8C%E5%8F%91%E5%B8%83%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-number">1.6.2.</span> <span class="nav-text">5.2 钩子和发布生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AAhook"><span class="nav-number">1.6.3.</span> <span class="nav-text">5.3 编写一个hook</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mooyi"
+      src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281528071.png">
+  <p class="site-author-name" itemprop="name">Mooyi</p>
+  <div class="site-description" itemprop="description">Live with fun</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Mooyi646" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Mooyi646" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/mooyixh@gmail.com" title="E-Mail → mooyixh@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/LuoMooyi" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;LuoMooyi" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/m00y1h" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;m00y1h" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="Link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://google.com/" title="http:&#x2F;&#x2F;google.com" rel="noopener" target="_blank">Google</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://bing.com/" title="http:&#x2F;&#x2F;bing.com" rel="noopener" target="_blank">Bing</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022-07 – 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mooyi</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="Symbols count total">124k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">1:53</span>
+</div>
+
+<!--
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://mooyi.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://mooyi646.github.io/post/cbb39f4b.html";
+    this.page.identifier = "post/cbb39f4b.html";
+    this.page.title = "Helm";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://mooyi.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>
