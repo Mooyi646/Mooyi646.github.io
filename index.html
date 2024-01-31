@@ -185,6 +185,1845 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://mooyi646.github.io/post/f293a03a.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281528071.png">
+      <meta itemprop="name" content="Mooyi">
+      <meta itemprop="description" content="Live with fun">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyi's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/f293a03a.html" class="post-title-link" itemprop="url">LLM开发学习</a>
+        </h2>
+
+        <div class="post-meta">
+
+        
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-01-31 17:50:40 / Modified: 17:54:08" itemprop="dateCreated datePublished" datetime="2024-01-31T17:50:40+08:00">2024-01-31</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LLM/" itemprop="url" rel="index"><span itemprop="name">LLM</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/post/f293a03a.html#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/f293a03a.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>6.8k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>6 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <span id="more"></span>
+
+<h1 id="大模型如何完成工作？"><a href="#大模型如何完成工作？" class="headerlink" title="大模型如何完成工作？"></a>大模型如何完成工作？</h1><h2 id="内在模型与提示词"><a href="#内在模型与提示词" class="headerlink" title="内在模型与提示词"></a>内在模型与提示词</h2><p>**Q1: **如何让大模型能够完成某个领域场景的实际工作，并且能够提升和干预效果？</p>
+<p><strong>A1</strong>：从影响大模型的能力和效果的两个因素入手：</p>
+<ul>
+<li><p><strong>模型</strong>（内在）：可以理解为知识和能力的混合体。</p>
+<p>经过微调的模型包含了学到的知识、逻辑，也包含执行具体某个任务的能力。</p>
+<p>缺点：训练与更新需要大量的随时间和成本 -&gt; 导致模型知识不够及时，变更困难，黑盒难控制，能力扩展难度高。</p>
+</li>
+<li><p>**提示词(prompt)**（外在）：可以理解为知识和指令的混合体</p>
+<p>prompt作用：</p>
+<ul>
+<li>prompt可以给大模型直接表达需求**(zero-shot)**</li>
+<li>可以给它示例**(few-shot)**解释需求</li>
+<li>可以一步步教它思考**(chain of thought)**一起完成需求</li>
+<li>给它背景信息**(context)**，帮助其理解问题和回顾历史</li>
+</ul>
+<p>因此，prompt有很好的灵活性和透明性，能够轻量级地完成很多工作。</p>
+<p>但是，受限于大模型性能与成本，<strong>prompt的大小有限</strong>，加上每次请求都要携带大量信息来维持状态，在性能上也有一定缺陷。</p>
+</li>
+</ul>
+<p>针对以上两个因素，可以做什么来<strong>干预模型</strong>呢？</p>
+<ul>
+<li><p>针对模型本身：fine-tune，微调，影响的是模型的权重</p>
+<p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401251355775.png" alt="image-20240125135244030"></p>
+</li>
+<li><p>针对输入：in-context learning，即prompt learning</p>
+<p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401251355039.png" alt="image-20240125135530980"></p>
+</li>
+</ul>
+<h2 id="引入检索"><a href="#引入检索" class="headerlink" title="引入检索"></a>引入检索</h2><p>**Q2: **目前提示词中包含很多内容，如何让大模型在海量的文章中总结回答？</p>
+<p>**A2: **问题分析：</p>
+<ol>
+<li>提示词包含很多内容 -&gt; 受限与token大小</li>
+<li>海量文章 -&gt; 相应时间过长</li>
+</ol>
+<p>理想情况：能否不提高token数量，且需提升大模型推理？</p>
+<p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401251402664.png" alt="image-20240125140209591"></p>
+<p>解决：对prompt进行压缩提炼。</p>
+<p>常见做法：外部引入检索流程，增加一部粗筛召回的逻辑，减少候选范围。</p>
+<p>好处：</p>
+<ul>
+<li>精简了prompt</li>
+<li>给大模型界定了范围，一定程度上使得大模型能够在更可靠的知识内容基础上总结推理，提高了输入的可信度</li>
+<li>从提升模型返回角度上来看，增加检索流程，可以对提示词进行检索增强(RAG)，比如对接知识图谱，业务知识库，能够提高输出的质量</li>
+</ul>
+<h2 id="检索方式选择"><a href="#检索方式选择" class="headerlink" title="检索方式选择"></a>检索方式选择</h2><p>目前业内主流的方式是采用<strong>向量检索</strong>来做检索增强。</p>
+<h2 id="基本流程与相关技术"><a href="#基本流程与相关技术" class="headerlink" title="基本流程与相关技术"></a>基本流程与相关技术</h2><h3 id="Tokenization与Embedding"><a href="#Tokenization与Embedding" class="headerlink" title="Tokenization与Embedding"></a>Tokenization与Embedding</h3><h4 id="Tokenization"><a href="#Tokenization" class="headerlink" title="Tokenization"></a>Tokenization</h4><p>token：作为模型的原始输入，是语义风格的最小单位。</p>
+<p>token可以是：一个单词，一个词根，一个标点等等</p>
+<p>对于LLM而言，外部输入或者训练的数据都是文本或文档，将其token化的过程就是tokenization.</p>
+<p>即tokenization为：将一段文本分割成单个的词语或标记的过程。</p>
+<p>如下：</p>
+<p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401251440064.png" alt="image-20240125144002015"></p>
+<p>对于英文，一个token一般对应4个字符或四分之三个单词；</p>
+<p>对于中文，token一般对应一个或半个词。</p>
+<p>不同的模型有不同的<strong>token限制</strong>，需要<strong>注意</strong>的是，此处的token限制，是<strong>输入的prompt和模型输出(completion)的token数之和</strong>，因此输入的prompt越长，输出的上限就越低。</p>
+<p><strong>temperature与token</strong></p>
+<p>temperature：即准确性概率。想要高准确性则将其尽可能置小，需要创造性就可以调高，范围为[0-1]</p>
+<p>当我们不一定想选概率最大的token时，可以通过temperature来控制</p>
+<h4 id="embedding"><a href="#embedding" class="headerlink" title="embedding"></a>embedding</h4><p>作用：将token序列变成向量</p>
+<p>距离相近的向量 -&gt; 有相近的含义</p>
+<p>embedding是对数据的压缩，且压缩的过程参考了语意和领域知识，可方便地进行相似性计算。</p>
+<h3 id="向量数据库VectorDB"><a href="#向量数据库VectorDB" class="headerlink" title="向量数据库VectorDB"></a>向量数据库VectorDB</h3><p>相似性计算：向量的距离可以用来衡量两个向量的相似度。常见的方式：</p>
+<ul>
+<li><p>余弦距离：通过两个向量的夹角的余弦，来确定其相似性。</p>
+<p>夹角为0：1， 90：0， 180：-1</p>
+<p>所以其取值范围为：[-1, 1]</p>
+</li>
+<li><p>欧式距离：两个点之间的连线距离</p>
+</li>
+<li><p>向量内积</p>
+</li>
+</ul>
+<p>向量数据库作用：</p>
+<ul>
+<li>检索增强：使用向量数据库做初筛，选择相似度高的候选材料，提供给大模型</li>
+<li>增加时效性</li>
+<li>提高可信度和溯源：基于向量数据库检索出来的资料回答</li>
+<li>隐私与权限问题</li>
+<li>多轮会话的context存储：大模型无记忆，可以通过向量数据库保存历史会话及上下文信息，每次对话将历史会话交给大模型，间接记忆。</li>
+<li>天生多模态：统一的向量格式存储，能够处理来自各种类型的数据源，例如文本、图像、音频、视频等。</li>
+</ul>
+<p>参考：</p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzA5MTIxNTY4MQ==&mid=2461139684&idx=1&sn=152bbf6a8b1f365da36c8d0640262ff4&chksm=873960cab04ee9dcaf4d4c6857a5bb0fa118548dfb4a48bae27e005c16381a9b065f65e78bcd&cur_album_id=2959126655292211206&scene=189#wechat_redirect">一文探秘LLM应用开发(4)</a></p>
+<h3 id="微调finetune"><a href="#微调finetune" class="headerlink" title="微调finetune"></a>微调finetune</h3><ul>
+<li>上游任务(upstream task)：无监督学习时做的任务</li>
+<li>下游任务(downstream task)：如情感分析，主体分类，文本生成</li>
+</ul>
+<p>**Q: **如何弥合上下游任务之间的gap，对齐大模型能力和用户实际需求？</p>
+<p>**A: **根据大模型的特点：如训练成本高，以及利用大模型学习到的知识的初衷，有一个较直接的做法是：</p>
+<p>设计不同目标的下游任务来和大模型组合起来一起完成具体的任务。该过程即为：目标函数挖掘(Object Engineering)。</p>
+<p>根据此思路：</p>
+<ol>
+<li>收集训练该领域任务需要的标注数据，重新学习，从而使模型具备该领域任务的能力。</li>
+<li>同时，学习特定领域知识时，之前在预训练中学到的知识不能忘记</li>
+<li>即将大模型的参数作为初始参数来学习，从而使其在保留历史知识和能力的基础上，又能适配下游任务具体的要求。此过程即为<strong>微调(finetune)</strong></li>
+</ol>
+<p>即整体过程为：预训练(pretrain) + 微调(finetune)</p>
+<p>微调的<strong>本质作用</strong>即为：通过调整模型的权重来更好地拟合数据，从何提高LLM在特定任务或领域的性能。</p>
+<p><strong>问题</strong>：每种任务都做一个适配任务，太麻烦</p>
+<p>**Q: **能否改变大模型适配下游任务的路线，让任务适配大模型，采用统一的模式处理不同任务？</p>
+<p>**A: **通过构建合适的prompt来适配大模型做不同任务。</p>
+<p>以GPT(Generative Pre-trained Transformer)为例，可以将具体问题变成大模型的文字接龙的方式来激发模型完成任务。</p>
+<p>如：情感分析问题，输入：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">I love this movie. It is [MASK]</span><br></pre></td></tr></table></figure>
+
+<p>则其会基于学到的知识补全为good，然后再将good这样的标签映射(Verbalizer)为”positive”，以此完成情感分析。</p>
+<p>整个过程无需修改模型参数，大模型一直在做自己擅长的文字接龙。</p>
+<p><strong>zero-shot 与 few-shot</strong></p>
+<p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401251601094.png" alt="image-20240125160127999"></p>
+<p>zero-shot：直接输入需求</p>
+<p>few-shot：先输入示例学习，然后输入需求</p>
+<p><strong>总结</strong>：将下游任务统一为一种模式，可以通过提示词学习(prompt learning &#x2F; in-context learning)，仅需少量数据(few-shot)或者无需数据(one-shot)，即可完成下游工作</p>
+<p>同时，在微调阶段，通过基于任务指定样例进行监督学习(instruct tuning指令微调)，可以使大模型以zero-shot的方式回答用户，甚至可以读懂样例中未出现的新指令类型（泛化性），并生成正确答案。</p>
+<p>问题：模型越来越大，全量参数微调难以工作。</p>
+<h4 id="参数高效微调PEFT-Parameter-Efficient-FineTuning-x2F-Delta-Tuning"><a href="#参数高效微调PEFT-Parameter-Efficient-FineTuning-x2F-Delta-Tuning" class="headerlink" title="参数高效微调PEFT(Parameter-Efficient FineTuning &#x2F; Delta Tuning)"></a>参数高效微调PEFT(Parameter-Efficient FineTuning &#x2F; Delta Tuning)</h4><p>参数高效微调：希望使用少量的参数以逼近全量参数微调的效果</p>
+<p>实现思路：区别于原来全量微调，</p>
+<ol>
+<li>固定原有模型参数，只微调变化的部分(少量参数, delta parameters)，从而减少计算成本和时间。</li>
+<li>同时，只存储微调部分的参数，而不保存全部模型，减少存储空间。</li>
+</ol>
+<p>三个方向：</p>
+<ul>
+<li><p>**增量式(Addition-based)**：增加原始模型中不存在的额外可训练神经模块或参数。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzA5MTIxNTY4MQ==&mid=2461139904&idx=1&sn=172e92206322ce3c8077e5cdff70502a&chksm=873961eeb04ee8f85bc49cafa1c462f5e0b3eef4ba4a02425118eea7373251a98665e9931996&cur_album_id=2959126655292211206&scene=189#wechat_redirect">具体类型参考</a></li>
+</ul>
+</li>
+<li><p>**指定式(Specification-based)**：指定原始模型中的特定的某些参数可训练，其余参数被冻结</p>
+</li>
+<li><p>**重参数化(Reparameterization)**：用低维子空间参数来重参数化原来存在的参数，以减少计算量。</p>
+<p>重参数化方法往往基于一类相似的假设：即预训练模型的适配过程本质上是低秩或者低维的。大白话讲，就是对它先进行精简计算然后再适配回原有结构并不会对模型影响很大。</p>
+</li>
+</ul>
+<p><strong>注</strong>：全量微调在大部分情况下还是效果最好的，因此，参数高效优化更多是一种折衷。</p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzA5MTIxNTY4MQ==&mid=2461140122&idx=5&sn=ffa1be89a5285a0938c8e8736da0aed9&chksm=873966b4b04eefa26e66d2ec2c603f065457185b5dc6d4872d74894c3c108e9532148bd65818&cur_album_id=2959126655292211206&scene=189#wechat_redirect">微调相关工具推荐</a></p>
+<h3 id="Prompt"><a href="#Prompt" class="headerlink" title="Prompt"></a>Prompt</h3><h4 id="In-context-learning"><a href="#In-context-learning" class="headerlink" title="In-context learning"></a>In-context learning</h4><p>除了问题描述之外，提供环境信息、输入、预期输出等信息，以上附加信息即为上下文(context)。</p>
+<p>对于模型来讲，我们仍然可以以这样人类熟悉的方式与模型进行交互，让它按照我们的预期工作，这就是上下文学习（In-Context-Learning），缩写为ICL。</p>
+<p>上下文学习是一种智能涌现(emergence)，其发生的前提是它拥有了和人类似的思维模式。</p>
+<p>模型发生智能涌现可能的原因是当学习的资料及模型参数规模大到一定程度（10B以上），引发了质变，从而将模型中本来蕴含的知识和逻辑激发出来，表现出了智能。</p>
+<p>总体而言，ICL的<strong>作用</strong>为：允许语言模型通过以演示的形式组织若干个示例或指定来学习任务。即类比学习。</p>
+<p>形式：</p>
+<ul>
+<li><p><strong>zero-shot</strong>：不提供上下文，只提供问题或 需求</p>
+<p>注：未提供示例，但是可以提供其他限定约束信息，如：仅回答，无需解释</p>
+</li>
+<li><p><strong>one-shot</strong>：提供一个例子</p>
+</li>
+<li><p><strong>few-shot</strong>：提供多个示例</p>
+</li>
+</ul>
+<p><strong>Q：</strong>In-contetxt learning 只是给大模型提供上下文输入，并没有修改模型权重，为什么有效？</p>
+<p><strong>A：</strong>（相关解释，可参考）</p>
+<ul>
+<li><p>提示示例会产生元梯度(meta-gradients)，这些元梯度会在推理时的前向传播过程中反映出来。而在微调时，示例实际上会产生真正的梯度，用于更新权重。因此，ICL可以取得与微调类似的效果。</p>
+<blockquote>
+<p>【Why Can GPT Learn In-Context? Language Models Implicitly Perform Gradient Descent as Meta-Optimizers】</p>
+</blockquote>
+</li>
+<li><p>把In-context learning看作是一种隐式的贝叶斯推理。大模型在进行进行In-Context Learning时，可通过使用Prompt来 “定位 “它在预训练过程中学到的相关概念。从理论上讲，我们可以将其视为以Prompt为条件的潜在概念的贝叶斯推理，而这种能力来自于预训练数据的结构（长期一致性）。从这个角度讲，解释了角色扮演以及夸奖大模型的有效性，因为它影响到了条件概率分布。</p>
+<blockquote>
+<p>【How does in-context learning work? A framework for understanding the differences from traditional supervised learning】</p>
+<p>《 An Explanation of In-context Learning as Implicit Bayesian Inference 》</p>
+<p>《Rethinking the Role of Demonstrations: What Makes In-Context Learning Work? 》</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>Q：</strong>如何提高In-context learning的学习能力？</p>
+<p><strong>A：</strong>指令学习(Instruct learning)，主要又有两方面可以提升：</p>
+<ol>
+<li>提升模型的zero-shot能力，即不提供例子也能智能回答</li>
+<li>让模型识别更多任务类型以及回答方式</li>
+</ol>
+<h4 id="Instruct-learning"><a href="#Instruct-learning" class="headerlink" title="Instruct learning"></a>Instruct learning</h4><p>发生时间：微调阶段。所以一般也叫指令微调(IT)</p>
+<p>指定微调的<strong>核心</strong>：不是学习知识，而是学习更多的<strong>任务类型以及回答方式和风格</strong>。</p>
+<p>方式：通过构建指令格式的实例，然后以有监督的方式对大模型进行微调。</p>
+<p>作用：指令微调可以帮助LLM拥有更好的推理能力， 从而展现出<strong>泛化到未见过任务</strong>的卓越能力。也就是说，就算微调的指令中没有设计相关的任务，大模型在新任务上的表现也会优于微调之前。</p>
+<h4 id="Chain-of-Thought-COT"><a href="#Chain-of-Thought-COT" class="headerlink" title="Chain of Thought(COT)"></a>Chain of Thought(COT)</h4><p>使用场景：无需大模型一次性完成任务，而是通过一步步分解，推理来完成任务。</p>
+<p>作用：能使大型语言模型解决算术推理（arithmetic Arithmetic）、常识推理（commonsense Reasoning）和符号推理（ symbolic reasoning）等类型的复杂任务</p>
+<p>触发COT：不一定非要提供推理步骤示例，zero-shot同样管用，最简单的额方式是在prompt中增加”Let’s think step by step”等相关字句即可。</p>
+<h4 id="Self-consistency-COT"><a href="#Self-consistency-COT" class="headerlink" title="Self-consistency COT"></a>Self-consistency COT</h4><p>利用”自一致性”（self-consistency）的解码策略，以取代在思维链提示中使用的贪婪解码策略，也就是说让大模型通过<strong>多种方式去生产答案</strong>，最后根据<strong>多次输出进行加权投票</strong>的方式选择一种最靠谱的答案。</p>
+<p>缺点：速度慢，资源消耗量大</p>
+<h4 id="Least-to-Most"><a href="#Least-to-Most" class="headerlink" title="Least-to-Most"></a>Least-to-Most</h4><p>思路：它在解决复杂问题时，先引导模型把问题拆分成子问题；然后再让大模型逐一回答子问题，并把子问题的回答作为下一个问题回答的上文，直到给出最终答案。</p>
+<p>即是一种<strong>循序渐进</strong>引导大模型解决问题的方式。</p>
+<p>使用：可以在prompt中增加如”what subproblems must be solved before answering this inquiry”之类的提示</p>
+<h4 id="Self-Ask"><a href="#Self-Ask" class="headerlink" title="Self-Ask"></a>Self-Ask</h4><p>与Least-To-Most类似，对于一个大模型没有在训练时直接见到的问题，通过诱导大模型以自我提问的问题，将问题分解为更小的后续问题，而这些问题可能在训练数据中见到过，这样就可以通过自问自答的方式，最终获得正确答案。</p>
+<p>使用：通过构建prompt示例，给出所有的follow up questions</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/aaN2xdFqa4HB8W4sLkwgxaCjG6PRTdhRibmbq2V05N91v1ia6apWvSqU3yewjvpM6Kto4uI0uTkajp0z9456lVIw/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></p>
+<h4 id="Meta-prompting"><a href="#Meta-prompting" class="headerlink" title="Meta-prompting"></a>Meta-prompting</h4><p>思路：使用大模型写Prompt，然后用其提供的Prompt再去提问，从而获得效果改进。</p>
+<p><a target="_blank" rel="noopener" href="https://chat.openai.com/share/77c59aeb-a2d6-4df8-abf6-42c8d19aba3d">示例</a></p>
+<h4 id="Knowledge-Generation-Prompting"><a href="#Knowledge-Generation-Prompting" class="headerlink" title="Knowledge Generation Prompting"></a>Knowledge Generation Prompting</h4><p>方式：通过知识生成来增强Prompt，提升大模型的效果。</p>
+<p>基本思路：</p>
+<ol>
+<li>基于问题让大模型给出问题的相关知识</li>
+<li>再将知识整合到问题中，从而让大模型给予<strong>更细致有针对性</strong>的回答。</li>
+</ol>
+<h4 id="Iterative-Prompting"><a href="#Iterative-Prompting" class="headerlink" title="Iterative Prompting"></a>Iterative Prompting</h4><p>迭代型提示：与大模型交互时，不要将其看作时独立的过程，而是将前一次的回答作为上下文提供给大模型。</p>
+<p>作用：可以有效提高模型信息的挖掘能力，并消除一些无关的幻觉。</p>
+<h4 id="Tree-of-Thoughts-TOT"><a href="#Tree-of-Thoughts-TOT" class="headerlink" title="Tree of Thoughts(TOT)"></a>Tree of Thoughts(TOT)</h4><p><img src="https://mmbiz.qpic.cn/mmbiz_png/aaN2xdFqa4HB8W4sLkwgxaCjG6PRTdhRuo9R49crFlxAMXkMJ8w4bdx352D0eEoyQSfOvMSkXyWEunRVroeCIg/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片"></p>
+<p>TOT是在COT(Chain of Thought)之上的扩展，并能够探索连贯的子步骤（思维），作为解决问题的中间步骤。</p>
+<p>COT：和大模型的一次交互，但是复杂问题一次无法解决。</p>
+<p>可以诱导大模型将复杂问题拆分成多层的树结构，每一步选择都以树的模式(BFS &#x2F; DFS)动态选择最合适的路径。其允许大模型通过考虑多种不同的推理路径和自我评估选择来决定下一步行动方案，并在必要时前瞻或回溯以做出全局选择，从而尽心深思熟虑的决策。</p>
+<p>基本过程如下：</p>
+<ol>
+<li>系统将问题分解，并生成一个推理”思维“候选者的列表</li>
+<li>对以上思维进行评估，系统衡量每个想法产生所需解决方案的可能性</li>
+<li>最后对方案进行排序</li>
+</ol>
+<h4 id="Graph-of-Thoughts-GOT"><a href="#Graph-of-Thoughts-GOT" class="headerlink" title="Graph of Thoughts(GOT)"></a>Graph of Thoughts(GOT)</h4><p>将这个结构变成DAG，进一步完善推理过程。</p>
+<p>相比于TOT，主要变化为：</p>
+<ul>
+<li>聚合：将几个想法融合成一个统一的想法</li>
+<li>精化：从单个思想进行连续迭代，以提高其精度</li>
+<li>生成：有利于从现有思想中产生新的思想</li>
+</ul>
+<h4 id="Algorithm-of-Thoughts-AoT"><a href="#Algorithm-of-Thoughts-AoT" class="headerlink" title="Algorithm-of-Thoughts(AoT)"></a>Algorithm-of-Thoughts(AoT)</h4><p>TOT与GOT的问题：会与大模型产生多次交互，从而导致高昂的运算成本，整体交互逻辑也比较复杂。</p>
+<p>如何尽量减少对大模型的查询交互，甚至将迭代过程直接放在大模型内部完成？ - &gt; AOT</p>
+<p>实现方式：通过使用算法示例</p>
+<h4 id="Program-aided-Language-Model-PAL"><a href="#Program-aided-Language-Model-PAL" class="headerlink" title="Program-aided Language Model(PAL)"></a>Program-aided Language Model(PAL)</h4><p>大模型问题：不擅长数学计算与逻辑执行</p>
+<p>思路：让大模型根据问题生成解决该问题的程序，然后将程序放在python等程序解释器上运行，从而产生实际的结果。</p>
+<p>但是目前，普通的数学应用题，大模型无需外部支持也能算对，所以PAL的使用场景变为复杂的数据分析和工具、API接口调用等场景。</p>
+<h4 id="Retrieval-Augmented-Generation-RAG"><a href="#Retrieval-Augmented-Generation-RAG" class="headerlink" title="Retrieval Augmented Generation(RAG)"></a>Retrieval Augmented Generation(RAG)</h4><p>通过检索方式，将问题相关背景知识作为上下文一并传给大模型，以便有效地提高模型准确性以及减少幻觉。</p>
+<p>工作流程：</p>
+<ol>
+<li>用户向LLM应用提出问题</li>
+<li>基于问题再数据库中检索出相关问题</li>
+<li>将检索出的top n 数据传给LLM应用，LLM应用基于用户问题以及检索到的相关信息进行合并形成最终的prompt、</li>
+<li>将prompt提交给大模型</li>
+<li>大模型产生输出返回给LLM应用，进而返回给用户。</li>
+</ol>
+<p>使用RAG架构的LLM应用，好处：</p>
+<ul>
+<li>破解prompt learning受限context window的问题</li>
+<li>能够尽量减少大模型幻觉带来的问题</li>
+<li>减少了为了微调而准备问题对，大大减少了复杂度</li>
+<li>prompt构造过程的操作空间大，为后续干预模型结果，完成特定业务需求提供了必要手段。</li>
+</ul>
+<h4 id="prompt的问题"><a href="#prompt的问题" class="headerlink" title="prompt的问题"></a>prompt的问题</h4><ul>
+<li><p>context window限制，即token长度限制</p>
+</li>
+<li><p>prompt的技巧性、繁琐性、稳定性问题</p>
+</li>
+<li><p>prompt的安全及权限隔离问题：如何防止大模型被利用与被攻击？</p>
+<p>提供攻击：通过包装好的提示，欺骗大模型执行非预期的操作。主要有以下三类：</p>
+<ul>
+<li>提示注入：将恶意或非预期内容添加到提示中，以劫持语言模型的输出。</li>
+<li>提示泄露：从LLM的响应中提取敏感或保护信息</li>
+<li>越狱：绕过安全和审查功能</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://mooyi646.github.io/post/b32394ab.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281528071.png">
+      <meta itemprop="name" content="Mooyi">
+      <meta itemprop="description" content="Live with fun">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyi's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/b32394ab.html" class="post-title-link" itemprop="url">向量数据库的非必要性</a>
+        </h2>
+
+        <div class="post-meta">
+
+        
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-01-31 17:50:40 / Modified: 17:54:08" itemprop="dateCreated datePublished" datetime="2024-01-31T17:50:40+08:00">2024-01-31</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/LLM/" itemprop="url" rel="index"><span itemprop="name">LLM</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/post/b32394ab.html#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/b32394ab.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>1.3k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>1 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="向量数据库的非必要性"><a href="#向量数据库的非必要性" class="headerlink" title="向量数据库的非必要性"></a>向量数据库的非必要性</h1><p>检索增强RAG（Retrieval Augmented Generation)</p>
+<ol>
+<li>快速在全部潜在文档中搜索一小部分相关文档<ul>
+<li>确定相关文档子集：向量嵌入，最邻近搜索</li>
+</ul>
+</li>
+<li>将这部分文档内容加入到模型的提示信息中，再将其发送给LLM</li>
+</ol>
+<p>向量数据库：存储和计算大量文档的最近邻信息</p>
+<p>向量数据库问题：</p>
+<ul>
+<li>数据一致性</li>
+<li>有限的查询语言</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/post/b32394ab.html#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://mooyi646.github.io/post/0.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281528071.png">
+      <meta itemprop="name" content="Mooyi">
+      <meta itemprop="description" content="Live with fun">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyi's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/0.html" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+
+        
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-01-31 17:08:12 / Modified: 17:54:08" itemprop="dateCreated datePublished" datetime="2024-01-31T17:08:12+08:00">2024-01-31</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/post/0.html#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/0.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>0</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>1 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://mooyi646.github.io/post/0.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281528071.png">
+      <meta itemprop="name" content="Mooyi">
+      <meta itemprop="description" content="Live with fun">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyi's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/0.html" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+
+        
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-01-18 11:09:27" itemprop="dateCreated datePublished" datetime="2024-01-18T11:09:27+08:00">2024-01-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-01-31 17:54:08" itemprop="dateModified" datetime="2024-01-31T17:54:08+08:00">2024-01-31</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/post/0.html#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/0.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>348</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>1 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><strong>结构化数据 vs. 非结构化数据</strong></p>
+<ul>
+<li>结构化数据：也称行数据。由二维表结构来逻辑表达和实现，严格遵循数据格式与长度规范，主要通过关系型数据库进行存储管理</li>
+<li>非结构化数据：数据结构不规则或不完整，没有预定义的数据模型，不方便用数据库二维表来表现的数据。例如办公文档、文本、图片、HTML、音视频等等。</li>
+</ul>
+<p><strong>Relation Extraction(RE)</strong></p>
+<p>关系提取。</p>
+<p>作用：从非结构化文本中提取结构化知识。</p>
+<p><strong>prompt-tuning</strong></p>
+<p>提示调整？</p>
+<p>通过完成掐词任务，直接采用预训练的 LM 作为预测器，以弥补预训练和微调之间的差距。</p>
+<p>prompt-tuning将原始输入与提示模板结合在一起来预测[MASK]，然后将预测的标签词映射到相应的类集，使得PLMs(Pre-trained Language Models)在少量任务上有更好的表现。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://mooyi646.github.io/post/0.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281528071.png">
+      <meta itemprop="name" content="Mooyi">
+      <meta itemprop="description" content="Live with fun">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyi's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/0.html" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+
+        
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-01-17 13:51:39" itemprop="dateCreated datePublished" datetime="2024-01-17T13:51:39+08:00">2024-01-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-01-31 17:54:08" itemprop="dateModified" datetime="2024-01-31T17:54:08+08:00">2024-01-31</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/post/0.html#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/0.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>2.5k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>2 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="SseEmmitter"><a href="#SseEmmitter" class="headerlink" title="SseEmmitter"></a>SseEmmitter</h2><p>作用：推送消息</p>
+<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>服务端常用推送消息的技术有：</p>
+<ul>
+<li><p>客户端轮询：ajax定时拉取</p>
+</li>
+<li><p>服务端主动推送：WebSocket。</p>
+<ul>
+<li>是<strong>双全工</strong>的(full deplex)，即可以同时进行信号的双向传输。</li>
+<li>本质上是一个额外的tcp连接，建立与关闭时握手使用http协议，其他数据传输不使用http协议，而是更复杂一些，适用于需要进行复杂<strong>双向</strong>数据通讯的场景。</li>
+<li>优点：强大灵活</li>
+</ul>
+</li>
+<li><p>服务端主动推送：SSE(Server Send Event)。</p>
+<ul>
+<li><p>基于单工通信模式，HTML5新标准，用来从服务端实时推送数据到浏览器端。</p>
+</li>
+<li><p>直接建立在当前http连接上，本质是保持一个http长连接。</p>
+<p>注：http协议无法做到服务器主动推送消息。但是，可以变通为服务器向客户端声明，接下来发送的是流信息(streaming)，即发送的为数据流，会源源不断发送，如此，客户端不会关闭连接，会一直等着服务器发过来的新的数据流。（流信息本质为用时很长的下载）</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>SSE优点：</p>
+<ul>
+<li><p>使用HTTP协议，现有服务器软件都支持。WebSocket是一个独立协议。</p>
+</li>
+<li><p>轻量级，使用简单。</p>
+</li>
+<li><p>默认支持断线重连，WebSocket需要自己实现。</p>
+</li>
+<li><p>一般只用于传送文本，二进制数据需要编码后传送。WebSocket默认支持传送二进制数据。</p>
+</li>
+<li><p>支持自定义发送的消息类型。</p>
+</li>
+</ul>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>大致使用步骤为：</p>
+<ol>
+<li>客户端创建SseEmitter，即<code>EventSource</code>对象，向服务器发起连接</li>
+<li>服务端存储客户端创建的SseEmitter</li>
+</ol>
+<h4 id="客户端API"><a href="#客户端API" class="headerlink" title="客户端API"></a>客户端API</h4><p><strong>1. EventSource对象</strong></p>
+<p>SSE客户端API部署在EventSource对象中，查看浏览器是否支持SSE：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="string">&#x27;EventSource&#x27;</span> <span class="keyword">in</span> <span class="variable language_">window</span>) &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用SSE：</p>
+<ol>
+<li><p>浏览器生成EventSource实例，向服务器发起连接：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> source = <span class="keyword">new</span> <span class="title class_">EventSource</span>(url);</span><br></pre></td></tr></table></figure>
+
+<p>其中，以上url可以与当前网址同域，也可以跨域。</p>
+<p>跨域时：可以指定第二个参数，打开<code>withCredentials</code>属性，表示是否一起发送Cookie.即为：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> source = <span class="keyword">new</span> <span class="title class_">EventSource</span>(url, &#123; <span class="attr">withCredentials</span>: <span class="literal">true</span> &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>EventSource实例的<code>readyState</code>属性，表示连接的当前状态，该属性<strong>只读</strong>，可取值如下：</p>
+<ul>
+<li>0：相当于常量<code>EventSource.CONNECTING</code>，表示连接还未建立，或者断线正在重连。</li>
+<li>1：相当于常量<code>EventSource.OPEN</code>，表示连接已经建立，可以接受数据。</li>
+<li>2：相当于常量<code>EventSource.CLOSED</code>，表示连接已断，且不会重连。</li>
+</ul>
+</li>
+<li><p>连接一旦建立，就会触发<code>open</code>事件，可以在<code>onopen</code>属性定义回调函数。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">source.<span class="property">onopen</span> =  <span class="keyword">function</span> (<span class="params">event</span>)&#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 或者</span></span><br><span class="line">source.<span class="title function_">addEventListener</span>(<span class="string">&#x27;open&#x27;</span>, <span class="keyword">function</span> (<span class="params">event</span>) &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>客户端收到服务器发来的数据，会触发<code>message</code>事件，可以在<code>onmessage</code>属性定义回调函数，类似于onopen.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">source.<span class="property">onmessage</span> =  <span class="keyword">function</span> (<span class="params">event</span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> data = event.<span class="property">data</span>;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 或者</span></span><br><span class="line">source.<span class="title function_">addEventListener</span>(<span class="string">&#x27;message&#x27;</span>, <span class="keyword">function</span> (<span class="params">event</span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> data = event.<span class="property">data</span>;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br></pre></td></tr></table></figure>
+
+<p>其中，data即为服务器传回的数据（文本格式）</p>
+</li>
+<li><p>发生通信错误时，会触发<code>error</code>事件，可以在<code>onerror</code>属性中定义回调函数。</p>
+</li>
+<li><p>使用<code>close</code>方法关闭SSE连接</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source.<span class="title function_">close</span>();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>自定义事件的处理：</p>
+<p>服务器发来的数据默认总是触发浏览器EventSource的message事件，也可以自定义SSE事件，如此，发送来的数据不会触发message事件。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">source.<span class="title function_">addEventListener</span>(<span class="string">&#x27;event_name&#x27;</span>, <span class="keyword">function</span>(<span class="params">event</span>)&#123;</span><br><span class="line">    <span class="keyword">var</span> data = event.<span class="property">data</span>;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br></pre></td></tr></table></figure>
+
+<p>以上，浏览器对SSE的’event_name’事件监听，而服务器如何发送’event_name’事件呢？如下：</p>
+</li>
+</ol>
+<h4 id="服务器实现"><a href="#服务器实现" class="headerlink" title="服务器实现"></a>服务器实现</h4><p><strong>数据格式</strong>：</p>
+<ol>
+<li><p>必须是UTF8编码的文本</p>
+</li>
+<li><p>有如下HTTP头信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Content-Type: text/event-stream</span><br><span class="line">Cache-Control: no-cache</span><br><span class="line">Connection: keep-alive</span><br></pre></td></tr></table></figure>
+
+<p>Content-Type<code>必须指定 MIME 类型为</code>event-steam</p>
+</li>
+</ol>
+<ul>
+<li><p>每次发送的信息，由若干个<code>message</code>组成，每个之间使用<code>\n\n</code>分隔。每个message内部都由若干行组成，每行格式如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[field]: value\n</span><br></pre></td></tr></table></figure>
+
+</li>
+<li><p>field取值可以有四个：</p>
+<ul>
+<li><p><strong>data</strong>：表示数据内容，可以分行，每行以<code>\n</code>结尾，最后一行使用<code>\n\n</code>结尾</p>
+</li>
+<li><p><strong>event</strong>：表示自定义的事件类型，默认是<code>message</code>事件。</p>
+</li>
+<li><p><strong>id</strong>：表示数据标识符，相当于每条数据的编号。</p>
+<ul>
+<li>在浏览器中，使用<code>lastEventId</code>属性读取这个值。</li>
+<li>断连时，浏览器会发送一个HTTP头，其中包含一个特殊的<code>Last-Event-ID</code>头信息，将该值发送回来，用于帮助服务器端重新建立连接。</li>
+<li>因此，该头信息可被视为一种同步机制。</li>
+</ul>
+</li>
+<li><p><strong>retry</strong>：表示浏览器重新发起连接的时间间隔。</p>
+<p>浏览器重新发起连接的两种情况：</p>
+<ul>
+<li>时间间隔到期</li>
+<li>网络错误等原因导致连接出错</li>
+</ul>
+</li>
+</ul>
+<p>示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">id: msg1\n</span><br><span class="line">event: foo\n</span><br><span class="line">retry: 10000\n</span><br><span class="line">data: a foo event\n\n</span><br></pre></td></tr></table></figure>
+
+
+</li>
+<li><p>此外，还可以有冒号开头的行，表示注释。通常，服务器每隔一段时间就会向浏览器发送一个注释，<strong>保持连接不中断</strong>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">: <span class="title class_">This</span> is a comment</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>参考：</p>
+<p><a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2017/05/server-sent_events.html">Server-Sent Events 教程</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u011943534/article/details/120251614">springboot学习(五十八) springboot中使用SseEmitter推送消息</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://mooyi646.github.io/post/0.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281528071.png">
+      <meta itemprop="name" content="Mooyi">
+      <meta itemprop="description" content="Live with fun">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyi's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/0.html" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+
+        
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-01-16 15:06:03" itemprop="dateCreated datePublished" datetime="2024-01-16T15:06:03+08:00">2024-01-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-01-31 17:54:08" itemprop="dateModified" datetime="2024-01-31T17:54:08+08:00">2024-01-31</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/post/0.html#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/0.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>1.9k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>2 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="LangChain"><a href="#LangChain" class="headerlink" title="LangChain"></a>LangChain</h1><p>作用：用于开发由语言模型驱动的应用程序的框架。</p>
+<p>主要能力：</p>
+<ul>
+<li>可以将LLM模型与外部数据源进行连接</li>
+<li>允许与LLM模型进行交互</li>
+</ul>
+<p>基础功能：</p>
+<ul>
+<li>LLM调用：支持多种模型接口、用于测试的Fake LLM, 缓存的支持，用量记录，流模式</li>
+<li>Prompt管理：支持各种自定义模板</li>
+<li>拥有大量文档加载器：如Email, markdown, pdf…</li>
+<li>对索引的支持：<ul>
+<li>文档分割器</li>
+<li>向量化</li>
+<li>对接向量存储与搜索</li>
+</ul>
+</li>
+<li>Chains:<ul>
+<li>LLM Chain</li>
+<li>各种工具Chain</li>
+<li>LangChainHub</li>
+</ul>
+</li>
+</ul>
+<h2 id="概念解析"><a href="#概念解析" class="headerlink" title="概念解析"></a>概念解析</h2><h3 id="Loader-加载器"><a href="#Loader-加载器" class="headerlink" title="Loader 加载器"></a>Loader 加载器</h3><p>作用：从指定源进行数据加载</p>
+<h3 id="Document-文档"><a href="#Document-文档" class="headerlink" title="Document 文档"></a>Document 文档</h3><p>使用loader读取到数据后，数据源需转换成Document对象，方便后续使用。</p>
+<h3 id="Text-Splitters-文本分割"><a href="#Text-Splitters-文本分割" class="headerlink" title="Text Splitters 文本分割"></a>Text Splitters 文本分割</h3><p>作用：用于分割文本。</p>
+<p><strong>Q: 为什么需要进行文本分割？</strong></p>
+<p><strong>A：</strong>将文本当作prompt发送给api，或者使用其embedding功能，都有字符长度限制，所以需要将文本进行分割。</p>
+<h3 id="Vectorstores-向量数据库"><a href="#Vectorstores-向量数据库" class="headerlink" title="Vectorstores 向量数据库"></a>Vectorstores 向量数据库</h3><p>数据相关性搜索本质：向量运算</p>
+<p>所以需要将加载进来的Document进行向量化，将其存储到对应的向量数据库中。</p>
+<h3 id="Chain-链"><a href="#Chain-链" class="headerlink" title="Chain 链"></a>Chain 链</h3><p>可以将其理解为任务，一个Chain就是一个任务。</p>
+<p>是对组件调用的序列，也可以包括其他链。</p>
+<h3 id="Agent-代理"><a href="#Agent-代理" class="headerlink" title="Agent 代理"></a>Agent 代理</h3><p><strong>作用</strong>：可以理解为其可以动态选择和调用chain或已有的工具</p>
+<p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401181440013.png" alt="image-20240118144044926"></p>
+<p><strong>代理类型</strong>：</p>
+<ul>
+<li>动作代理：决定要采取的动作，并逐个执行这些动作。<ul>
+<li>适用于小型任务</li>
+</ul>
+</li>
+<li>计划和执行代理：先制定一套要采取的行动计划，然后逐个执行这些行动。<ul>
+<li>复杂长时间任务，初始规划有助于保持长期目标和专注。</li>
+</ul>
+</li>
+</ul>
+<p><strong>相关概念解析</strong>：</p>
+<ul>
+<li>代理程序(Agent)：应用程序的逻辑所在。提供了一个接口，接受用户输入以及代理程序已经执行的步骤列表，并返回代理动作(AgentAction)或代理结束(AgentFinish)<ul>
+<li>代理动作：对应要使用的工具以及该工具的输入</li>
+<li>代理结束：表代理程序已完成，并包含向用户返回的信息</li>
+</ul>
+</li>
+<li>工具(Tools)：代理程序可以执行的操作。提供的工具高度取决于代理程序要执行的任务</li>
+<li>工具包(ToolKits)：为特定用例设计的工具组合。</li>
+<li>代理执行器(Agent Executor)：包装了一个代理程序和一组工具 。负责循环迭代运行代理程序，知道满足停止条件为止</li>
+</ul>
+<p><strong>构建代理的典型方法：</strong></p>
+<ul>
+<li>PromptTemplate：负责接收用户输入和先前步骤，并构建要发送给语言模型的提示</li>
+<li>语言模型：接收PromptTemplate构建的提示，并返回一些输出</li>
+<li>输出解析器：将以上语言模型的输出解析为AgentAction或AgentFinish对象</li>
+</ul>
+<p><strong>代理类型</strong></p>
+<ul>
+<li><strong>zero-shot-react-description</strong>：使用 <em>ReAct</em> 框架根据工具的 <code>描述 description</code> 来决定使用哪个工具。可以提供任意数量的tools, 每个tool都需要都描述。<strong>无记忆</strong>。</li>
+<li><strong>conversational-react-description</strong>：类似zero-shot，但是有记忆</li>
+<li><strong>react-docstore</strong>：使用ReAct框架与文档存储进行交互。必须提供以下两个工具：<ul>
+<li>Search工具：搜索相关文章</li>
+<li>Lookup工具：在检索到的文章中找到相关的信息块</li>
+</ul>
+</li>
+<li><strong>self-ask-with-search</strong>：查找问题的事实性答案。</li>
+</ul>
+<h3 id="Embedding嵌入"><a href="#Embedding嵌入" class="headerlink" title="Embedding嵌入"></a>Embedding嵌入</h3><p>作用：将一个内容实体映射为向量，从而获得内容之间的相似度。用于衡量文本的相关性</p>
+<p>使用场景：根据用户提供的语料片段与prompt内容计算相关度，然后将最相关的语料片段作为上下文放到prompt中，以提高completion的准确率</p>
+<h3 id="fine-tuning-微调"><a href="#fine-tuning-微调" class="headerlink" title="fine-tuning 微调"></a>fine-tuning 微调</h3><p>作用：在不改动模型的基础上，在顶层增加特性映（提供上下文），使微调后的模型更符合实际情况。</p>
+<p>主要目的：节省每次 completion 提供相同 prompt 的 tokens，把类似的 prompt 可以训练成: 只需要更改具体问题，而不用重复写 context、example.</p>
+<p>使用场景：</p>
+<ul>
+<li>想让模型按照某种格式来识别prompt，或按照某种格式回答。</li>
+<li>想让模型按照某种语气、性格来回答</li>
+<li>想让回答的completion具有某种倾向</li>
+</ul>
+<p>对大量数据进行fine-tuning，训练后的模型，按照prompt格式书写，则completion会自动按照期望的格式返回。</p>
+<p>类似于Masked Language Modeling(MLM)，系统会将回答识别为「答案: [mask] 」，模型去预测 mask 的内容，或者理解为「完形填空」</p>
+<p>相比于fine-tuning最大的优势为：不用进行训练，并且可以实时添加新内容，不用加一次就训练一次，各方面成本都低于fine-tuning</p>
+<p>参考：</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/609359047">快速了解 OpenAI 的 fine-tune 和 Embedding 能力</a></p>
+<p><a target="_blank" rel="noopener" href="https://liaokong.gitbook.io/llm-kai-fa-jiao-cheng/">LangChain 中文入门教程</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/639479632">Langchain 代理 (Agents) ，赋能超级 LLMs</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://mooyi646.github.io/post/0.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281528071.png">
+      <meta itemprop="name" content="Mooyi">
+      <meta itemprop="description" content="Live with fun">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyi's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/0.html" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+
+        
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-01-10 11:44:16" itemprop="dateCreated datePublished" datetime="2024-01-10T11:44:16+08:00">2024-01-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-01-31 17:54:08" itemprop="dateModified" datetime="2024-01-31T17:54:08+08:00">2024-01-31</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/post/0.html#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/0.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>4.8k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>4 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h1><p>【MYSQL锁】</p>
+<h2 id="按粒度"><a href="#按粒度" class="headerlink" title="按粒度"></a>按粒度</h2><h3 id="全局锁"><a href="#全局锁" class="headerlink" title="全局锁"></a>全局锁</h3><p><strong>定义</strong>：即对整个数据库实例加锁</p>
+<p><strong>应用场景</strong>：全库逻辑备份(<code>mysqldump</code>)</p>
+<p><strong>实现方式</strong>：mysql提供了全局加<strong>读锁</strong>的方法，<code>FLUSH TABLES WITH RED LOCK</code>(FTWRL),，当需要整个库处于<strong>只读</strong>状态时，可以使用以上命令。使用后其他线程的更新类语句会被阻塞。</p>
+<p><strong>风险点：</strong></p>
+<ul>
+<li>如果在主库上备份，那么在备份期间都不能执行更新，业务基本上就能停止。</li>
+<li>如果在从库上备份，那么备份期间从库不能执行主库同步过来的binlog，会导致主从延迟。</li>
+</ul>
+<p><strong>解决办法：</strong></p>
+<ul>
+<li><code>mysqldump</code>使用参数<code>--single-transaction</code>，启动一个事务，确保拿到一致性视图。而由于MVCC的支持，这个过程中数据是可以正常更新的。【需要支持事务】</li>
+</ul>
+<h3 id="表级锁"><a href="#表级锁" class="headerlink" title="表级锁"></a>表级锁</h3><p><strong>定义</strong>：即对当前操作的整张表加锁。MyISAM与InnoDB都支持表级锁。</p>
+<p>MYSQL中有两种表级锁：</p>
+<ol>
+<li>表锁</li>
+<li>元数据锁(Meta Data Lock， MDL)</li>
+</ol>
+<h4 id="1-表锁"><a href="#1-表锁" class="headerlink" title="1. 表锁"></a>1. 表锁</h4><p><strong>实现方式</strong>：<code>lock table table_name read/write</code></p>
+<p>如：<code>lock table t1 read , t2 wirte</code>，则其他线程写t1，读写t2都会被阻塞。</p>
+<p>同时，本线程在<code>unlock tables</code>之前，只允许执行读t1，读写t2的操作，且不能访问其他表。</p>
+<p><strong>释放锁</strong></p>
+<ol>
+<li><code>unlock tables</code></li>
+<li>会话退出后会释放所有表锁。</li>
+</ol>
+<h4 id="2-元数据锁MDL"><a href="#2-元数据锁MDL" class="headerlink" title="2. 元数据锁MDL"></a>2. 元数据锁MDL</h4><p>MDL不需要显式使用，在访问一个表时会被自动加上。</p>
+<ul>
+<li>当对一个表做增删改查(CRUD)操作的时候，加 <strong>MDL读锁</strong>(Shared Read &#x2F;  Shared Write)；</li>
+<li>当要对表做结构变更操作的时候，加 <strong>MDL 写锁</strong>。</li>
+</ul>
+<p>作用：防止进行CRUD操作时，其他线程对表结构做变更。</p>
+<p><strong><a target="_blank" rel="noopener" href="https://www.cnblogs.com/keme/p/11065025.html#221-%E6%80%8E%E4%B9%88%E8%A7%A3%E5%86%B3%E4%BA%86%E8%BF%99%E4%B8%AAmdl%E9%94%81">风险点：</a></strong></p>
+<p>如对表进行以下操作：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">注: 表t 是 innodb 表，mysql版本是<span class="number">5.7</span><span class="number">.24</span> 自动提交开启</span><br><span class="line"><span class="number">1.</span> sessionA:</span><br><span class="line"># <span class="keyword">begin</span>显式开启事务，所以其不会autocommit</span><br><span class="line"><span class="keyword">begin</span>;</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> t limit <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="number">2.</span> sessionB:</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> t limit <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"><span class="number">3.</span> sessionC:</span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> t <span class="keyword">add</span> f <span class="type">int</span> ;</span><br><span class="line">#会mdl锁住</span><br><span class="line"></span><br><span class="line"><span class="number">4.</span> sessionD:</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> t limit <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>如上操作：</p>
+<ol>
+<li><p>A先启动，会对表t加上一个MDL读锁</p>
+</li>
+<li><p>然后B也需要MDL读锁，正常执行。</p>
+</li>
+<li><p>C为对表进行结构修改，需要获取MDL写锁，但是A获取的MDL读锁还未释放，所以C获取锁失败，被阻塞。</p>
+<blockquote>
+<p>Q：为什么A获取的MDL读锁还未释放？</p>
+<p>A：事务中的 MDL 锁，在语句执行开始时申请，但是语句结束后并不会马上释放，而会<strong>等到整个事务提交后再释放。</strong> </p>
+<p>一般行锁都有锁超时时间。但是MDL锁没有超时时间的限制，只要事务没有提交就会一直锁住。</p>
+</blockquote>
+</li>
+<li><p>之后所有在表t上申请读锁的操作都会被C阻塞。</p>
+<blockquote>
+<p>Q：为什么？</p>
+<p>A：所有对表的增删改查操作都需要先申请MDL 读锁，而这时读锁没有释放，对表alter ，产生了mdl写锁，所有锁会形成一个优先级队列，<strong>写锁优先级高于读锁</strong>，所以一旦出现写锁等待，会将后续所有读写操作都阻塞。</p>
+</blockquote>
+</li>
+</ol>
+<p><strong>结果</strong>：很容易造成线程爆满</p>
+<p><strong>解决办法：</strong></p>
+<p>由前面分析可得，产生如上风险的原因是有<strong>长事务</strong>一直未提交，所以造成<strong>锁未释放</strong>。</p>
+<p>Q：如何找到长事务？</p>
+<p>A：在MySQL的<code>information_schema</code>库的<code>innobd_trx</code>表中，可以查到当前执行中的事务</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 查看事务超过<span class="number">60</span>s的事务</span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> information_schema.innodb_trx <span class="keyword">where</span> TIME_TO_SEC(timediff(now(),trx_started))<span class="operator">&gt;</span><span class="number">60</span>\G;</span><br><span class="line"># trx_started 表示什么时候执行的这个事务</span><br></pre></td></tr></table></figure>
+
+<p>该命令会返回一系列信息，包括：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 事务状态</span><br><span class="line">trx_state：<span class="keyword">RUNNING</span></span><br><span class="line"># 事务开始时间</span><br><span class="line">trx_started: <span class="number">2019</span><span class="number">-06</span><span class="number">-21</span> <span class="number">12</span>:<span class="number">44</span>:<span class="number">22</span></span><br><span class="line"># 执行事务的线程id</span><br><span class="line">trx_mysql_thread_id: <span class="number">17</span></span><br><span class="line"></span><br><span class="line"># 然后通过线程id定位</span><br><span class="line"># 查看所有线程</span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">show</span> <span class="keyword">full</span> processlist;</span><br></pre></td></tr></table></figure>
+
+<p>【以上操作】</p>
+<p>先查看host字段，查看到底是谁连接了数据库，然后进去commit（提交事务）或者rollback ,哪如果不是localhost 环境，是程序连接了，这时候就要kill掉了。</p>
+<p>即整体解决方案为：</p>
+<ol>
+<li>找到长事务</li>
+<li>若做DDL(data definition language)的表刚好有长事务在执行，暂停DDL或者kill掉这个长事务</li>
+</ol>
+<p>即我们为什么建议在低峰期做ddl变更。</p>
+<h4 id="3-意向锁"><a href="#3-意向锁" class="headerlink" title="3. 意向锁"></a>3. 意向锁</h4><p>定义：意向锁为一种<strong>不与行级锁冲突的表级锁</strong>。</p>
+<ul>
+<li>意向共享锁(Intention Shared Lock, IS)：一个事务在获取（任何一行&#x2F;或者全表）S锁之前，一定会先在所在的表上加IS锁。</li>
+<li>意向排他锁(Intention Exclusive Lock, IX)：一个事务在获取（任何一行&#x2F;或者全表）X锁之前，一定会先在所在的表上加IX锁。</li>
+</ul>
+<p><strong>意向锁是表级锁，不会与行级锁发生冲突，意向锁之间也不会发生冲突。其只会和共享表锁(lock table … read)以及独占表锁(lock table… write)发生冲突。</strong></p>
+<p>表锁与行锁满足：读读共享、读写互斥、写写互斥。</p>
+<p><strong>意向锁作用</strong>：</p>
+<ul>
+<li>无<code>意向锁</code>，需要加<code>独占表锁</code>时：遍历表中所有记录查询是否有<code>独占锁</code>，效率低；</li>
+<li>有<code>意向锁</code>，则加<code>独占锁</code>之前会先加表级别的<code>意向独占锁</code>，则加<code>独占表锁</code>时，可以直接查看是否有<code>意向独占锁</code>从而判断是否有锁冲突。</li>
+</ul>
+<p>即意向锁的作用为：<strong>快速判断表中是否有记录被加锁。</strong></p>
+<h4 id="4-AUTO-INC-锁"><a href="#4-AUTO-INC-锁" class="headerlink" title="4. AUTO-INC 锁"></a>4. AUTO-INC 锁</h4><p>表中主键通过<code>AUTO_INCREMENT</code>设置为自增，之后插入数据时，可以不指定主键的值，数据库会自动给其赋递增的值，这主要通过<code>AUTO-INC锁</code>实现。</p>
+<p>AUTO-INC锁是一个特殊的表锁机制。锁<strong>不是等事务提交后才释放，而是执行完插入语句后就立即释放。</strong></p>
+<p>执行过程：</p>
+<ol>
+<li>在插入数据时，会加一个表级别的 AUTO-INC 锁</li>
+<li>然后为被 <code>AUTO_INCREMENT</code> 修饰的字段赋值递增的值</li>
+<li>等插入语句执行完成后，才会把 AUTO-INC 锁释放掉。</li>
+</ol>
+<p>那么，一个事务在持有 AUTO-INC 锁的过程中，其他事务的如果要向该表插入语句都会被阻塞，从而保证插入数据时，被 <code>AUTO_INCREMENT</code> 修饰的字段的值是连续递增的。</p>
+<p>面对大量插入语句时：性能低。</p>
+<p> 在 MySQL 5.1.22 版本开始，InnoDB 存储引擎提供了一种<strong>轻量级的锁</strong>来实现自增。</p>
+<p>一样也是在插入数据的时候，会为被 <code>AUTO_INCREMENT</code> 修饰的字段加上轻量级锁，<strong>然后给该字段赋值一个自增的值，就把这个轻量级锁释放了，而不需要等待整个插入语句执行完后才释放锁</strong>。</p>
+<p>用AUTO-INC还是轻量级锁：<code>innodb_autoinc_lock_mode</code>：</p>
+<ul>
+<li><p>值为0：AUTO-INC</p>
+</li>
+<li><p>值为2：轻量级锁</p>
+<blockquote>
+<p>效率最高</p>
+<p>但是搭配binlog的日志格式为statement一起使用时，在<a target="_blank" rel="noopener" href="https://xiaolincoding.com/mysql/lock/mysql_lock.html#auto-inc-%E9%94%81">主从复制中会发生数据不一致</a>情况。</p>
+</blockquote>
+</li>
+<li><p>值为1：</p>
+<ul>
+<li>普通insert语句，自增锁在申请之后就马上释放</li>
+<li>insert … select这种批量插入语句，自增锁等语句结束后释放。</li>
+</ul>
+</li>
+</ul>
+<h3 id="页级锁"><a href="#页级锁" class="headerlink" title="页级锁"></a>页级锁</h3><p><strong>定义</strong>：介于行级锁与表锁之间。</p>
+<p>表锁：速度快，冲突多。</p>
+<p>行锁：冲突少，速度慢。</p>
+<p>所以采取折中的页级锁，一次取相邻的一组记录。</p>
+<p><a target="_blank" rel="noopener" href="https://www.mysqlzh.com/doc/218.html">BDB</a> 引擎支持页级锁。</p>
+<h3 id="行级锁"><a href="#行级锁" class="headerlink" title="行级锁"></a>行级锁</h3><p><strong>定义</strong>：对某一行数据进行加锁。</p>
+<p>粒度最小的锁，发生冲突的概率最低，并发度最高。但是加锁慢，开销大，容易死锁。</p>
+<p>MYSQL中只有InnoDB支持行级锁，行级锁分为共享锁和排他锁。</p>
+<p><strong>实现方式</strong>：行级锁不是直接锁记录，而是<strong>锁索引</strong>。</p>
+<ul>
+<li>主键索引：直接锁定主键索引</li>
+<li>非主键索引：先锁定该非主键索引，再锁定相关的主键索引。</li>
+</ul>
+<p><strong>Q1</strong>：普通<code>select</code>语句会对记录加锁吗？</p>
+<p><strong>A1</strong>：不会，其属于<code>快照读</code>（MVCC实现）</p>
+<p><strong>Q2</strong>：查询时需要加锁怎么办？</p>
+<p><strong>A2</strong>：使用以下两种方式，即锁定读</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">/</span><span class="operator">/</span>对读取的记录加共享锁</span><br><span class="line"><span class="keyword">select</span> ... lock <span class="keyword">in</span> share mode;</span><br><span class="line"></span><br><span class="line"><span class="operator">/</span><span class="operator">/</span>对读取的记录加独占锁</span><br><span class="line"><span class="keyword">select</span> ... <span class="keyword">for</span> <span class="keyword">update</span>;</span><br></pre></td></tr></table></figure>
+
+<p>以上语句使用时需在同一个事务中，因为事务提交后锁就会释放。</p>
+<p><strong>Q3</strong>：怎么保证在同一事务中？</p>
+<p><strong>A3</strong>：使用<code>begin</code>， <code>start transaction</code>或<code>set autocommit = 0 </code>显式开启事务</p>
+<p>锁分类（按属性）：【读读共享、读写互斥、写写互斥】</p>
+<ul>
+<li>共享锁（S锁）</li>
+<li>排他锁（X锁）</li>
+</ul>
+<p><strong>行级锁类型主要三类：</strong></p>
+<ol>
+<li>Record Lock，记录锁，锁一条记录</li>
+<li>Gap Lock，间隙锁，锁定一个范围，但是不包含记录本身</li>
+<li>Next-Key Lock，临键锁，Record Lock + Gap Lock，锁定一个范围以及记录本身</li>
+</ol>
+<h4 id="Record-Lock记录锁"><a href="#Record-Lock记录锁" class="headerlink" title="Record Lock记录锁"></a>Record Lock记录锁</h4><p>锁住一条记录，记录锁有S锁与X锁之分。</p>
+<p>如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 开启事务</span><br><span class="line"><span class="keyword">begin</span>;</span><br><span class="line"># 给t1表中id <span class="operator">=</span>  <span class="number">1</span>的记录加上X型的记录锁</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> t1 <span class="keyword">where</span> id <span class="operator">=</span> <span class="number">1</span> <span class="keyword">for</span> <span class="keyword">update</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="Gap-Lock间隙锁"><a href="#Gap-Lock间隙锁" class="headerlink" title="Gap Lock间隙锁"></a>Gap Lock间隙锁</h4><p><strong>只存在与可重复读(RR)级别</strong>。</p>
+<p>目的：解决可重复读隔离级别下<strong>幻读</strong>的现象。即防止插入幻读记录。</p>
+<p>如：id有3， 5的记录，在(3, 5)加上间隙锁，则其他事务无法插入id &#x3D; 4的记录，防止了幻读的发生。</p>
+<p>间隙锁虽然存在S锁与X锁，但是并无区别。间隙锁是<strong>兼容</strong>的，<strong>即两个事务可以同时持有包含共同间隙范围的间隙锁，并不存在互斥关系</strong>，因为间隙锁的目的是防止插入幻影记录而提出的。</p>
+<h4 id="Next-Key-Lock临键锁"><a href="#Next-Key-Lock临键锁" class="headerlink" title="Next-Key Lock临键锁"></a>Next-Key Lock临键锁</h4><p>锁定一个范围，并且锁定记录本身。</p>
+<p>如：id有3， 5的记录，在(3, 5]加上间隙锁，则其他事务无法插入id &#x3D; 4的记录，也无法修改id &#x3D; 5的记录。</p>
+<p>所以，next-key lock的<strong>作用</strong>为：即保护了记录，又能组织其他事务将新纪录插入到被保护记录的前方的间隙中。</p>
+<p>由于next-key lock包含记录锁，所以依然满足S锁与X锁的特性。即一个事务获取了 X 型的 next-key lock，那么另外一个事务在获取相同范围的 X 型的 next-key lock 时，是会被阻塞的。</p>
+<h4 id="插入意向锁"><a href="#插入意向锁" class="headerlink" title="插入意向锁"></a>插入意向锁</h4><p>事务插入记录时，需判断：插入位置是否已被其他事务加了间隙锁，若有，则需等待锁释放，在此期间，会生成一个<strong>插入意向锁</strong>，表明事务想要在某个区间插入新纪录，但是现在处于等待状态。</p>
+<blockquote>
+<p>注：MySQL 加锁时，是先生成锁结构，然后设置锁的状态，如果锁状态是等待状态，并不是意味着事务成功获取到了锁，只有当锁状态为正常状态时，才代表事务成功获取到了锁</p>
+</blockquote>
+<p>插入意向锁属于<strong>特殊的间隙锁</strong>，普通间隙锁锁住的为一个区间，插入意向锁锁住的就是一个点。</p>
+<p>尽管「插入意向锁」也属于间隙锁，但两个事务却不能在同一时间内，一个拥有间隙锁，另一个拥有该间隙区间内的插入意向锁（当然，插入意向锁如果不在间隙锁区间内则是可以的）。</p>
+<h3 id="select语句的锁定范围"><a href="#select语句的锁定范围" class="headerlink" title="select语句的锁定范围"></a>select语句的锁定范围</h3><h4 id="普通select：select-from-t1-where-id-x3D-1"><a href="#普通select：select-from-t1-where-id-x3D-1" class="headerlink" title="普通select：select * from t1 where id &#x3D; 1"></a>普通select：select * from t1 where id &#x3D; 1</h4><p>普通select查询为快照读，其通过MVCC实现无锁查询，InnoDB不会为其加任何锁。</p>
+<p><strong>Q</strong>：什么锁都没有？</p>
+<p><strong>A</strong>：前面提到，InnoDB不会为其加任何锁，即不会存在行锁，但是对数据表进行DML和DDL操作时，MySQL会为该表加上MDL锁，<strong>MDL锁是sever层实现的表级锁</strong>，适用于所有存储引擎。所以：</p>
+<ul>
+<li>对表进行增删改查(DML)，加MDL读锁(Shared Read与Shared Write都属于MDL读锁，互相兼容)</li>
+<li>对表进行结构更改(DDL)，加MDL写锁</li>
+</ul>
+<p>因此，我们所说的普通查询不加锁，指的是不加行级锁，实际上持有MDL锁。</p>
+<h4 id="select-for-update"><a href="#select-for-update" class="headerlink" title="select .. for update"></a>select .. for update</h4><p>属于锁定语句，会对表记录加X型的行级锁。对于不同隔离级别，其加的行级锁种类不同。</p>
+<p><strong>1. RC读已提交</strong></p>
+<p>行级锁种类只有记录锁。</p>
+<p><strong>2. RR可重复读</strong></p>
+<p>行级锁种类除记录锁外还有间隙锁与临键锁，不同场景下加锁不同。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://mooyi646.github.io/post/0.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281528071.png">
+      <meta itemprop="name" content="Mooyi">
+      <meta itemprop="description" content="Live with fun">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyi's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/0.html" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+
+        
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-01-07 13:54:47" itemprop="dateCreated datePublished" datetime="2024-01-07T13:54:47+08:00">2024-01-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-01-31 17:54:08" itemprop="dateModified" datetime="2024-01-31T17:54:08+08:00">2024-01-31</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/post/0.html#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/0.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>7.5k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>7 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="三大日志binlog-redo-log-undo-log"><a href="#三大日志binlog-redo-log-undo-log" class="headerlink" title="三大日志binlog, redo log, undo log"></a>三大日志binlog, redo log, undo log</h1><img src="https://oss.javaguide.cn/github/javaguide/01.png" alt="img" style="zoom:50%;" />
+
+<h2 id="redo-log重做日志"><a href="#redo-log重做日志" class="headerlink" title="redo log重做日志"></a>redo log重做日志</h2><p>作用：使MySQL拥有崩溃恢复能力。是InnoDB独有的。</p>
+<p>更新表数据时，在buffer pool存在要更新的数据时，直接在Buffer Pool更新数据所在页，然后将其设置为脏页。</p>
+<p>然后将“在某个数据页做了什么修改”记录到redo log buffer中，接着刷盘到redo log文件中。是物理日志。</p>
+<blockquote>
+<p>每条 redo 记录由“<strong>表空间号+数据页号+偏移量+修改数据长度+具体修改的数据</strong>”组成</p>
+</blockquote>
+<p><img src="https://oss.javaguide.cn/github/javaguide/03.png" alt="img"></p>
+<h3 id="Buffer-Pool"><a href="#Buffer-Pool" class="headerlink" title="Buffer Pool"></a>Buffer Pool</h3><p><strong>Q: Why Buffer Pool?</strong></p>
+<p><strong>A</strong>：以通常思维来看数据修改。</p>
+<ol>
+<li>从磁盘中读取记录</li>
+<li>在内存中修改该记录</li>
+</ol>
+<p>修改结束后，该条记录是直接写回磁盘，还是缓存起来呢？</p>
+<p>A：缓存起来。以便下次查询命中了该记录，可以直接读取缓存中的记录，无需从磁盘读。 - &gt; Buffer Pool</p>
+<p><strong>Q：Buffer Pool缓存什么？</strong></p>
+<p>InnoDB存储数据以页为单位，默认页大小为16k.</p>
+<p>Buffer Pool同理，以页划分。</p>
+<p>在 MySQL 启动的时候，<strong>InnoDB 会为 Buffer Pool 申请一片连续的内存空间，然后按照默认的<code>16KB</code>的大小划分出一个个的页， Buffer Pool 中的页就叫做缓存页</strong>。此时这些缓存页都是空闲的，之后随着程序的运行，才会有磁盘上的页被缓存到 Buffer Pool 中。</p>
+<p>所以，MySQL 刚启动的时候，使用的虚拟内存空间很大，而使用到的物理内存空间却很小，这是因为只有这些虚拟内存被访问后，操作系统才会触发缺页中断，申请物理内存，接着将虚拟地址和物理地址建立映射关系。</p>
+<p>【小林BufferPool<a target="_blank" rel="noopener" href="https://xiaolincoding.com/mysql/log/how_update.html#buffer-pool-%E7%BC%93%E5%AD%98%E4%BB%80%E4%B9%88%E3%80%91">https://xiaolincoding.com/mysql/log/how_update.html#buffer-pool-%E7%BC%93%E5%AD%98%E4%BB%80%E4%B9%88】</a></p>
+<h3 id="刷盘时机"><a href="#刷盘时机" class="headerlink" title="刷盘时机"></a>刷盘时机</h3><p>刷盘目的：保证数据持久性与一致性。【顺序写】</p>
+<p><strong>1. 事务提交</strong></p>
+<p>事务提交时，log buffer中的redo log会被刷新到磁盘。</p>
+<p>可以通过<code>innodb_flush_log_at_trx_commit</code>参数控制。</p>
+<p><strong>2. log buffer空间不足时</strong></p>
+<p>log buffer中redo log已占满总容量的一半左右，会刷盘。</p>
+<p><strong>3. 事务日志缓冲区满</strong></p>
+<p>InnoDB 使用一个事务日志缓冲区（transaction log buffer）来暂存事务的重做日志条目。当缓冲区满时，会触发日志的刷新，将日志写入磁盘。</p>
+<p><strong>4. CheckPoint检查点</strong></p>
+<p>InnoDB定时执行checkpoint操作，将内存中的脏数据刷新到磁盘，同时将响应的redo log一起刷新，以保证数据一致性。</p>
+<p><strong>5. 后台刷新线程</strong></p>
+<p>InnoDB启动了后台线程，周期性地（1s）将Buffer Pool中的脏页刷新到磁盘（WAL Write-Ahead Logging，预写日志，即写操作并不是立刻写到磁盘上，而是先写日志，然后在合适的时间再写到磁盘上），并将相关redo log一起刷新。</p>
+<p><strong>6. 正常关闭服务器</strong></p>
+<p>MySQL关闭时，redo log会刷盘。</p>
+<h3 id="刷盘策略innodb-flush-log-at-trx-commit"><a href="#刷盘策略innodb-flush-log-at-trx-commit" class="headerlink" title="刷盘策略innodb_flush_log_at_trx_commit"></a>刷盘策略innodb_flush_log_at_trx_commit</h3><p><code>innodb_flush_log_at_trx_commit</code>取值：</p>
+<ul>
+<li><p><strong>0</strong>：每次事务提交时不进行刷盘操作。【后台线程1s刷】</p>
+<p>性能最高，但最不安全。MySQL挂了或宕机可能丢失最近1s的事务。</p>
+<p><img src="https://oss.javaguide.cn/github/javaguide/06.png" alt="img"></p>
+</li>
+<li><p><strong>1</strong>：每次事务提交时都进行刷盘操作。</p>
+<p>性能最低，但是最安全。不会有数据丢失。【为保证事务一致性，需使用1】</p>
+<p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401071355264.png" alt="img"></p>
+</li>
+<li><p><strong>2</strong>：每次事务提交时，只把log buffer中的redo log写入page cache（操作系统的文件系统缓存）。</p>
+<p>性能与安全性都介于以上两种之间。MySQL挂了不会丢数据，操作系统宕机或断点可能丢1s.</p>
+<p><img src="https://oss.javaguide.cn/github/javaguide/09.png" alt="img"></p>
+</li>
+</ul>
+<p>默认值：1</p>
+<p>此外，<code>InnoDB</code> 存储引擎有一个后台线程，每隔<code>1</code> 秒，就会把 <code>redo log buffer</code> 中的内容写到文件系统缓存（<code>page cache</code>），然后调用 <code>fsync</code> 刷盘。</p>
+<p>所以，无事务提交的redo log，也可能刷盘。</p>
+<p><img src="https://oss.javaguide.cn/github/javaguide/05.png" alt="img"></p>
+<h3 id="日志文件组"><a href="#日志文件组" class="headerlink" title="日志文件组"></a>日志文件组</h3><p>redo log日志文件不止一个，是以日志文件组形式存在，每个redo日志文件大小一样。</p>
+<p>采用环形数组形式，从头开始写，写到末尾又回头循环写。</p>
+<img src="https://oss.javaguide.cn/github/javaguide/10.png" alt="img" style="zoom:50%;" />
+
+<p>日志文件组两个重要属性：</p>
+<ul>
+<li><p><strong>write pos</strong>：当前记录的位置，一边写一边后移。</p>
+<p>刷盘记录redo log到日志文件组时，write pos后移更新。</p>
+</li>
+<li><p><strong>checkpoint</strong>：当前要擦除的位置，也是往后推移</p>
+<p>MySQL加载日志文件组恢复数据时，会清空加载过的redo log，checkpoint后移更新。</p>
+</li>
+</ul>
+<p><strong>write pos 追上checkpoint?</strong></p>
+<p>表示日志文件组已满，不能再写入新的redo log，MySQL阻塞，将Buffer Pool中脏页刷新进磁盘，然后标记redo log可以擦除的记录，并擦除，推进checkpoint.</p>
+<p><strong>注</strong>：MySQL 8.0.30 之前可以通过 <code>innodb_log_files_in_group</code> 和 <code>innodb_log_file_size</code> 配置日志文件组的文件数和文件大小，但在 MySQL 8.0.30 及之后的版本中，这两个变量已被废弃，即使被指定也是用来计算 <code>innodb_redo_log_capacity</code> 的值。而日志文件组的文件数则固定为 32，文件大小则为 <code>innodb_redo_log_capacity / 32</code> 。</p>
+<p>在使用 MySQL 8.0.30 及之后的版本时，推荐使用 <code>innodb_redo_log_capacity</code> 变量配置日志文件组</p>
+<h2 id="binlog归档日志"><a href="#binlog归档日志" class="headerlink" title="binlog归档日志"></a>binlog归档日志</h2><p>作用：记录更新语句的原始逻辑，是逻辑日志，属于MySQL Server层。</p>
+<p>不管用什么存储引擎，只要发生了表数据更新，都会产生 <code>binlog</code> 日志。</p>
+<p><code>MySQL</code>数据库的<strong>数据备份、主备、主主、主从</strong>都离不开<code>binlog</code>，需要依靠<code>binlog</code>来同步数据，保证数据一致性。</p>
+<p><code>binlog</code>会记录所有涉及<strong>更新数据的逻辑操作</strong>，并且是顺序写。</p>
+<h3 id="记录格式"><a href="#记录格式" class="headerlink" title="记录格式"></a>记录格式</h3><p>有3种格式，可通过<code>binlog_format</code>参数指定：</p>
+<ul>
+<li><p><strong>statement</strong>：记录SQL语句原文。</p>
+<p>同步数据时，会执行记录的SQL语句。</p>
+<p>问题：更新的字段为当前时间<code>now()</code>时，同步执行会与源库时间不一致。</p>
+<p>解决：指定row</p>
+</li>
+<li><p><strong>row</strong>：除简单SQL外，还包含操作的具体数据。</p>
+<p>看不到详细信息，需通过<code>mysqlbinlog</code>工具解析。</p>
+<p>优点：可以保证同步数据的一致性。【通常都用】</p>
+<p>缺点：占用空间较大，恢复与同步更消耗IO资源，影响执行速度。</p>
+<p>解决：折中方案，mixed.</p>
+</li>
+<li><p><strong>mixed</strong>：MySQL判断SQL语句是否可能引起数据不一致，会则使用<code>row</code>，不会则使用<code>statement</code>。</p>
+</li>
+</ul>
+<h3 id="写入机制"><a href="#写入机制" class="headerlink" title="写入机制"></a>写入机制</h3><ol>
+<li><p>事务执行过程中，先将日志写入到<code>binlog cache</code></p>
+</li>
+<li><p>事务<strong>提交</strong>时，将<code>binlog cache</code>写入到<code>binlog</code>文件中。（追加写，写满换新文件）</p>
+<blockquote>
+<ol>
+<li>先write到文件系统的page cache，速度快</li>
+<li>再fsync，持久化到磁盘</li>
+</ol>
+<p><strong>write和fsync的时机</strong>：由参数<code>sync_binlog</code>控制</p>
+<ul>
+<li><p><strong>0</strong>：每次提交事务只write，由系统判断什么时候fsync（默认）</p>
+<p>优点：性能得到提升</p>
+<p>缺点：机器宕机，page cache中的binlog会丢失</p>
+</li>
+<li><p><strong>1</strong>：每次提交事务都执行fsync</p>
+</li>
+<li><p><strong>N</strong>：N &gt; 1，即每次提交事务都write，累积N个事务后fsync</p>
+<p>优点：出现IO瓶颈时，放大N，可以提升性能</p>
+<p>缺点：机器宕机后，会丢失最近的N个事务的binlog</p>
+</li>
+</ul>
+</blockquote>
+</li>
+</ol>
+<p>因为一个事务的<code>binlog</code>不能被拆开，无论这个事务多大，也要确保一次性写入，所以系统会给每个线程分配一个块内存作为<code>binlog cache</code>。</p>
+<h3 id="主从复制实现"><a href="#主从复制实现" class="headerlink" title="主从复制实现"></a>主从复制实现</h3><p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401071355262.png" alt="img"></p>
+<p>主从复制过程一般是异步的。过程一般有3个阶段：</p>
+<ol>
+<li>写入binlog[主库]</li>
+<li>同步binlog[从库创建线程连接主库的log dump线程，复制到从库，写到暂存日志relay log]</li>
+<li>回放binlog[从库，回放更新]</li>
+</ol>
+<p>完成主从复制后，可以实现：</p>
+<ul>
+<li><strong>写数据：只写主库</strong></li>
+<li><strong>读数据：只读从库</strong></li>
+</ul>
+<p>从而，写请求锁表时，不会影响读请求执行。</p>
+<p><strong>Q：从库数量越多越好？</strong></p>
+<p><strong>A</strong>：No. 从库数量多，其连接上来的IO线程也多，主库需要创建同样数量的log dump线程来处理复制请求，对主库的资源消耗量高。</p>
+<p>一般，一个主库一般跟 2～3 个从库（1 套数据库，1 主 2 从 1 备主）</p>
+<h2 id="两阶段提交"><a href="#两阶段提交" class="headerlink" title="两阶段提交"></a>两阶段提交</h2><p>redo log：使InnoDB有了崩溃恢复的能力</p>
+<p>binlog：保证了MySQL集群架构的数据一致性</p>
+<p>两个的写入时机：</p>
+<ul>
+<li>redo log：事务<strong>执行过程中</strong>可以不断写入</li>
+<li>binlog：<strong>提交事务时</strong>写入</li>
+</ul>
+<img src="https://oss.javaguide.cn/github/javaguide/01-20220305234816065.png" alt="img" style="zoom:50%;" />
+
+<p><strong>Q：redo log 与 binlog之间的逻辑不一致会造成的问题？</strong></p>
+<p><strong>A</strong>：假设场景为：redo log写完后，在写binlog的过程中出现异常</p>
+<pre><code>   则会导致：redo log 与 binlog中的数据不一致。即会导致恢复时，主备 / 从库数据不一致。
+</code></pre>
+<p>解决方案：InnoDB使用<strong>两阶段提交</strong>方案。</p>
+<p>原理：将redo log的写入拆分为两个步骤：</p>
+<ol>
+<li>prepare</li>
+<li>commit</li>
+</ol>
+<img src="https://oss.javaguide.cn/github/javaguide/04-20220305234956774.png" alt="img" style="zoom:50%;" />
+
+<p>此时若发生binlog写入异常：</p>
+<p>Mysql根据redo log恢复数据时，发现redo log还处于prepare阶段，且无对应的binlog日志，就会回滚事务。</p>
+<p><strong>Q：redo log commit阶段发生异常，会回滚事务吗？</strong></p>
+<p><strong>A</strong>：不会，redo log虽然处于prepare截断，但是可以通过事务id找到对应的binlog日志，所以MySQL认为是完整的，会提交事务恢复数据。</p>
+<h2 id="undo-log回滚日志"><a href="#undo-log回滚日志" class="headerlink" title="undo log回滚日志"></a>undo log回滚日志</h2><p>想要保证事务的<strong>原子性（Atomicity）</strong>：异常发生时，对已执行的操作进行回滚。</p>
+<p>作用：事务还未执行完（未提交），发生故障，需要回滚到事务之前的数据。即保证事务原子性。此外，还是实现MVCC的关键因素之一。</p>
+<p>记录时机：事务未提交前，记录更新前的数据到undo log中。</p>
+<p>如（不同类型操作undo log的格式不同）：</p>
+<ul>
+<li><p>插入记录时，记录主键，回滚时删除对应记录</p>
+</li>
+<li><p>删除记录时，记录所有内容，回滚时插入对应记录</p>
+</li>
+<li><p>更新记录时，记录旧值与主键，回滚时更新为旧值</p>
+<blockquote>
+<p>更新操作产生的undo log都有一个roll_pointer指针和一个trx_id（事务id）：</p>
+<ul>
+<li>trx_id：记录被哪个事务修改的</li>
+<li>roll_pointer：将undo log串成一个链表，即版本链</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h3 id="undo-log刷盘"><a href="#undo-log刷盘" class="headerlink" title="undo log刷盘"></a>undo log刷盘</h3><p>与数据页的刷盘策略一致，需通过redo log保证持久化。</p>
+<p>Buffer Pool中有undo页，对undo 页的修改会记录到redo log， redo log再刷盘。</p>
+<h1 id="MCVV"><a href="#MCVV" class="headerlink" title="MCVV"></a>MCVV</h1><p>MVCC: Multi-Version Concurrency Control，即多版本并发控制。</p>
+<p>作用：保证多并发事务同时读写数据库时数据的一致性和隔离性。</p>
+<p>实现方式：在每个数据行上维护多个版本的数据。当一个事务要对数据库中数据进行修改时，MVCC会为其创建一个数据快照，而不直接修改实际的数据行。</p>
+<h2 id="快照读-vs-当前读"><a href="#快照读-vs-当前读" class="headerlink" title="快照读 vs. 当前读"></a>快照读 vs. 当前读</h2><p><strong>快照读</strong></p>
+<p>不加锁的非阻塞读。</p>
+<p>读取数据的某个版本快照。普通select即为快照读。</p>
+<p><strong>当前读</strong></p>
+<p>读取的是记录的最新版本，读取时还要保证其他并发事务不能修改当前记录，会对读取的记录进行加锁。</p>
+<p>select lock in share mode(共享锁), select for update ; update, insert ,delete(排他锁)都是当前读。</p>
+<p><strong>1. 读操作</strong></p>
+<p>使用快照读。</p>
+<p>快照读基于事务开始时数据库中的状态创建，因此事务不会读取其他事务尚未提交的修改。</p>
+<p>具体操作如下：</p>
+<ul>
+<li>事务查找符合条件的数据行，并选择符合事务开始时间的数据版本进行读取。</li>
+<li>某个数据行有多个版本时：事务会选择不晚于其开始时间的最新版本。确保事务只读在其开始前已存在的数据。</li>
+<li>事务读取的是快照数据，因此其他并发事务对数据行的修改不影响当前读取。</li>
+</ul>
+<p><strong>2. 写操作</strong></p>
+<p>会生成新的数据版本，并将修改后的数据写入数据库。</p>
+<p>具体操作如下：</p>
+<ul>
+<li>事务为要修改的数据行创建一个新的版本，并将修改后的数据写入新版本。</li>
+<li>新版本的数据会带有当前事务的版本号，以便其他事务能够正确读取相应版本的数据。</li>
+<li>原始版本的数据仍然存在，供其他事务使用快照读取，这保证了其他事务不受当前事务的写操作影响。</li>
+</ul>
+<p><strong>3. 事务的提交与回滚</strong></p>
+<ul>
+<li>当一个事务提交时，它所做的修改将成为数据库的最新版本，并且对其他事务可见。</li>
+<li>当一个事务回滚时，它所做的修改将被撤销，对其他事务不可见。</li>
+</ul>
+<p><strong>4. 版本的回收</strong></p>
+<p>为了防止数据库中的版本无限增长，MVCC 会定期进行版本的回收。回收机制会删除已经不再需要的旧版本数据，从而释放空间。</p>
+<p>MVCC 通过创建数据的多个版本和使用快照读取来实现并发控制。读操作使用旧版本数据的快照，写操作创建新版本，并确保原始版本仍然可用。这样，不同的事务可以在一定程度上并发执行，而不会相互干扰，从而提高了数据库的并发性能和数据一致性。</p>
+<h2 id="InnoDB对MVCC的实现"><a href="#InnoDB对MVCC的实现" class="headerlink" title="InnoDB对MVCC的实现"></a>InnoDB对MVCC的实现</h2><p><code>MVCC</code> 的实现依赖于：<strong>隐藏字段、Read View、undo log</strong>。</p>
+<p>在内部实现中，</p>
+<ol>
+<li><p><code>InnoDB</code> 通过数据行的 <code>DB_TRX_ID</code> 和 <code>Read View</code> 来判断数据的可见性，</p>
+</li>
+<li><p>如不可见，则通过数据行的 <code>DB_ROLL_PTR</code> 找到 <code>undo log</code> 中的历史版本。</p>
+<p>每个事务读到的数据版本可能是不一样的，在同一个事务中，用户只能看到该事务<u>创建 <code>Read View</code> 之前</u>已经提交的修改和该事务本身做的修改。</p>
+</li>
+</ol>
+<h3 id="隐藏字段"><a href="#隐藏字段" class="headerlink" title="隐藏字段"></a>隐藏字段</h3><p>InnoDB为每行数据添加三个隐藏字段：</p>
+<ul>
+<li><p><code>DB_TRX_ID（6字节）</code>：即事务ID，表示最后一次插入或更新该行的事务 id。</p>
+<p>此外，<code>delete</code> 操作在内部被视为更新，只不过会在记录头 <code>Record header</code> 中的 <code>deleted_flag</code> 字段将其标记为已删除</p>
+</li>
+<li><p><code>DB_ROLL_PTR（7字节）</code>： 回滚指针，指向该行的 <code>undo log</code> 。</p>
+<p>如果该行未被更新，则为空</p>
+</li>
+<li><p><code>DB_ROW_ID（6字节）</code>：即隐式主键，如果没有设置主键且该表没有唯一非空索引时，<code>InnoDB</code> 会使用该 id 来生成聚簇索引</p>
+</li>
+</ul>
+<h3 id="ReadView"><a href="#ReadView" class="headerlink" title="ReadView"></a>ReadView</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ReadView</span> &#123;</span></span><br><span class="line">  <span class="comment">/* ... */</span></span><br><span class="line">private:</span><br><span class="line">  <span class="type">trx_id_t</span> m_low_limit_id;      <span class="comment">/* 目前出现过的最大的事务 ID+1，即下一个将被分配的事务 ID。大于等于这个 ID 的事务均不可见 */</span></span><br><span class="line"></span><br><span class="line">  <span class="type">trx_id_t</span> m_up_limit_id;       <span class="comment">/* 活跃事务列表 m_ids 中最小的事务 ID，如果 m_ids 为空，则 m_up_limit_id 为 m_low_limit_id。小于这个 ID 的事务均可见 */</span></span><br><span class="line"></span><br><span class="line">  <span class="type">trx_id_t</span> m_creator_trx_id;    <span class="comment">/* 创建该 Read View 的事务ID */</span></span><br><span class="line"></span><br><span class="line">  <span class="type">trx_id_t</span> m_low_limit_no;      <span class="comment">/* 事务 Number, 小于该 Number 的 Undo Logs 均可以被 Purge(清除) */</span></span><br><span class="line"></span><br><span class="line">  <span class="type">ids_t</span> m_ids;                  <span class="comment">/* 创建 Read View 时的活跃事务列表 */</span></span><br><span class="line"></span><br><span class="line">  m_closed;                     <span class="comment">/* 标记 Read View 是否 close */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>Read View即为事务进行快照读时产生的读视图。</p>
+<p>作用：主要是用于做<strong>可见性判断</strong>。当某个事务执行快照读时，会对该记录创建一个read view，将其作为条件用于判断当前事务能看到哪个版本的数据。</p>
+<h4 id="可见性算法"><a href="#可见性算法" class="headerlink" title="可见性算法"></a>可见性算法</h4><p><strong>注</strong>：</p>
+<ol>
+<li>ReadView与SQL绑定，而非与事务绑定。所以即使在同一事务中，每次SQL启动时的<code>low_trx_id</code>和<code>up_trx_id</code>也是不同。</li>
+<li><code>db_trx_id</code>指的是数据行中的<code>db_trx_id</code>字段，分配的事务ID只有操作了数据行，才会更新该字段值。（越晚创建id越大）</li>
+</ol>
+<p><strong>up_limit_id</strong></p>
+<p>表示“低水位”，即当前活跃事务列表的最小事务id(最早创建的事务)，若读取的数据行上的<code>db_trx_id</code>小于<code>up_limit_id</code>，表明这条记录的最后修改在readview创建之前，因此这条记录可以被看见。</p>
+<p><strong>low_limit_id</strong></p>
+<p>表示“高水位”，即当前活跃事务的最大id(最晚创建的事务) + 1，若读取的数据行上的<code>db_trx_id</code>大于<code>lpw_limit_id</code>，表明这条记录的最后修改在readview创建之后，因此这条记录不可以被看见。</p>
+<p>若读取的数据行上的<code>db_trx_id</code>在<code>up_limit_id</code>与<code>low_limit_id</code>之间，则查找该数据行上的<code>db_trx_id</code>是否在ReadView上的<code>m_ids</code>列表中。（即该事务是否为活跃事务）</p>
+<ul>
+<li>在其中，说明该条记录的最后修改在ReadView创建之时，被另一个活跃事务所修改，所以该条记录不可见。</li>
+<li>不在其中，说明该条记录的最后修改在ReadView之后，所以可见。</li>
+</ul>
+<p>综合以上，可见性算法的流程为：</p>
+<p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401071355068.png" alt="可见性算法"></p>
+<h4 id="ReadView生成时机"><a href="#ReadView生成时机" class="headerlink" title="ReadView生成时机"></a>ReadView生成时机</h4><p><strong>1. RR（Repeatable Read）</strong></p>
+<ul>
+<li>每个事务执行<code>SELECT</code>语句时：<ul>
+<li><strong>首次</strong>执行：会讲当前系统所有活跃事务拷贝到一个列表中生成ReadView</li>
+<li><strong>后续</strong>执行：复用其之前生成的ReadView</li>
+</ul>
+</li>
+<li><code>UPDATE, DELETE, INSERT</code>：对一致性读snapshot无影响</li>
+</ul>
+<p>RR隔离级别，第一次创建ReadView后，其就会一直持续到事务结束。</p>
+<p>即在事务执行过程中，数据的可见性不会变，所以在事务内部不会出现数据不一致的情况。</p>
+<p><strong>2. RC（Read Commited)</strong></p>
+<ul>
+<li><strong>每次</strong><code>SELECT</code>执行，都会重新将当前系统中的所有活跃事务拷贝到一个列表中生成ReadView</li>
+</ul>
+<p>问题：两个查询之间有事务提交，就会出现数据不一致。</p>
+<h3 id="undo-log"><a href="#undo-log" class="headerlink" title="undo log"></a>undo log</h3><p>InnoDB有两种undo log：</p>
+<ul>
+<li><p><strong>insert undo log</strong>：指在 <code>insert</code> 操作中产生的 <code>undo log</code>。</p>
+<p>因为 <code>insert</code> 操作的记录只对事务本身可见，对其他事务不可见。只在事务回滚时需要，故该 <code>undo log</code> 可以<strong>在事务提交后直接删除</strong>。不需要进行 <code>purge</code> 操作</p>
+</li>
+<li><p><strong>update undo log</strong>：<code>update</code> 或 <code>delete</code> 操作中产生的 <code>undo log</code>。</p>
+<p>除事务回滚需要之外，可能需要提供 <code>MVCC</code> 机制，因此不能在事务提交时就进行删除。提交时放入 <code>undo log</code> 链表，等待 <code>purge线程</code> 进行最后的删除</p>
+</li>
+</ul>
+<p>不同事务或者相同事务的对同一记录行的修改，会使该记录行的 <code>undo log</code> 成为一条链表，链首就是最新的记录，链尾就是最早的旧记录。</p>
+<h2 id="purge"><a href="#purge" class="headerlink" title="purge"></a>purge</h2><ul>
+<li>为实现MVCC，更新或删除操作都是：设置一下老记录的<code>deleted_bit</code>，并不是真的删除。</li>
+<li>为节省磁盘空间，InnoDB有专门的purge线程来清理<code>deleted_bit</code>为<code>true</code>的记录。</li>
+<li>为不影响MVCC正常工作，purge线程自己也维护了一个read view(相当于系统中最老活跃事务的read view)</li>
+<li>若某个记录的<code>deleted_bit</code>为<code>true</code>，且<code>DB_TRX_ID</code>相对于purge线程的read view可见，这条记录一定时可以被安全清除的。</li>
+</ul>
+<p>参考：</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/wtopps/article/details/118247884">什么是MySQL MVCC的ReadView？</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/jelly12345/p/14889331.html">MVCC多版本并发控制原理总结（最终版）</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://mooyi646.github.io/post/0.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281528071.png">
+      <meta itemprop="name" content="Mooyi">
+      <meta itemprop="description" content="Live with fun">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyi's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/post/0.html" class="post-title-link" itemprop="url">Untitled</a>
+        </h2>
+
+        <div class="post-meta">
+
+        
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-12-17 19:14:29" itemprop="dateCreated datePublished" datetime="2023-12-17T19:14:29+08:00">2023-12-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-01-31 17:54:08" itemprop="dateModified" datetime="2024-01-31T17:54:08+08:00">2024-01-31</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/post/0.html#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/0.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>15</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>1 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="MyBatisPlus"><a href="#MyBatisPlus" class="headerlink" title="MyBatisPlus"></a>MyBatisPlus</h1><h2 id="CRUD"><a href="#CRUD" class="headerlink" title="CRUD"></a>CRUD</h2>
+      
+    </div>
+
+    
+    
+    
+
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://mooyi646.github.io/post/cbb39f4b.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -293,1032 +2132,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://mooyi646.github.io/post/bae4ff13.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281528071.png">
-      <meta itemprop="name" content="Mooyi">
-      <meta itemprop="description" content="Live with fun">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mooyi's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/bae4ff13.html" class="post-title-link" itemprop="url">Redis</a>
-        </h2>
-
-        <div class="post-meta">
-
-        
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2023-12-13 19:14:15 / Modified: 19:18:16" itemprop="dateCreated datePublished" datetime="2023-12-13T19:14:15+08:00">2023-12-13</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Learning/DataBase/" itemprop="url" rel="index"><span itemprop="name">DataBase</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/post/bae4ff13.html#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/bae4ff13.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="Symbols count in article">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>23k</span>
-            </span>
-            <span class="post-meta-item" title="Reading time">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>21 mins.</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Redis"><a href="#Redis" class="headerlink" title="Redis"></a>Redis</h1><p>特点：高性能的<code>key-value</code>数据库，NoSQL</p>
-<p>与其他<code>key-value</code>数据库相比：</p>
-<ul>
-<li>redis支持数据持久化，可以将内存中的数据保存在磁盘中，重启时再次加载使用。</li>
-<li>除简单数据外，还支持<code>list</code>, <code>set</code>, <code>zset</code>(有序set), <code>hash</code>等数据结构的存储</li>
-<li>支持数据备份，即master-slave模式的数据备份</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/bae4ff13.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://mooyi646.github.io/post/f8355b15.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281528071.png">
-      <meta itemprop="name" content="Mooyi">
-      <meta itemprop="description" content="Live with fun">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mooyi's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/f8355b15.html" class="post-title-link" itemprop="url">leetcode记录</a>
-        </h2>
-
-        <div class="post-meta">
-
-        
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2023-12-13 19:12:18 / Modified: 19:18:16" itemprop="dateCreated datePublished" datetime="2023-12-13T19:12:18+08:00">2023-12-13</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Learning/Algorithm/" itemprop="url" rel="index"><span itemprop="name">Algorithm</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/post/f8355b15.html#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/f8355b15.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="Symbols count in article">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>14k</span>
-            </span>
-            <span class="post-meta-item" title="Reading time">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>12 mins.</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>一些比较杂乱的刷题记录和总结</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/f8355b15.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://mooyi646.github.io/post/1134db17.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281528071.png">
-      <meta itemprop="name" content="Mooyi">
-      <meta itemprop="description" content="Live with fun">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mooyi's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/1134db17.html" class="post-title-link" itemprop="url">GC</a>
-        </h2>
-
-        <div class="post-meta">
-
-        
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2023-12-13 19:10:58 / Modified: 19:18:16" itemprop="dateCreated datePublished" datetime="2023-12-13T19:10:58+08:00">2023-12-13</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Learning/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/post/1134db17.html#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/1134db17.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="Symbols count in article">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>7.3k</span>
-            </span>
-            <span class="post-meta-item" title="Reading time">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>7 mins.</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Garbage-Collection-GC"><a href="#Garbage-Collection-GC" class="headerlink" title="Garbage Collection(GC)"></a>Garbage Collection(GC)</h1><p>回收无任何对象引用的对象占据的内容空间，即不会再被使用的对象的内容空间。</p>
-<p>引用：若Reference类型的数据中存储的数值代表另一块内容的起始地址，则称这块内存为一个引用</p>
-<p>垃圾：无任何对象引用的对象</p>
-<p>回收：清理垃圾占用的内存空间而非对象本身</p>
-<p>发生地点：一般在堆内存中，因为大部分对象都储存在堆内存中</p>
-<p>发生时间：程序空闲时不定时回收</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/1134db17.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://mooyi646.github.io/post/4b1b8bf7.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281528071.png">
-      <meta itemprop="name" content="Mooyi">
-      <meta itemprop="description" content="Live with fun">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mooyi's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/4b1b8bf7.html" class="post-title-link" itemprop="url">多线程与锁</a>
-        </h2>
-
-        <div class="post-meta">
-
-        
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2023-12-13 19:09:12 / Modified: 19:18:47" itemprop="dateCreated datePublished" datetime="2023-12-13T19:09:12+08:00">2023-12-13</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Learning/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/post/4b1b8bf7.html#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/4b1b8bf7.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="Symbols count in article">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>6.3k</span>
-            </span>
-            <span class="post-meta-item" title="Reading time">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>6 mins.</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="1-多线程编程"><a href="#1-多线程编程" class="headerlink" title="1. 多线程编程"></a>1. 多线程编程</h1><h2 id="1-1-线程生命周期"><a href="#1-1-线程生命周期" class="headerlink" title="1. 1 线程生命周期"></a>1. 1 线程生命周期</h2><h3 id="1-1-1-线程创建"><a href="#1-1-1-线程创建" class="headerlink" title="1.1.1 线程创建"></a>1.1.1 线程创建</h3>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/4b1b8bf7.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://mooyi646.github.io/post/a7eb5674.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281528071.png">
-      <meta itemprop="name" content="Mooyi">
-      <meta itemprop="description" content="Live with fun">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mooyi's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/a7eb5674.html" class="post-title-link" itemprop="url">Java内存区域</a>
-        </h2>
-
-        <div class="post-meta">
-
-        
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2023-12-11 21:24:10 / Modified: 21:25:05" itemprop="dateCreated datePublished" datetime="2023-12-11T21:24:10+08:00">2023-12-11</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Learning/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/post/a7eb5674.html#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/a7eb5674.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="Symbols count in article">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>5k</span>
-            </span>
-            <span class="post-meta-item" title="Reading time">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>5 mins.</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="运行时数据区域"><a href="#运行时数据区域" class="headerlink" title="运行时数据区域"></a>运行时数据区域</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/a7eb5674.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://mooyi646.github.io/post/e6f6ebb1.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281528071.png">
-      <meta itemprop="name" content="Mooyi">
-      <meta itemprop="description" content="Live with fun">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mooyi's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/e6f6ebb1.html" class="post-title-link" itemprop="url">Lambda与Stream</a>
-        </h2>
-
-        <div class="post-meta">
-
-        
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2023-12-11 21:22:51 / Modified: 21:25:05" itemprop="dateCreated datePublished" datetime="2023-12-11T21:22:51+08:00">2023-12-11</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Learning/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/post/e6f6ebb1.html#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/e6f6ebb1.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="Symbols count in article">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>4.1k</span>
-            </span>
-            <span class="post-meta-item" title="Reading time">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>4 mins.</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Lambda表达式"><a href="#Lambda表达式" class="headerlink" title="Lambda表达式"></a>Lambda表达式</h1><p>也称闭包，允许将函数作为一个方法的参数，即把函数作为参数传递进方法中。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/e6f6ebb1.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://mooyi646.github.io/post/7af799fd.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281528071.png">
-      <meta itemprop="name" content="Mooyi">
-      <meta itemprop="description" content="Live with fun">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mooyi's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/7af799fd.html" class="post-title-link" itemprop="url">反射</a>
-        </h2>
-
-        <div class="post-meta">
-
-        
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2023-12-11 21:21:46 / Modified: 21:25:05" itemprop="dateCreated datePublished" datetime="2023-12-11T21:21:46+08:00">2023-12-11</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Learning/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/post/7af799fd.html#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/7af799fd.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="Symbols count in article">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>6.1k</span>
-            </span>
-            <span class="post-meta-item" title="Reading time">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>6 mins.</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="反射机制"><a href="#反射机制" class="headerlink" title="反射机制"></a>反射机制</h1><p>在程序运行时期，对于任意一个类，都能够知道这个类的所有属性和方法；对于任意一个对象，都能够调用它的任意方法和属性；这种动态获取信息以及动态调用方法的功能成为反射机制。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/7af799fd.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://mooyi646.github.io/post/5d4053e7.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281528071.png">
-      <meta itemprop="name" content="Mooyi">
-      <meta itemprop="description" content="Live with fun">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mooyi's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/5d4053e7.html" class="post-title-link" itemprop="url">容器与集合</a>
-        </h2>
-
-        <div class="post-meta">
-
-        
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-12-11 19:45:56" itemprop="dateCreated datePublished" datetime="2023-12-11T19:45:56+08:00">2023-12-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-12-13 19:08:55" itemprop="dateModified" datetime="2023-12-13T19:08:55+08:00">2023-12-13</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Learning/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/post/5d4053e7.html#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/5d4053e7.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="Symbols count in article">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>19k</span>
-            </span>
-            <span class="post-meta-item" title="Reading time">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>17 mins.</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="容器与集合"><a href="#容器与集合" class="headerlink" title="容器与集合"></a>容器与集合</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/5d4053e7.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://mooyi646.github.io/post/43a71ae4.html">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281528071.png">
-      <meta itemprop="name" content="Mooyi">
-      <meta itemprop="description" content="Live with fun">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Mooyi's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/post/43a71ae4.html" class="post-title-link" itemprop="url">MySQL索引</a>
-        </h2>
-
-        <div class="post-meta">
-
-        
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2023-12-09 23:38:01" itemprop="dateCreated datePublished" datetime="2023-12-09T23:38:01+08:00">2023-12-09</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-12-11 21:12:58" itemprop="dateModified" datetime="2023-12-11T21:12:58+08:00">2023-12-11</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Learning/DataBase/" itemprop="url" rel="index"><span itemprop="name">DataBase</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/post/43a71ae4.html#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/43a71ae4.html" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  <br>
-            <span class="post-meta-item" title="Symbols count in article">
-              <span class="post-meta-item-icon">
-                <i class="far fa-file-word"></i>
-              </span>
-                <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>11k</span>
-            </span>
-            <span class="post-meta-item" title="Reading time">
-              <span class="post-meta-item-icon">
-                <i class="far fa-clock"></i>
-              </span>
-                <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>10 mins.</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="存储引擎"><a href="#存储引擎" class="headerlink" title="存储引擎"></a>存储引擎</h1><p>常见存储引擎有3种：MyISAM, MEMORY, InnoDB</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/post/43a71ae4.html#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
   </nav>
 
 
@@ -1385,20 +2202,20 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-count">27</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-count">45</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -1452,7 +2269,7 @@
 <div class="copyright">
   
   &copy; 2022-07 – 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -1461,12 +2278,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">124k</span>
+    <span title="Symbols count total">151k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">1:53</span>
+    <span title="Reading time total">2:17</span>
 </div>
 
 <!--

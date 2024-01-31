@@ -28,7 +28,7 @@
 <meta property="og:description" content="一些开发过程中的问题rec.">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-08-26T13:59:08.742Z">
-<meta property="article:modified_time" content="2023-09-27T15:38:29.944Z">
+<meta property="article:modified_time" content="2024-01-31T02:26:44.541Z">
 <meta property="article:author" content="Mooyi">
 <meta property="article:tag" content="问题">
 <meta property="article:tag" content="Mo1isting">
@@ -222,7 +222,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2023-09-27 23:38:29" itemprop="dateModified" datetime="2023-09-27T23:38:29+08:00">2023-09-27</time>
+                <time title="Modified: 2024-01-31 10:26:44" itemprop="dateModified" datetime="2024-01-31T10:26:44+08:00">2024-01-31</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -258,14 +258,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>815</span>
+              <span>2.2k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">Reading time &asymp;</span>
-              <span>1 mins.</span>
+              <span>2 mins.</span>
             </span>
 
         </div>
@@ -294,7 +294,26 @@
 </li>
 <li><p><a target="_blank" rel="noopener" href="https://jasonkayzk.github.io/2020/01/25/%E5%85%B3%E4%BA%8EMybatis-plus%E8%B0%83%E7%94%A8baseMapper%E6%8A%A5%E9%94%99Invalid-bound-statement%E7%9A%84%E8%A7%A3%E5%86%B3/">https://jasonkayzk.github.io/2020/01/25/%E5%85%B3%E4%BA%8EMybatis-plus%E8%B0%83%E7%94%A8baseMapper%E6%8A%A5%E9%94%99Invalid-bound-statement%E7%9A%84%E8%A7%A3%E5%86%B3/</a></p>
 <p>以及记得关闭下划线驼峰转换：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mybatis:</span><br><span class="line">  configuration:</span><br><span class="line">    map-underscore-to-camel-case: false #下划线转驼峰</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mybatis:</span><br><span class="line">  configuration:</span><br><span class="line">    map-underscore-to-camel-case: false #下划线转驼峰</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>A component required a bean of type ‘com.mo1isting.backend.service.CoffeeService’ that could not be found.</p>
+<p>解决方案：CoffeeService忘记加@Service注解了</p>
+</li>
+<li><p>hashmap在类中方法外定义后赋值，提示：</p>
+<p>Cannot resolve symbol ‘put’</p>
+<p>解决方案：将其赋值放入static块中</p>
+<p>原因：<a target="_blank" rel="noopener" href="https://luyu05.github.io/2018/07/10/HashMap/">https://luyu05.github.io/2018/07/10/HashMap/</a></p>
+<p>即hashmap存放数据采用Node[] table的形式，而Node结构是static的，其中的变量 hash为final , key为final，所以其要么在定义时赋值，要么在static块中赋值。</p>
+</li>
+<li><p>git-ssh-error解决方案：</p>
+<p>问题：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git <span class="built_in">clone</span> git@github.com:xxxxx/xxxx.git my-awesome-proj</span></span><br><span class="line">Cloning into &#x27;my-awesome-proj&#x27;...</span><br><span class="line">ssh: connect to host github.com port 22: Connection timed out</span><br><span class="line">fatal: Could not read from remote repository.</span><br></pre></td></tr></table></figure>
+
+<p>解决方案：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="comment"># This should also timeout</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">ssh -T git@github.com</span></span><br><span class="line">ssh: connect to host github.com port 22: Connection timed out</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="comment"># but this might work</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">ssh -T -p 443 git@ssh.github.com</span></span><br><span class="line">Hi xxxx! You&#x27;ve successfully authenticated, but GitHub does not provide shell access.</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="comment"># Override SSH settings</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">vim ~/.ssh/config</span></span><br><span class="line">```</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Add section below to it</span></span><br><span class="line">Host github.com</span><br><span class="line">  Hostname ssh.github.com</span><br><span class="line">  Port 443</span><br><span class="line">```</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">ssh -T git@github.com</span></span><br><span class="line">Hi xxxxx! You&#x27;ve successfully authenticated, but GitHub does not</span><br><span class="line">provide shell access.</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git <span class="built_in">clone</span> git@github.com:xxxxxx/xxxxx.git my-awesome-proj</span></span><br><span class="line">Cloning into &#x27;my-awesome-proj&#x27;...</span><br><span class="line">remote: Enumerating objects: 15, done.</span><br><span class="line">remote: Counting objects: 100% (15/15), done.</span><br><span class="line">remote: Compressing objects: 100% (14/14), done.</span><br><span class="line">remote: Total 15 (delta 0), reused 15 (delta 0), pack-reused 0</span><br><span class="line">Receiving objects: 100% (15/15), 22.90 KiB | 4.58 MiB/s, done.</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="https://gist.github.com/Tamal/1cc77f88ef3e900aeae65f0e5e504794">参考</a></p>
+</li>
 </ol>
 
     </div>
@@ -428,20 +447,20 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-count">27</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-count">45</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -495,7 +514,7 @@
 <div class="copyright">
   
   &copy; 2022-07 – 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -504,12 +523,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">124k</span>
+    <span title="Symbols count total">151k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">1:53</span>
+    <span title="Reading time total">2:17</span>
 </div>
 
 <!--

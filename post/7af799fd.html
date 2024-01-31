@@ -28,7 +28,7 @@
 <meta property="og:description" content="反射机制在程序运行时期，对于任意一个类，都能够知道这个类的所有属性和方法；对于任意一个对象，都能够调用它的任意方法和属性；这种动态获取信息以及动态调用方法的功能成为反射机制。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-12-11T13:21:46.000Z">
-<meta property="article:modified_time" content="2023-12-11T13:25:05.143Z">
+<meta property="article:modified_time" content="2024-01-07T04:20:49.657Z">
 <meta property="article:author" content="Mooyi">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="反射">
@@ -214,10 +214,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2023-12-11 21:21:46 / Modified: 21:25:05" itemprop="dateCreated datePublished" datetime="2023-12-11T21:21:46+08:00">2023-12-11</time>
+              <time title="Created: 2023-12-11 21:21:46" itemprop="dateCreated datePublished" datetime="2023-12-11T21:21:46+08:00">2023-12-11</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-01-07 12:20:49" itemprop="dateModified" datetime="2024-01-07T12:20:49+08:00">2024-01-07</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -252,7 +258,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>6.1k</span>
+              <span>6.2k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
@@ -305,10 +311,8 @@
 <p>获取到Class实例后，可以通过该实例来创建对应类型的实例，如：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Class</span> <span class="variable">cls</span> <span class="operator">=</span> String.class;</span><br><span class="line"><span class="type">String</span> <span class="variable">s</span> <span class="operator">=</span> (String) cls.newInstance();</span><br><span class="line"><span class="comment">//相当于new String()</span></span><br><span class="line"><span class="comment">//注：只能调用无参的构造方法</span></span><br></pre></td></tr></table></figure>
 
-
-
-
-
+<p><strong>Q</strong>: 为什么要使用反射创建实例？</p>
+<p><strong>A</strong>: 反射可以动态获取类信息，若静态创建，类名或其相关操作发生变化则需修改源码，而反射无需做修改，相比静态而言修改变少，高效很多。</p>
 <h3 id="Class实例-vs-instanceof"><a href="#Class实例-vs-instanceof" class="headerlink" title="Class实例 vs. instanceof"></a>Class实例 vs. instanceof</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Integer</span> <span class="variable">n</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">123</span>);</span><br><span class="line"></span><br><span class="line"><span class="type">boolean</span> <span class="variable">b1</span> <span class="operator">=</span> n <span class="keyword">instanceof</span> Integer; <span class="comment">// true，因为n是Integer类型</span></span><br><span class="line"><span class="type">boolean</span> <span class="variable">b2</span> <span class="operator">=</span> n <span class="keyword">instanceof</span> Number; <span class="comment">// true，因为n是Number类型的子类</span></span><br><span class="line"></span><br><span class="line"><span class="type">boolean</span> <span class="variable">b3</span> <span class="operator">=</span> n.getClass() == Integer.class; <span class="comment">// true，因为n.getClass()返回Integer.class</span></span><br><span class="line"><span class="type">boolean</span> <span class="variable">b4</span> <span class="operator">=</span> n.getClass() == Number.class; <span class="comment">// false，因为Integer.class!=Number.class</span></span><br></pre></td></tr></table></figure>
 
 <p><code>instanceof</code>不但匹配指定类型，还会匹配指定类型的父类</p>
@@ -551,20 +555,20 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-count">27</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">categories</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-count">45</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>
@@ -618,7 +622,7 @@
 <div class="copyright">
   
   &copy; 2022-07 – 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -627,12 +631,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="Symbols count total">124k</span>
+    <span title="Symbols count total">151k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">1:53</span>
+    <span title="Reading time total">2:17</span>
 </div>
 
 <!--
