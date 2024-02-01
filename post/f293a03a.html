@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281527777.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281527777.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281527777.png">
+  <link rel="mask-icon" href="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281527777.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"mooyi646.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="大模型如何完成工作？内在模型与提示词">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LLM开发学习">
+<meta property="og:url" content="https://mooyi646.github.io/post/f293a03a.html">
+<meta property="og:site_name" content="Mooyi&#39;s Blog">
+<meta property="og:description" content="大模型如何完成工作？内在模型与提示词">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401251355775.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401251355039.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401251402664.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401251440064.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401251601094.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402010936562.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402010936829.png">
+<meta property="article:published_time" content="2024-01-31T09:50:40.000Z">
+<meta property="article:modified_time" content="2024-02-01T06:26:20.621Z">
+<meta property="article:author" content="Mooyi">
+<meta property="article:tag" content="LLM">
+<meta property="article:tag" content="prompt">
+<meta property="article:tag" content="tokenization">
+<meta property="article:tag" content="向量数据库">
+<meta property="article:tag" content="微调">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401251355775.png">
+
+<link rel="canonical" href="https://mooyi646.github.io/post/f293a03a.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>LLM开发学习 | Mooyi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta custom-logo">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Mooyi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://mooyi646.github.io/post/f293a03a.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281528071.png">
+      <meta itemprop="name" content="Mooyi">
+      <meta itemprop="description" content="Live with fun">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LLM开发学习
+        </h1>
+
+        <div class="post-meta">
+
+        
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2024-01-31 17:50:40" itemprop="dateCreated datePublished" datetime="2024-01-31T17:50:40+08:00">2024-01-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-02-01 14:26:20" itemprop="dateModified" datetime="2024-02-01T14:26:20+08:00">2024-02-01</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Learning/LLM/" itemprop="url" rel="index"><span itemprop="name">LLM</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/post/f293a03a.html#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/f293a03a.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>6.8k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>6 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="大模型如何完成工作？"><a href="#大模型如何完成工作？" class="headerlink" title="大模型如何完成工作？"></a>大模型如何完成工作？</h1><h2 id="内在模型与提示词"><a href="#内在模型与提示词" class="headerlink" title="内在模型与提示词"></a>内在模型与提示词</h2><span id="more"></span>
+
+<p>**Q1:**如何让大模型能够完成某个领域场景的实际工作，并且能够提升和干预效果？</p>
+<p><strong>A1</strong>：从影响大模型的能力和效果的两个因素入手：</p>
+<ul>
+<li><p><strong>模型</strong>（内在）：可以理解为知识和能力的混合体。</p>
+<p>经过微调的模型包含了学到的知识、逻辑，也包含执行具体某个任务的能力。</p>
+<p>缺点：训练与更新需要大量的随时间和成本 -&gt; 导致模型知识不够及时，变更困难，黑盒难控制，能力扩展难度高。</p>
+</li>
+<li><p>**提示词(prompt)**（外在）：可以理解为知识和指令的混合体</p>
+<p>prompt作用：</p>
+<ul>
+<li>prompt可以给大模型直接表达需求**(zero-shot)**</li>
+<li>可以给它示例**(few-shot)**解释需求</li>
+<li>可以一步步教它思考**(chain of thought)**一起完成需求</li>
+<li>给它背景信息**(context)**，帮助其理解问题和回顾历史</li>
+</ul>
+<p>因此，prompt有很好的灵活性和透明性，能够轻量级地完成很多工作。</p>
+<p>但是，受限于大模型性能与成本，<strong>prompt的大小有限</strong>，加上每次请求都要携带大量信息来维持状态，在性能上也有一定缺陷。</p>
+</li>
+</ul>
+<p>针对以上两个因素，可以做什么来<strong>干预模型</strong>呢？</p>
+<ul>
+<li><p>针对模型本身：fine-tune，微调，影响的是模型的权重</p>
+<p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401251355775.png" alt="image-20240125135244030"></p>
+</li>
+<li><p>针对输入：in-context learning，即prompt learning</p>
+<p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401251355039.png" alt="image-20240125135530980"></p>
+</li>
+</ul>
+<h2 id="引入检索"><a href="#引入检索" class="headerlink" title="引入检索"></a>引入检索</h2><p>**Q2: **目前提示词中包含很多内容，如何让大模型在海量的文章中总结回答？</p>
+<p>**A2: **问题分析：</p>
+<ol>
+<li>提示词包含很多内容 -&gt; 受限与token大小</li>
+<li>海量文章 -&gt; 相应时间过长</li>
+</ol>
+<p>理想情况：能否不提高token数量，且需提升大模型推理？</p>
+<p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401251402664.png" alt="image-20240125140209591"></p>
+<p>解决：对prompt进行压缩提炼。</p>
+<p>常见做法：外部引入检索流程，增加一部粗筛召回的逻辑，减少候选范围。</p>
+<p>好处：</p>
+<ul>
+<li>精简了prompt</li>
+<li>给大模型界定了范围，一定程度上使得大模型能够在更可靠的知识内容基础上总结推理，提高了输入的可信度</li>
+<li>从提升模型返回角度上来看，增加检索流程，可以对提示词进行检索增强(RAG)，比如对接知识图谱，业务知识库，能够提高输出的质量</li>
+</ul>
+<h2 id="检索方式选择"><a href="#检索方式选择" class="headerlink" title="检索方式选择"></a>检索方式选择</h2><p>目前业内主流的方式是采用<strong>向量检索</strong>来做检索增强。</p>
+<h2 id="基本流程与相关技术"><a href="#基本流程与相关技术" class="headerlink" title="基本流程与相关技术"></a>基本流程与相关技术</h2><h3 id="Tokenization与Embedding"><a href="#Tokenization与Embedding" class="headerlink" title="Tokenization与Embedding"></a>Tokenization与Embedding</h3><h4 id="Tokenization"><a href="#Tokenization" class="headerlink" title="Tokenization"></a>Tokenization</h4><p>token：作为模型的原始输入，是语义风格的最小单位。</p>
+<p>token可以是：一个单词，一个词根，一个标点等等</p>
+<p>对于LLM而言，外部输入或者训练的数据都是文本或文档，将其token化的过程就是tokenization.</p>
+<p>即tokenization为：将一段文本分割成单个的词语或标记的过程。</p>
+<p>如下：</p>
+<p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401251440064.png" alt="image-20240125144002015"></p>
+<p>对于英文，一个token一般对应4个字符或四分之三个单词；</p>
+<p>对于中文，token一般对应一个或半个词。</p>
+<p>不同的模型有不同的<strong>token限制</strong>，需要<strong>注意</strong>的是，此处的token限制，是<strong>输入的prompt和模型输出(completion)的token数之和</strong>，因此输入的prompt越长，输出的上限就越低。</p>
+<p><strong>temperature与token</strong></p>
+<p>temperature：即准确性概率。想要高准确性则将其尽可能置小，需要创造性就可以调高，范围为[0-1]</p>
+<p>当我们不一定想选概率最大的token时，可以通过temperature来控制</p>
+<h4 id="embedding"><a href="#embedding" class="headerlink" title="embedding"></a>embedding</h4><p>作用：将token序列变成向量</p>
+<p>距离相近的向量 -&gt; 有相近的含义</p>
+<p>embedding是对数据的压缩，且压缩的过程参考了语意和领域知识，可方便地进行相似性计算。</p>
+<h3 id="向量数据库VectorDB"><a href="#向量数据库VectorDB" class="headerlink" title="向量数据库VectorDB"></a>向量数据库VectorDB</h3><p>相似性计算：向量的距离可以用来衡量两个向量的相似度。常见的方式：</p>
+<ul>
+<li><p>余弦距离：通过两个向量的夹角的余弦，来确定其相似性。</p>
+<p>夹角为0：1， 90：0， 180：-1</p>
+<p>所以其取值范围为：[-1, 1]</p>
+</li>
+<li><p>欧式距离：两个点之间的连线距离</p>
+</li>
+<li><p>向量内积</p>
+</li>
+</ul>
+<p>向量数据库作用：</p>
+<ul>
+<li>检索增强：使用向量数据库做初筛，选择相似度高的候选材料，提供给大模型</li>
+<li>增加时效性</li>
+<li>提高可信度和溯源：基于向量数据库检索出来的资料回答</li>
+<li>隐私与权限问题</li>
+<li>多轮会话的context存储：大模型无记忆，可以通过向量数据库保存历史会话及上下文信息，每次对话将历史会话交给大模型，间接记忆。</li>
+<li>天生多模态：统一的向量格式存储，能够处理来自各种类型的数据源，例如文本、图像、音频、视频等。</li>
+</ul>
+<p>参考：</p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzA5MTIxNTY4MQ==&mid=2461139684&idx=1&sn=152bbf6a8b1f365da36c8d0640262ff4&chksm=873960cab04ee9dcaf4d4c6857a5bb0fa118548dfb4a48bae27e005c16381a9b065f65e78bcd&cur_album_id=2959126655292211206&scene=189#wechat_redirect">一文探秘LLM应用开发(4)</a></p>
+<h3 id="微调finetune"><a href="#微调finetune" class="headerlink" title="微调finetune"></a>微调finetune</h3><ul>
+<li>上游任务(upstream task)：无监督学习时做的任务</li>
+<li>下游任务(downstream task)：如情感分析，主体分类，文本生成</li>
+</ul>
+<p>**Q: **如何弥合上下游任务之间的gap，对齐大模型能力和用户实际需求？</p>
+<p>**A: **根据大模型的特点：如训练成本高，以及利用大模型学习到的知识的初衷，有一个较直接的做法是：</p>
+<p>设计不同目标的下游任务来和大模型组合起来一起完成具体的任务。该过程即为：目标函数挖掘(Object Engineering)。</p>
+<p>根据此思路：</p>
+<ol>
+<li>收集训练该领域任务需要的标注数据，重新学习，从而使模型具备该领域任务的能力。</li>
+<li>同时，学习特定领域知识时，之前在预训练中学到的知识不能忘记</li>
+<li>即将大模型的参数作为初始参数来学习，从而使其在保留历史知识和能力的基础上，又能适配下游任务具体的要求。此过程即为<strong>微调(finetune)</strong></li>
+</ol>
+<p>即整体过程为：预训练(pretrain) + 微调(finetune)</p>
+<p>微调的<strong>本质作用</strong>即为：通过调整模型的权重来更好地拟合数据，从何提高LLM在特定任务或领域的性能。</p>
+<p><strong>问题</strong>：每种任务都做一个适配任务，太麻烦</p>
+<p>**Q: **能否改变大模型适配下游任务的路线，让任务适配大模型，采用统一的模式处理不同任务？</p>
+<p>**A: **通过构建合适的prompt来适配大模型做不同任务。</p>
+<p>以GPT(Generative Pre-trained Transformer)为例，可以将具体问题变成大模型的文字接龙的方式来激发模型完成任务。</p>
+<p>如：情感分析问题，输入：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">I love this movie. It is [MASK]</span><br></pre></td></tr></table></figure>
+
+<p>则其会基于学到的知识补全为good，然后再将good这样的标签映射(Verbalizer)为”positive”，以此完成情感分析。</p>
+<p>整个过程无需修改模型参数，大模型一直在做自己擅长的文字接龙。</p>
+<p><strong>zero-shot 与 few-shot</strong></p>
+<p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401251601094.png" alt="image-20240125160127999"></p>
+<p>zero-shot：直接输入需求</p>
+<p>few-shot：先输入示例学习，然后输入需求</p>
+<p><strong>总结</strong>：将下游任务统一为一种模式，可以通过提示词学习(prompt learning &#x2F; in-context learning)，仅需少量数据(few-shot)或者无需数据(one-shot)，即可完成下游工作</p>
+<p>同时，在微调阶段，通过基于任务指定样例进行监督学习(instruct tuning指令微调)，可以使大模型以zero-shot的方式回答用户，甚至可以读懂样例中未出现的新指令类型（泛化性），并生成正确答案。</p>
+<p>问题：模型越来越大，全量参数微调难以工作。</p>
+<h4 id="参数高效微调PEFT-Parameter-Efficient-FineTuning-x2F-Delta-Tuning"><a href="#参数高效微调PEFT-Parameter-Efficient-FineTuning-x2F-Delta-Tuning" class="headerlink" title="参数高效微调PEFT(Parameter-Efficient FineTuning &#x2F; Delta Tuning)"></a>参数高效微调PEFT(Parameter-Efficient FineTuning &#x2F; Delta Tuning)</h4><p>参数高效微调：希望使用少量的参数以逼近全量参数微调的效果</p>
+<p>实现思路：区别于原来全量微调，</p>
+<ol>
+<li>固定原有模型参数，只微调变化的部分(少量参数, delta parameters)，从而减少计算成本和时间。</li>
+<li>同时，只存储微调部分的参数，而不保存全部模型，减少存储空间。</li>
+</ol>
+<p>三个方向：</p>
+<ul>
+<li><p>**增量式(Addition-based)**：增加原始模型中不存在的额外可训练神经模块或参数。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzA5MTIxNTY4MQ==&mid=2461139904&idx=1&sn=172e92206322ce3c8077e5cdff70502a&chksm=873961eeb04ee8f85bc49cafa1c462f5e0b3eef4ba4a02425118eea7373251a98665e9931996&cur_album_id=2959126655292211206&scene=189#wechat_redirect">具体类型参考</a></li>
+</ul>
+</li>
+<li><p>**指定式(Specification-based)**：指定原始模型中的特定的某些参数可训练，其余参数被冻结</p>
+</li>
+<li><p>**重参数化(Reparameterization)**：用低维子空间参数来重参数化原来存在的参数，以减少计算量。</p>
+<p>重参数化方法往往基于一类相似的假设：即预训练模型的适配过程本质上是低秩或者低维的。大白话讲，就是对它先进行精简计算然后再适配回原有结构并不会对模型影响很大。</p>
+</li>
+</ul>
+<p><strong>注</strong>：全量微调在大部分情况下还是效果最好的，因此，参数高效优化更多是一种折衷。</p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzA5MTIxNTY4MQ==&mid=2461140122&idx=5&sn=ffa1be89a5285a0938c8e8736da0aed9&chksm=873966b4b04eefa26e66d2ec2c603f065457185b5dc6d4872d74894c3c108e9532148bd65818&cur_album_id=2959126655292211206&scene=189#wechat_redirect">微调相关工具推荐</a></p>
+<h3 id="Prompt"><a href="#Prompt" class="headerlink" title="Prompt"></a>Prompt</h3><h4 id="In-context-learning"><a href="#In-context-learning" class="headerlink" title="In-context learning"></a>In-context learning</h4><p>除了问题描述之外，提供环境信息、输入、预期输出等信息，以上附加信息即为上下文(context)。</p>
+<p>对于模型来讲，我们仍然可以以这样人类熟悉的方式与模型进行交互，让它按照我们的预期工作，这就是上下文学习（In-Context-Learning），缩写为ICL。</p>
+<p>上下文学习是一种智能涌现(emergence)，其发生的前提是它拥有了和人类似的思维模式。</p>
+<p>模型发生智能涌现可能的原因是当学习的资料及模型参数规模大到一定程度（10B以上），引发了质变，从而将模型中本来蕴含的知识和逻辑激发出来，表现出了智能。</p>
+<p>总体而言，ICL的<strong>作用</strong>为：允许语言模型通过以演示的形式组织若干个示例或指定来学习任务。即类比学习。</p>
+<p>形式：</p>
+<ul>
+<li><p><strong>zero-shot</strong>：不提供上下文，只提供问题或 需求</p>
+<p>注：未提供示例，但是可以提供其他限定约束信息，如：仅回答，无需解释</p>
+</li>
+<li><p><strong>one-shot</strong>：提供一个例子</p>
+</li>
+<li><p><strong>few-shot</strong>：提供多个示例</p>
+</li>
+</ul>
+<p><strong>Q：</strong>In-contetxt learning 只是给大模型提供上下文输入，并没有修改模型权重，为什么有效？</p>
+<p><strong>A：</strong>（相关解释，可参考）</p>
+<ul>
+<li><p>提示示例会产生元梯度(meta-gradients)，这些元梯度会在推理时的前向传播过程中反映出来。而在微调时，示例实际上会产生真正的梯度，用于更新权重。因此，ICL可以取得与微调类似的效果。</p>
+<blockquote>
+<p>【Why Can GPT Learn In-Context? Language Models Implicitly Perform Gradient Descent as Meta-Optimizers】</p>
+</blockquote>
+</li>
+<li><p>把In-context learning看作是一种隐式的贝叶斯推理。大模型在进行进行In-Context Learning时，可通过使用Prompt来 “定位 “它在预训练过程中学到的相关概念。从理论上讲，我们可以将其视为以Prompt为条件的潜在概念的贝叶斯推理，而这种能力来自于预训练数据的结构（长期一致性）。从这个角度讲，解释了角色扮演以及夸奖大模型的有效性，因为它影响到了条件概率分布。</p>
+<blockquote>
+<p>【How does in-context learning work? A framework for understanding the differences from traditional supervised learning】</p>
+<p>《 An Explanation of In-context Learning as Implicit Bayesian Inference 》</p>
+<p>《Rethinking the Role of Demonstrations: What Makes In-Context Learning Work? 》</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>Q：</strong>如何提高In-context learning的学习能力？</p>
+<p><strong>A：</strong>指令学习(Instruct learning)，主要又有两方面可以提升：</p>
+<ol>
+<li>提升模型的zero-shot能力，即不提供例子也能智能回答</li>
+<li>让模型识别更多任务类型以及回答方式</li>
+</ol>
+<h4 id="Instruct-learning"><a href="#Instruct-learning" class="headerlink" title="Instruct learning"></a>Instruct learning</h4><p>发生时间：微调阶段。所以一般也叫指令微调(IT)</p>
+<p>指定微调的<strong>核心</strong>：不是学习知识，而是学习更多的<strong>任务类型以及回答方式和风格</strong>。</p>
+<p>方式：通过构建指令格式的实例，然后以有监督的方式对大模型进行微调。</p>
+<p>作用：指令微调可以帮助LLM拥有更好的推理能力， 从而展现出<strong>泛化到未见过任务</strong>的卓越能力。也就是说，就算微调的指令中没有设计相关的任务，大模型在新任务上的表现也会优于微调之前。</p>
+<h4 id="Chain-of-Thought-COT"><a href="#Chain-of-Thought-COT" class="headerlink" title="Chain of Thought(COT)"></a>Chain of Thought(COT)</h4><p>使用场景：无需大模型一次性完成任务，而是通过一步步分解，推理来完成任务。</p>
+<p>作用：能使大型语言模型解决算术推理（arithmetic Arithmetic）、常识推理（commonsense Reasoning）和符号推理（ symbolic reasoning）等类型的复杂任务</p>
+<p>触发COT：不一定非要提供推理步骤示例，zero-shot同样管用，最简单的额方式是在prompt中增加”Let’s think step by step”等相关字句即可。</p>
+<h4 id="Self-consistency-COT"><a href="#Self-consistency-COT" class="headerlink" title="Self-consistency COT"></a>Self-consistency COT</h4><p>利用”自一致性”（self-consistency）的解码策略，以取代在思维链提示中使用的贪婪解码策略，也就是说让大模型通过<strong>多种方式去生产答案</strong>，最后根据<strong>多次输出进行加权投票</strong>的方式选择一种最靠谱的答案。</p>
+<p>缺点：速度慢，资源消耗量大</p>
+<h4 id="Least-to-Most"><a href="#Least-to-Most" class="headerlink" title="Least-to-Most"></a>Least-to-Most</h4><p>思路：它在解决复杂问题时，先引导模型把问题拆分成子问题；然后再让大模型逐一回答子问题，并把子问题的回答作为下一个问题回答的上文，直到给出最终答案。</p>
+<p>即是一种<strong>循序渐进</strong>引导大模型解决问题的方式。</p>
+<p>使用：可以在prompt中增加如”what subproblems must be solved before answering this inquiry”之类的提示</p>
+<h4 id="Self-Ask"><a href="#Self-Ask" class="headerlink" title="Self-Ask"></a>Self-Ask</h4><p>与Least-To-Most类似，对于一个大模型没有在训练时直接见到的问题，通过诱导大模型以自我提问的问题，将问题分解为更小的后续问题，而这些问题可能在训练数据中见到过，这样就可以通过自问自答的方式，最终获得正确答案。</p>
+<p>使用：通过构建prompt示例，给出所有的follow up questions</p>
+<p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402010936562.png" alt="图片"></p>
+<h4 id="Meta-prompting"><a href="#Meta-prompting" class="headerlink" title="Meta-prompting"></a>Meta-prompting</h4><p>思路：使用大模型写Prompt，然后用其提供的Prompt再去提问，从而获得效果改进。</p>
+<p><a target="_blank" rel="noopener" href="https://chat.openai.com/share/77c59aeb-a2d6-4df8-abf6-42c8d19aba3d">示例</a></p>
+<h4 id="Knowledge-Generation-Prompting"><a href="#Knowledge-Generation-Prompting" class="headerlink" title="Knowledge Generation Prompting"></a>Knowledge Generation Prompting</h4><p>方式：通过知识生成来增强Prompt，提升大模型的效果。</p>
+<p>基本思路：</p>
+<ol>
+<li>基于问题让大模型给出问题的相关知识</li>
+<li>再将知识整合到问题中，从而让大模型给予<strong>更细致有针对性</strong>的回答。</li>
+</ol>
+<h4 id="Iterative-Prompting"><a href="#Iterative-Prompting" class="headerlink" title="Iterative Prompting"></a>Iterative Prompting</h4><p>迭代型提示：与大模型交互时，不要将其看作时独立的过程，而是将前一次的回答作为上下文提供给大模型。</p>
+<p>作用：可以有效提高模型信息的挖掘能力，并消除一些无关的幻觉。</p>
+<h4 id="Tree-of-Thoughts-TOT"><a href="#Tree-of-Thoughts-TOT" class="headerlink" title="Tree of Thoughts(TOT)"></a>Tree of Thoughts(TOT)</h4><p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402010936829.png" alt="图片"></p>
+<p>TOT是在COT(Chain of Thought)之上的扩展，并能够探索连贯的子步骤（思维），作为解决问题的中间步骤。</p>
+<p>COT：和大模型的一次交互，但是复杂问题一次无法解决。</p>
+<p>可以诱导大模型将复杂问题拆分成多层的树结构，每一步选择都以树的模式(BFS &#x2F; DFS)动态选择最合适的路径。其允许大模型通过考虑多种不同的推理路径和自我评估选择来决定下一步行动方案，并在必要时前瞻或回溯以做出全局选择，从而尽心深思熟虑的决策。</p>
+<p>基本过程如下：</p>
+<ol>
+<li>系统将问题分解，并生成一个推理”思维“候选者的列表</li>
+<li>对以上思维进行评估，系统衡量每个想法产生所需解决方案的可能性</li>
+<li>最后对方案进行排序</li>
+</ol>
+<h4 id="Graph-of-Thoughts-GOT"><a href="#Graph-of-Thoughts-GOT" class="headerlink" title="Graph of Thoughts(GOT)"></a>Graph of Thoughts(GOT)</h4><p>将这个结构变成DAG，进一步完善推理过程。</p>
+<p>相比于TOT，主要变化为：</p>
+<ul>
+<li>聚合：将几个想法融合成一个统一的想法</li>
+<li>精化：从单个思想进行连续迭代，以提高其精度</li>
+<li>生成：有利于从现有思想中产生新的思想</li>
+</ul>
+<h4 id="Algorithm-of-Thoughts-AoT"><a href="#Algorithm-of-Thoughts-AoT" class="headerlink" title="Algorithm-of-Thoughts(AoT)"></a>Algorithm-of-Thoughts(AoT)</h4><p>TOT与GOT的问题：会与大模型产生多次交互，从而导致高昂的运算成本，整体交互逻辑也比较复杂。</p>
+<p>如何尽量减少对大模型的查询交互，甚至将迭代过程直接放在大模型内部完成？ - &gt; AOT</p>
+<p>实现方式：通过使用算法示例</p>
+<h4 id="Program-aided-Language-Model-PAL"><a href="#Program-aided-Language-Model-PAL" class="headerlink" title="Program-aided Language Model(PAL)"></a>Program-aided Language Model(PAL)</h4><p>大模型问题：不擅长数学计算与逻辑执行</p>
+<p>思路：让大模型根据问题生成解决该问题的程序，然后将程序放在python等程序解释器上运行，从而产生实际的结果。</p>
+<p>但是目前，普通的数学应用题，大模型无需外部支持也能算对，所以PAL的使用场景变为复杂的数据分析和工具、API接口调用等场景。</p>
+<h4 id="Retrieval-Augmented-Generation-RAG"><a href="#Retrieval-Augmented-Generation-RAG" class="headerlink" title="Retrieval Augmented Generation(RAG)"></a>Retrieval Augmented Generation(RAG)</h4><p>通过检索方式，将问题相关背景知识作为上下文一并传给大模型，以便有效地提高模型准确性以及减少幻觉。</p>
+<p>工作流程：</p>
+<ol>
+<li>用户向LLM应用提出问题</li>
+<li>基于问题再数据库中检索出相关问题</li>
+<li>将检索出的top n 数据传给LLM应用，LLM应用基于用户问题以及检索到的相关信息进行合并形成最终的prompt、</li>
+<li>将prompt提交给大模型</li>
+<li>大模型产生输出返回给LLM应用，进而返回给用户。</li>
+</ol>
+<p>使用RAG架构的LLM应用，好处：</p>
+<ul>
+<li>破解prompt learning受限context window的问题</li>
+<li>能够尽量减少大模型幻觉带来的问题</li>
+<li>减少了为了微调而准备问题对，大大减少了复杂度</li>
+<li>prompt构造过程的操作空间大，为后续干预模型结果，完成特定业务需求提供了必要手段。</li>
+</ul>
+<h4 id="prompt的问题"><a href="#prompt的问题" class="headerlink" title="prompt的问题"></a>prompt的问题</h4><ul>
+<li><p>context window限制，即token长度限制</p>
+</li>
+<li><p>prompt的技巧性、繁琐性、稳定性问题</p>
+</li>
+<li><p>prompt的安全及权限隔离问题：如何防止大模型被利用与被攻击？</p>
+<p>提供攻击：通过包装好的提示，欺骗大模型执行非预期的操作。主要有以下三类：</p>
+<ul>
+<li>提示注入：将恶意或非预期内容添加到提示中，以劫持语言模型的输出。</li>
+<li>提示泄露：从LLM的响应中提取敏感或保护信息</li>
+<li>越狱：绕过安全和审查功能</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    
+      <div>
+       <div>
+    
+        <div style="text-align:center;color: #3F92A4;font-size:15px;">-------------END OF TEXT <i class="fa fa-tree"></i> Thanks for reading(●'◡'●)-------------</div>
+    
+</div>
+      </div>
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Mooyi
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://mooyi646.github.io/post/f293a03a.html" title="LLM开发学习">https://mooyi646.github.io/post/f293a03a.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/LLM/" rel="tag"># LLM</a>
+              <a href="/tags/prompt/" rel="tag"># prompt</a>
+              <a href="/tags/tokenization/" rel="tag"># tokenization</a>
+              <a href="/tags/%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag"># 向量数据库</a>
+              <a href="/tags/%E5%BE%AE%E8%B0%83/" rel="tag"># 微调</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/post/b32394ab.html" rel="prev" title="向量数据库的非必要性">
+      <i class="fa fa-chevron-left"></i> 向量数据库的非必要性
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%A6%82%E4%BD%95%E5%AE%8C%E6%88%90%E5%B7%A5%E4%BD%9C%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">大模型如何完成工作？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%9C%A8%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%8F%90%E7%A4%BA%E8%AF%8D"><span class="nav-number">1.1.</span> <span class="nav-text">内在模型与提示词</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%95%E5%85%A5%E6%A3%80%E7%B4%A2"><span class="nav-number">1.2.</span> <span class="nav-text">引入检索</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A3%80%E7%B4%A2%E6%96%B9%E5%BC%8F%E9%80%89%E6%8B%A9"><span class="nav-number">1.3.</span> <span class="nav-text">检索方式选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E6%B5%81%E7%A8%8B%E4%B8%8E%E7%9B%B8%E5%85%B3%E6%8A%80%E6%9C%AF"><span class="nav-number">1.4.</span> <span class="nav-text">基本流程与相关技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Tokenization%E4%B8%8EEmbedding"><span class="nav-number">1.4.1.</span> <span class="nav-text">Tokenization与Embedding</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Tokenization"><span class="nav-number">1.4.1.1.</span> <span class="nav-text">Tokenization</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#embedding"><span class="nav-number">1.4.1.2.</span> <span class="nav-text">embedding</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93VectorDB"><span class="nav-number">1.4.2.</span> <span class="nav-text">向量数据库VectorDB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%AE%E8%B0%83finetune"><span class="nav-number">1.4.3.</span> <span class="nav-text">微调finetune</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E6%95%B0%E9%AB%98%E6%95%88%E5%BE%AE%E8%B0%83PEFT-Parameter-Efficient-FineTuning-x2F-Delta-Tuning"><span class="nav-number">1.4.3.1.</span> <span class="nav-text">参数高效微调PEFT(Parameter-Efficient FineTuning &#x2F; Delta Tuning)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Prompt"><span class="nav-number">1.4.4.</span> <span class="nav-text">Prompt</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#In-context-learning"><span class="nav-number">1.4.4.1.</span> <span class="nav-text">In-context learning</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Instruct-learning"><span class="nav-number">1.4.4.2.</span> <span class="nav-text">Instruct learning</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Chain-of-Thought-COT"><span class="nav-number">1.4.4.3.</span> <span class="nav-text">Chain of Thought(COT)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Self-consistency-COT"><span class="nav-number">1.4.4.4.</span> <span class="nav-text">Self-consistency COT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Least-to-Most"><span class="nav-number">1.4.4.5.</span> <span class="nav-text">Least-to-Most</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Self-Ask"><span class="nav-number">1.4.4.6.</span> <span class="nav-text">Self-Ask</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Meta-prompting"><span class="nav-number">1.4.4.7.</span> <span class="nav-text">Meta-prompting</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Knowledge-Generation-Prompting"><span class="nav-number">1.4.4.8.</span> <span class="nav-text">Knowledge Generation Prompting</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Iterative-Prompting"><span class="nav-number">1.4.4.9.</span> <span class="nav-text">Iterative Prompting</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Tree-of-Thoughts-TOT"><span class="nav-number">1.4.4.10.</span> <span class="nav-text">Tree of Thoughts(TOT)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Graph-of-Thoughts-GOT"><span class="nav-number">1.4.4.11.</span> <span class="nav-text">Graph of Thoughts(GOT)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Algorithm-of-Thoughts-AoT"><span class="nav-number">1.4.4.12.</span> <span class="nav-text">Algorithm-of-Thoughts(AoT)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Program-aided-Language-Model-PAL"><span class="nav-number">1.4.4.13.</span> <span class="nav-text">Program-aided Language Model(PAL)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Retrieval-Augmented-Generation-RAG"><span class="nav-number">1.4.4.14.</span> <span class="nav-text">Retrieval Augmented Generation(RAG)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#prompt%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">1.4.4.15.</span> <span class="nav-text">prompt的问题</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mooyi"
+      src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281528071.png">
+  <p class="site-author-name" itemprop="name">Mooyi</p>
+  <div class="site-description" itemprop="description">Live with fun</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">54</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Mooyi646" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Mooyi646" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/mooyixh@gmail.com" title="E-Mail → mooyixh@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/LuoMooyi" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;LuoMooyi" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/m00y1h" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;m00y1h" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="Link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://google.com/" title="http:&#x2F;&#x2F;google.com" rel="noopener" target="_blank">Google</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://bing.com/" title="http:&#x2F;&#x2F;bing.com" rel="noopener" target="_blank">Bing</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022-07 – 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mooyi</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="Symbols count total">152k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">2:19</span>
+</div>
+
+<!--
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://mooyi.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://mooyi646.github.io/post/f293a03a.html";
+    this.page.identifier = "post/f293a03a.html";
+    this.page.title = "LLM开发学习";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://mooyi.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>

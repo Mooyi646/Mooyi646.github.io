@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281527777.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281527777.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281527777.png">
+  <link rel="mask-icon" href="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281527777.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"mooyi646.github.io","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.json"};
+  </script>
+
+  <meta name="description" content="存储引擎常见存储引擎有3种：MyISAM, MEMORY, InnoDB">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL索引">
+<meta property="og:url" content="https://mooyi646.github.io/post/43a71ae4.html">
+<meta property="og:site_name" content="Mooyi&#39;s Blog">
+<meta property="og:description" content="存储引擎常见存储引擎有3种：MyISAM, MEMORY, InnoDB">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401071337598.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401071338530.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401071341236.png">
+<meta property="article:published_time" content="2023-12-09T15:38:01.000Z">
+<meta property="article:modified_time" content="2024-01-07T05:43:26.666Z">
+<meta property="article:author" content="Mooyi">
+<meta property="article:tag" content="MySQL">
+<meta property="article:tag" content="存储引擎">
+<meta property="article:tag" content="索引">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401071337598.png">
+
+<link rel="canonical" href="https://mooyi646.github.io/post/43a71ae4.html">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>MySQL索引 | Mooyi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta custom-logo">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Mooyi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://mooyi646.github.io/post/43a71ae4.html">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281528071.png">
+      <meta itemprop="name" content="Mooyi">
+      <meta itemprop="description" content="Live with fun">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Mooyi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MySQL索引
+        </h1>
+
+        <div class="post-meta">
+
+        
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-12-09 23:38:01" itemprop="dateCreated datePublished" datetime="2023-12-09T23:38:01+08:00">2023-12-09</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-01-07 13:43:26" itemprop="dateModified" datetime="2024-01-07T13:43:26+08:00">2024-01-07</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Learning/" itemprop="url" rel="index"><span itemprop="name">Learning</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Learning/DataBase/" itemprop="url" rel="index"><span itemprop="name">DataBase</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/post/43a71ae4.html#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="post/43a71ae4.html" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  <br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>11k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>10 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="存储引擎"><a href="#存储引擎" class="headerlink" title="存储引擎"></a>存储引擎</h1><p>常见存储引擎有3种：MyISAM, MEMORY, InnoDB</p>
+<span id="more"></span>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>MyISAM</th>
+<th>InnoDB</th>
+<th>MEMORY</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>存储结构</td>
+<td>每张表被存放在三个文件：<br />1. frm - 定义数据 <br />2. MYD (MYData)- 数据文件 <br />3.  MYI (MYIndex)- 索引文件</td>
+<td>所有的表都保存在同一个数据文件中（也可能是多个文件，或者是独立的表空间文件），InnoDB 表的大小只受限于操作系统文件的大小，一般为 2GB</td>
+<td>将数据存在内存，为了提高数据的访问速度，每一个表实际上和一个磁盘文件关联。文件是frm。</td>
+</tr>
+<tr>
+<td>存储限制</td>
+<td>256TB</td>
+<td>64TB</td>
+<td>RAM</td>
+</tr>
+<tr>
+<td>支持事务</td>
+<td>No</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>事务安全</td>
+<td>不支持 每次查询具有原子性</td>
+<td>支持。是具有事务 (commit)、回滚 (rollback) 和崩溃修复能力 (crash recovery capabilities) 的事务安全 (transaction-safe (ACID compliant)) 型表</td>
+<td></td>
+</tr>
+<tr>
+<td>支持全文索引</td>
+<td>Yes</td>
+<td>No（5.6.4 以上支持英文全文索引） 可以通过使用 Sphinx 从 InnoDB 中获得全文索引，会慢一点</td>
+<td>No</td>
+</tr>
+<tr>
+<td>支持B树索引</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>支持哈希索引</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>支持集群索引</td>
+<td>No</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>支持数据压缩</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>支持外键</td>
+<td>No</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td>SELECT</td>
+<td>MyISAM更优</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>INSERT</td>
+<td></td>
+<td>InnoDB更优</td>
+<td></td>
+</tr>
+<tr>
+<td>UPDATE</td>
+<td></td>
+<td>InnoDB更优</td>
+<td></td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td></td>
+<td>InnoDB 更优 它不会重新建立表，而是一行一行的删除</td>
+<td></td>
+</tr>
+<tr>
+<td>COUNT  without WHERE</td>
+<td>MyISAM 更优。因为 MyISAM 保存了表的具体行数</td>
+<td>InnoDB 没有保存表的具体行数，需要逐行扫描统计，就很慢了</td>
+<td></td>
+</tr>
+<tr>
+<td>COUNT with WHERE</td>
+<td>一样</td>
+<td>一样，无WHERE的情况InnoDB也会锁表</td>
+<td></td>
+</tr>
+<tr>
+<td>锁</td>
+<td>只支持表锁</td>
+<td>支持表锁、行锁。行锁大幅度提高了多用户并发操作的性能。但是 <strong>InnoDB 的行锁，只是在 WHERE 的主键是有效的，非主键的 WHERE 都会锁全表的。</strong></td>
+<td>表锁</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><h2 id="索引判断"><a href="#索引判断" class="headerlink" title="索引判断"></a>索引判断</h2><p>判断一条SQL是否使用索引，需通过执行计划进行判断：</p>
+<p>实现执行计划：在SQL前加上关键字<code>explain</code>，如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">explain <span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> student <span class="keyword">where</span> name <span class="operator">=</span> <span class="string">&#x27;Mark&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>则SQL执行结束后，会输出多个字段，其中某些关键字段为：</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>select_type</th>
+<th>table</th>
+<th>partitions</th>
+<th>type</th>
+<th>possible_keys</th>
+<th>key</th>
+<th>key_len</th>
+<th>ref</th>
+<th>rows</th>
+<th>filtered</th>
+<th>Extra</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>SIMPLE</td>
+<td>student</td>
+<td>(Null)</td>
+<td>ALL</td>
+<td>(Null)</td>
+<td>(Null)</td>
+<td>(Null)</td>
+<td>(Null)</td>
+<td>12</td>
+<td>100.00</td>
+<td>(Null)</td>
+</tr>
+</tbody></table>
+<p>其中：</p>
+<ul>
+<li><p><code>type</code>：即为查询类型，即在表中找到所需行的方式。有以下几种类型（从上到下，性能越来越好）：</p>
+<ul>
+<li><p>ALL：全表扫描，即遍历全表以找到匹配的行。即直接遍历整个聚簇索引。</p>
+</li>
+<li><p>index：全索引扫描，通过遍历所有索引来查找匹配的行.</p>
+<blockquote>
+<p>直接在某个索引树上做条件判断，不需要回表。</p>
+</blockquote>
+</li>
+<li><p>range：索引范围扫描，常见于<code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>,<code>&gt;=</code> <code>between</code>等操作符.</p>
+</li>
+<li><p>ref：普通的二级索引等值查询。</p>
+<blockquote>
+<p>可能会查到多个匹配值，性能比const差一点。</p>
+<p>由于null不能用const，所以不管是唯一索引还是二级索引值为null，都最多用到ref.</p>
+</blockquote>
+</li>
+<li><p>eq_ref：多表连接查询时，被驱动表通过主键或唯一索引键进行等值查询</p>
+</li>
+<li><p>const：使用主键或唯一索引等值查询来定位一条数据。因为索引的B+树都是矮胖的，定位一条唯一索引的记录，速度非常快，所以将该种查询定义为常数级，即为const.</p>
+<blockquote>
+<p>唯一索引中允许多个null存在，所以对其进行null值查询，无法使用const</p>
+</blockquote>
+</li>
+<li><p>system：是 const 类型的特例, 当查询的表只有一条数据的情况下使用 system.</p>
+</li>
+<li><p>NULL：不用访问表或索引就直接能得到结果</p>
+</li>
+</ul>
+</li>
+<li><p><code>key</code>：执行本条SQL时，是否用到索引。</p>
+</li>
+<li><p><code>Extra</code>：额外的可选信息。可以通过其判断当前SQL的执行效率。主要有：</p>
+<ul>
+<li>Using index：使用索引覆盖</li>
+<li>Using index condition：使用索引下推</li>
+<li>Using filesort：使用临时空间排序。</li>
+</ul>
+</li>
+</ul>
+<p>索引种类</p>
+<p>目前MySQL提供了以下四种索引：</p>
+<ol>
+<li>B-Tree索引：最常见，大部分存储引擎都支持</li>
+<li>Hash索引：只有MEMORY引擎支持，使用场景简单</li>
+<li>R-Tree索引：又称空间索引，是MyISAM引擎的一个特殊索引类型，主要用于地理空间数据类型，通常使用较少。</li>
+<li>Full-text索引：又称全文索引，也是MyISAM引擎的一个特殊索引类型，主要用于全文检索，innoDB从mysql5.6开始支持全文索引。</li>
+</ol>
+<h2 id="索引结构"><a href="#索引结构" class="headerlink" title="索引结构"></a>索引结构</h2><h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p><strong>Q1：索引过大无法加载到内存中怎么解决？</strong></p>
+<p>A1：分块读取。</p>
+<p>同时需要提高IO效率，在软件层面可以使用辅助手段提高。</p>
+<blockquote>
+<p>操作系统相关：</p>
+<ol>
+<li><p>局部性原理：</p>
+<ul>
+<li>时间局部性：之前访问过的数据很可能再次被访问，至少比陌生数据概率大很多</li>
+<li>空间局部性：数据与程序都有聚集成群的倾向</li>
+</ul>
+</li>
+<li><p>磁盘预读：</p>
+<p>内存与磁盘交互的最小逻辑单位：页</p>
+<p>其大小一般为4KB或8KB，由操作系统决定。在内存进行数据读取时，一般会读取页的整数倍。</p>
+</li>
+</ol>
+<p>InnoDB引擎在进行数据加载时读取的就是<strong>16KB</strong>的数据，即为分块读取的集中体现。</p>
+</blockquote>
+<p><strong>Q2：why B+树？</strong></p>
+<p>索引存储的数据格式：key-value形式。</p>
+<p>能够存储key-value格式的数据结构有很多，如：hashmap，树，为什么最终选用B+树做索引？</p>
+<p><strong>首先，why not hashmap？</strong></p>
+<ol>
+<li>利用hash存储需要将所有数据添加到内存，耗费内存空间</li>
+<li>不合适的hash算法会导致hash冲突，以及会导致数据散列不均匀，空间浪费</li>
+<li>哈希表存的key-value是无序的，进行范围查找时，需要遍历其中存储的所有数据，代价大。</li>
+</ol>
+<p>InnoDB自适应Hash。</p>
+<blockquote>
+<p><strong>什么是自适应Hash？</strong></p>
+<p>InnoDB引擎会监控对表上二级索引的查找，如果发现某二级索引被频繁访问，二级索引成为热点数据，建立hash索引可以带来速度上的提升，则：</p>
+<ol>
+<li>自适应hash索引功能被打开</li>
+<li>经常访问的二级索引数据会被自动生成到hash索引中去（最近连续被访问三次的数据）。</li>
+</ol>
+<p>自适应hash索引通过缓冲池的b+树来构造，所以建立速度很快。</p>
+<p><strong>特点</strong></p>
+<ol>
+<li>无序，没有树高</li>
+<li>降低对二级索引树的频繁资源访问</li>
+<li>自适应</li>
+</ol>
+<p><strong>缺点</strong></p>
+<ol>
+<li>会占用innodb buffer pool</li>
+<li>只适合搜索等值的查询，范围查找无法使用</li>
+<li><strong>MYSQL自动管理，无法人为干预</strong></li>
+</ol>
+</blockquote>
+<p><strong>其次，why not 二叉树、平衡二叉搜索树、AVL树、红黑树？</strong></p>
+<p>以上四种数据结构的共同点为：都为二叉树。即其每个分支上最多两个节点。</p>
+<p>当向其中插入大量数据时，无论其是否有序是否平衡，其树高度都会很大，导致在查找时，依然会存在多次比较操作，每次比较都相当于一次磁盘IO操作，会增加IO次数，影响效率</p>
+<blockquote>
+<p>为什么每次比较都相当于一次磁盘IO?</p>
+<p>因为每个节点占用一个磁盘块，在比较时会将其中数据读取到内存中。</p>
+</blockquote>
+<p>则为了解决以上问题，可以从两个维度思考：</p>
+<ol>
+<li>增加单个节点的范围：即单个节点的存值个数增加</li>
+<li>增加节点的孩子个数</li>
+</ol>
+<p>因此，B树与B+树应运而生。</p>
+<h3 id="B树"><a href="#B树" class="headerlink" title="B树"></a>B树</h3><p>其为一棵平衡搜索多叉树。多叉，即为其孩子节点个数，也叫阶数，当我们描述一棵B或B+树时，需要指定其阶数，一般用<code>m</code>表示。</p>
+<p>定义：</p>
+<ul>
+<li>每个节点都有key-value<ul>
+<li>根节点至少有<code>1</code>对</li>
+<li>非根节点至少有$\lceil m&#x2F;2 \rceil$对</li>
+<li>每个节点最多有<code>m-1</code>对</li>
+</ul>
+</li>
+<li>所有叶子节点位于同一层</li>
+<li>除叶子节点外，所有节点的孩子数量为其当前的key-value对数 + 1</li>
+<li>每个节点中的key都按照排序规则从小到大排列，该节点左子树中所有key都小于它，右子树都大于它【开区间】</li>
+</ul>
+<p>查询过程为：如需查询key &#x3D; 28的数据</p>
+<ol>
+<li>由根节点找到磁盘块1，读入到内存中</li>
+<li>比较得出28在区间16 ~ 34，找到磁盘块1中的指针p2</li>
+<li>由p2找到磁盘块3，读到内存中</li>
+<li>比较得出28在区间25 ~ 31，找到其中的指针p2</li>
+<li>由p2找到磁盘块8，读到内存中</li>
+<li>比较得出key&#x3D;28的key-value，结束</li>
+</ol>
+<p>优点：降低了树高，虽然每次读进内存中的数据多，但是读取的次数少</p>
+<p>缺点：每个节点都有key-value，磁盘块&#x2F;页的存储空间是有限的，所以当value很大时，能存储的key的数量减少。</p>
+<p>如何解决以上问题：</p>
+<p>在非叶子节点的磁盘页中不存value，只存储key，具体的key-value全部存储到叶子节点中。即B+树的方案。</p>
+<h3 id="B-树"><a href="#B-树" class="headerlink" title="B+树"></a>B+树</h3><p>在B树的基础上进行优化，不同点为：</p>
+<ul>
+<li>非叶子节点只存储Key，叶子节点存储key-value</li>
+<li>每个叶子节点都有相邻叶子节点的指针</li>
+<li>子节点为左闭右开</li>
+<li>除叶子节点外，所有节点孩子数量等于当前的key-value数量</li>
+</ul>
+<p>查询数据：</p>
+<p>存在两种搜索方式：</p>
+<ol>
+<li>B树的搜索方式：$O(logN)$</li>
+<li>链表搜索：叶子节点构成链表形成搜索，从最左下的叶子节点开始顺序搜索。</li>
+</ol>
+<p>优点：</p>
+<ol>
+<li>非叶子节点只存储key，所以相比B树，能存储更多的Key，因此能更大地降低树高与将范围分成更多的区间，数据检索更快。</li>
+<li>叶子节点都有相邻节点的指针，符合磁盘预读的特性，范围查询性能更快</li>
+<li>一般三到四层的B+树足以支撑千万级别的数据存储，更大则需分表</li>
+</ol>
+<p>B+树所能存储的数据量计算：</p>
+<ul>
+<li><p>非叶子节点指针数：</p>
+<p>InnoDB一个页的大小为16K，假设索引key的bigint占8个字节，指针占字节数为6，8 + 6 &#x3D; 14，则一个page所能存放的key和指针个数为：16k &#x2F; 14 ，约等于1170</p>
+</li>
+<li><p>叶子节点记录数：</p>
+<p>常规互联网单条行记录大小约为1k，则一个page能存储16k &#x2F; 1k &#x3D; 16条</p>
+<ul>
+<li>如果为2层，则能存储记录数为：1170 * 16 &#x3D; 18720</li>
+<li>如果为3层，则能存储：1170 * 1170 * 16 约为2190w</li>
+</ul>
+</li>
+</ul>
+<h2 id="索引设计"><a href="#索引设计" class="headerlink" title="索引设计"></a>索引设计</h2><p>由上文分析，B+树非叶子节点的空间占用时，指针占用的为固定空间大小6个字节，所以影响其内存占用的因素为key</p>
+<ul>
+<li><p>key为int：都占用4个字节</p>
+</li>
+<li><p>key为char：根据指定长度占用（英文字符一个长度一个字节，中文：utf8 - 3个, gbk - 2个）</p>
+<blockquote>
+<p>char(n) &#x2F; varchar(n)：n表示字符数</p>
+<p><strong>char(n) vs. varchar(n)</strong></p>
+<ul>
+<li>char(n)：<ul>
+<li>不管实际value的长度，都会占用n个字符的空间。【不够长则填充空格，固定长度】</li>
+<li>存储时会自动截断尾部空格</li>
+<li>上限255字节</li>
+<li>不指定n时默认为1</li>
+</ul>
+</li>
+<li>varchar(n)：<ul>
+<li>占用value的实际空间 + 1，且该值 &lt;&#x3D; n。【可变长度】</li>
+<li>不会截断尾部空格</li>
+<li>上限65535字节【2^16】</li>
+<li>不指定n时报错</li>
+</ul>
+</li>
+</ul>
+<p>空间占用超过n后，字符串会被截断</p>
+<p><strong>varchar vs. text</strong></p>
+<ul>
+<li>text：用于保存文本类型的字符串，有四种类型：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">文本字符串类型</th>
+<th align="left">特点</th>
+<th align="left">长度</th>
+<th align="left">长度范围</th>
+<th align="left">占用的存储空间</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">TINYTEXT</td>
+<td align="left">小文本、可变长度</td>
+<td align="left">L</td>
+<td align="left">0 &lt;&#x3D; L &lt;&#x3D; 255</td>
+<td align="left">L + 2 个字节</td>
+</tr>
+<tr>
+<td align="left">TEXT</td>
+<td align="left">文本、可变长度</td>
+<td align="left">L</td>
+<td align="left">0 &lt;&#x3D; L &lt;&#x3D; 65535</td>
+<td align="left">L + 2 个字节</td>
+</tr>
+<tr>
+<td align="left">MEDIUMTEXT</td>
+<td align="left">中等文本、可变长度</td>
+<td align="left">L</td>
+<td align="left">0 &lt;&#x3D; L &lt;&#x3D; 16777215</td>
+<td align="left">L + 3 个字节</td>
+</tr>
+<tr>
+<td align="left">LONGTEXT</td>
+<td align="left">大文本、可变长度</td>
+<td align="left">L</td>
+<td align="left">0 &lt;&#x3D; L&lt;&#x3D; 4294967295（相当于4GB）</td>
+<td align="left">L + 4 个字节</td>
+</tr>
+</tbody></table>
+<p>由于实际存储的长度不确定，MySQL 不允许 TEXT 类型的字段做主键</p>
+<p><strong>varchar转换为text</strong></p>
+<ol>
+<li>大于varchar（255）变为 tinytext</li>
+<li>大于varchar（500）变为 text</li>
+<li>大于varchar（20000）变为 mediumtext</li>
+</ol>
+<p><strong>为什么经常使用varchar(255)？</strong></p>
+<p>MYSQL5.6及以前，InnoDB支持的前缀索引最大为767个字节，采用utf8编码时， $\lfloor 767 &#x2F; 3 \rfloor &#x3D; 255$</p>
+<p>255刚好为能建立前缀索引的最大值，不是最优，但是能减少出错</p>
+</blockquote>
+</li>
+</ul>
+<p>目标：让key占用尽可能少的空间</p>
+<h3 id="前缀索引"><a href="#前缀索引" class="headerlink" title="前缀索引"></a>前缀索引</h3><p><strong>索引的选择性Index Selectivity</strong> &#x3D;  基数 &#x2F; 数据表的总记录数【即为唯一索引值占比】</p>
+<blockquote>
+<p>基数为不重复索引值的数量，即唯一索引值数量</p>
+<p>MYSQL中使用HyperLogLog做基数统计，这是一个预估值。</p>
+</blockquote>
+<p>索引的选择性越高，查询效率越高，但是所占用的空间也就越多。</p>
+<p><strong>前缀索引定义</strong></p>
+<p>选择目标列的部分字符作为索引，从而节约空间，提高索引效率，但是会降低索引的选择性。【性能与空间之间寻找平衡】</p>
+<p>大部分存储引擎都支持前缀索引，目前只有字符类型或二进制类型的字段可以建立前缀索引，如：CHAR&#x2F;VARCHAR、TEXT&#x2F;BLOB、BINARY&#x2F;VARBINARY</p>
+<ul>
+<li>字符类型基于前缀字符长度</li>
+<li>二进制类型基于字节大小</li>
+<li>TEXT&#x2F; BLOB类型只支持前缀索引，不支持整个字段建索引。</li>
+</ul>
+<p>怎么选定合适的前缀？即如何确定合适的前缀长度？</p>
+<ol>
+<li><p>统计指定字段出现重复值最多的前10个以及其重复出现次数</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="built_in">count</span>(<span class="operator">*</span>) <span class="keyword">as</span> count, city_name <span class="keyword">from</span> city <span class="keyword">group</span> <span class="keyword">by</span> city_name <span class="keyword">order</span> <span class="keyword">by</span> count <span class="keyword">desc</span> limity <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>统计该字段前3个字符出现重复值最多的前10个以及其重复出现次数</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="built_in">count</span>(<span class="operator">*</span>) <span class="keyword">as</span> count, <span class="keyword">left</span>(city_name, <span class="number">3</span>) <span class="keyword">as</span> prefix <span class="keyword">from</span> city <span class="keyword">group</span> <span class="keyword">by</span> prefix <span class="keyword">order</span> <span class="keyword">by</span> count <span class="keyword">desc</span> limit <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>left(str , length)返回指定str从左边返回length长度的字符串</p>
+</blockquote>
+</li>
+<li><p>观察第1次与第2次统计结果差距大不大，如果大，则向右扩1个字符，在比较前3个和前4个字符的统计结果【如果仍然差距大，继续扩展重复】</p>
+</li>
+<li><p>知道结果差不多，则当时的前n个字符可作为前缀索引的最终长度，以此建立前缀索引</p>
+</li>
+</ol>
+<p>优点：索引更小，节约索引空间，提高索引效率</p>
+<p>缺点：</p>
+<ul>
+<li>降低索引的选择性</li>
+<li>无法使用前缀索引做groupby和orderby，也无法做覆盖扫描</li>
+</ul>
+<h3 id="聚簇-x2F-非聚簇索引"><a href="#聚簇-x2F-非聚簇索引" class="headerlink" title="聚簇 &#x2F; 非聚簇索引"></a>聚簇 &#x2F; 非聚簇索引</h3><p>并不是一种单独的具体索引类型，而是一种数据存储方式，具体依赖于其实现方式。</p>
+<h4 id="聚簇索引"><a href="#聚簇索引" class="headerlink" title="聚簇索引"></a>聚簇索引</h4><p>即Clustered Index。</p>
+<p>定义：按表的主键构造一棵B+树，叶子节点存放表的行记录数据，即将表的索引与数据存储在一起，找到索引的同时也找到了数据。</p>
+<p>按照以上定义，很显然<strong>一张表只能有一个聚簇索引</strong>。</p>
+<p>InnoDB中存储主键选用的就是聚簇索引的方式，如果未定义主键，则会选择非空唯一性(not null unique)字段，若不存在，则会隐式定义一个长整型，占6个字节的rowid作为主键来作为聚簇索引。</p>
+<h4 id="非聚簇索引"><a href="#非聚簇索引" class="headerlink" title="非聚簇索引"></a>非聚簇索引</h4><p>Non-Clustered Index，也叫辅助索引或二级索引。</p>
+<p>非聚簇索引为在聚簇索引上创建的索引，即将数据与索引分开存储。</p>
+<p>常见非聚簇索引：</p>
+<ul>
+<li>复合索引</li>
+<li>前缀索引</li>
+<li>唯一性索引</li>
+<li>MyISAM中的主键做因</li>
+</ul>
+<p>同样由B+树构成，但是树的叶子节点不再存储表的行记录数据，而是主键或指定索引字段</p>
+<ul>
+<li>InnoDB中，存储的未主键</li>
+<li>MyISAM中，主键索引存的是主键。非主键索引存的是指定索引字段。</li>
+</ul>
+<p>如：存在表user，id为主键，name字段有索引，除此之外还有一个字段为company</p>
+<p>则以下两个SQL：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> id <span class="operator">=</span> <span class="number">7</span>;</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> name <span class="operator">=</span> <span class="string">&#x27;Jobs&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>InnoDB中其查找流程为：</p>
+<p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401071337598.png" alt="image-20240107133730133"></p>
+<p>SQL1：聚簇索引查找，主键为聚簇索引，所以可以直接通过主键查找到对应叶子节点，访问行记录</p>
+<p>SQL2：非聚簇索引查找，InnoDB除主键外都是非聚簇索引，通过二阶索引的B+树查询到其对应的主键id，然后再在主键索引建立的B+树中查询到对应的叶子节点，访问行数据。</p>
+<blockquote>
+<p>以上操作也叫<strong>回表</strong>。即包含两次具体的查询动作，非聚簇索引查找性能低，在能使用聚簇索引解决的情况下，尽量规避使用回表查询。</p>
+</blockquote>
+<p>MyISAM中查询流程为：</p>
+<p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401071338530.png" alt="image-20240107133821045"></p>
+<p>SQL1与SQL2都为非聚簇索引查找。</p>
+<p>MyISAM中无无论是主键索引还是非主键索引，都为非聚簇索引。其B+树中叶子节点还需存储地址，指向表中的某一行，因此，每个B+树都相互独立，不需要相互访问【与InnoDB不同】</p>
+<p>聚簇索引优缺点：</p>
+<p>优点：</p>
+<ol>
+<li>查找速度快于非聚簇索引，因为在InnoDB中无需二次查询，在MyISAM中无需寻址</li>
+<li>聚簇索引行数据在叶子节点中，同一个数据页可能有多条行数据，访问同一数据页的不同行数据是，其已被加载到内存中，再次访问可以直接在内存中访问，减少了IO</li>
+<li>InnoDB中使用主键值做非聚簇索引的value而非地址，是为了保证B+树分裂时，出现行移动的情况下，主键索引的B+树的变化不会影响非主键索引。</li>
+<li>适用于排序场合、选取一定范围数据的场景</li>
+</ol>
+<p>缺点：</p>
+<ol>
+<li><p>一张表中只能有一个聚簇索引，可以有多个非聚簇索引</p>
+</li>
+<li><p>维护聚簇索引很昂贵，因为行移动会造成碎片</p>
+</li>
+<li><p>若使用UUID(通用唯一标识码)做主键，其本身特性会导致数据稀疏，则会出现使用聚簇索引查询速度慢于全字典扫描，因此建议用自增主键做聚簇索引。</p>
+<blockquote>
+<p>为什么？</p>
+<p>因为聚簇索引的数据的物理存放顺序与索引顺序是一致的，只要索引相邻，则对应数据也存放在相邻磁盘上。</p>
+<p>如主键不是自增id，则不可能顺序插入，存储引擎会不断调整数据的物理地址，会不断分页。</p>
+<p>若主键为自增id，则只需一页一页写入数据，索引结构也相对紧凑，磁盘碎片少，效率更高。</p>
+</blockquote>
+</li>
+</ol>
+<p>如果涉及到大量数据的排序、全表扫描、count之类的操作的话，建议使用MyISAM引擎。因为所有占用空间小，这些操作是需要在内存中完成的。</p>
+<h3 id="索引覆盖"><a href="#索引覆盖" class="headerlink" title="索引覆盖"></a>索引覆盖</h3><p>covering inex</p>
+<p>当<code>explain</code>命令输出结果的<code>Extra</code>字段为：<code>Using index</code>时，则可触发索引覆盖 &#x2F; 覆盖索引。</p>
+<p>定义：只要在一棵索引树上就能获取SQL所需的所有数据，无需回表。</p>
+<p>实现：将被查询的字段，建立到<strong>联合索引</strong>中</p>
+<p>如：存在表user，id为主键，name字段有普通索引，除此之外还有一个字段为company</p>
+<p>以下两条SQL：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># <span class="number">1</span></span><br><span class="line"><span class="keyword">select</span> id, name <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> name <span class="operator">=</span> <span class="string">&#x27;Gates&#x27;</span>;</span><br><span class="line"># <span class="number">2</span></span><br><span class="line"><span class="keyword">select</span> id, name, company <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> name <span class="operator">=</span> <span class="string">&#x27;Gates&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>SQL1：name字段索引的B+树，访问name字段后可以获得对应的id，满足所需数据，无需回表，符合覆盖索引，效率高。</p>
+<p>SQL2：前面等同于SQL1，获取name和id后，无法在当前B+树获取company字段，需要二次查询聚簇索引获得company字段，回表，效率底。</p>
+<p>解决方案：将索引建立时：<code>index(name)</code>升级为联合索引<code>index(name, company)</code>，则再次执行SQL2，等同于SQL1执行过程。无需回表，符合索引覆盖，效率高。</p>
+<h3 id="联合索引"><a href="#联合索引" class="headerlink" title="联合索引"></a>联合索引</h3><h4 id="最左匹配原则"><a href="#最左匹配原则" class="headerlink" title="最左匹配原则"></a>最左匹配原则</h4><p>建立联合索引时需遵循最左匹配原则。</p>
+<p>如创建一个索引<code>index(a , b)</code>，则其B+树为以下：</p>
+<p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401071341236.png" alt="image-20240107134103148"></p>
+<p><code>a</code>字段是有序的，而<code>b</code>字段是建立在<code>a</code>字段的基础上的，所以在固定<code>a</code>字段上来看是有序的，整体看是无序的。</p>
+<p>什么条件查询才能利用联合索引呢？</p>
+<p>由以上B+树，b字段只有在a字段固定时才有序，所以：</p>
+<ol>
+<li>where b &#x3D; 2：无法使用联合索引，索引整体按照a字段排序，无法单独确定b</li>
+<li>where a &#x3D; 2 and b &#x3D; 2：可以使用</li>
+<li>where a &gt; 2 and b &#x3D; 2：a使用，b未使用。在a字段的固定范围中，b依然整体是无序状态</li>
+</ol>
+<p>由以上可以得出<strong>最左匹配定义</strong>：查询条件中，以联合索引最左边定义的字段为起点，且所有字段和顺序都与联合索引中一致，构成的查询条件能够利用联合索引，查询条件中出现<strong>范围查询、模糊查询、排序则需具体分析</strong>。</p>
+<p><strong>注</strong>：查询条件没有按联合索引的顺序排列时：同级查询会被MYSQL中的查询优化器<strong>自动优化查询顺序</strong>，即尽量会满足按照联合索引顺序排列。<strong>MySQL的查询优化器无法对于group by，order by进行优化</strong></p>
+<p><a target="_blank" rel="noopener" href="https://dbaplus.cn/news-11-4972-1.html">索引是否失效：</a></p>
+<p><strong>范围查询</strong>：</p>
+<ol>
+<li><code>&gt;</code>, <code>&lt;</code>：最左用到了联合索引，范围之后的不会使用</li>
+<li><code>&gt;=</code>, <code>&lt;=</code>：最左使用了，范围之后的对于<code>=</code>的情况用到了</li>
+<li><code>between x and y</code>：mysql中是闭区间，所以对于边界值等于的地方，范围也用到了联合索引。</li>
+</ol>
+<p><strong>模糊查询like</strong>：</p>
+<p>当涉及字符型数据的模糊查询和范围查询时，除最左原则外，还需考虑其本身是否能通过B+树查询。</p>
+<p>如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">/</span><span class="operator">/</span> SQL1</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> name <span class="keyword">like</span> <span class="string">&#x27;Ga%&#x27;</span>;</span><br><span class="line"><span class="operator">/</span><span class="operator">/</span> SQL2</span><br><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> name <span class="keyword">like</span> <span class="string">&#x27;%tes&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>SQL1符合最左，提提供了查询前缀，使用联合索引。</p>
+<p>SQL2符合最左，但是只提供了中缀，无法在B+树上进行节点搜索，所以无法使用联合索引。</p>
+<p>多条件情况：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> company <span class="keyword">like</span> <span class="string">&#x27;Mic%&#x27;</span> <span class="keyword">and</span> name <span class="keyword">like</span> <span class="string">&#x27;Ga%&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>首先优化器会自动优化为<code>name</code>在前，<code>company</code>在后。</p>
+<p>对于name字段进行查询，形成的区间为<code>[&#39;Ga~&#39;,&#39;Gb~&#39;)</code>，虽然在符合Ga为前缀的name的二级索引范围中，company是无序的，但是对于符合name &#x3D; Ga的记录中，company的值是有序的，所以company字段也会用到联合索引。</p>
+<p><strong>Q：使用<code>like &quot;%x&quot;</code>，索引一定会失效吗？</strong></p>
+<p><strong>A</strong>：不一定，取决于表中字段数量，如果表中所有字段都有索引，则走的为全扫描二级索引B+树。</p>
+<p>比如只有两个字段，id为聚簇索引，name为普通索引。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> name <span class="keyword">like</span> &quot;%tes&quot;;</span><br></pre></td></tr></table></figure>
+
+<p>则直接全扫描二级索引B+树则可得到想要结果，无需回表，保证了索引覆盖</p>
+<h2 id="常见索引失效"><a href="#常见索引失效" class="headerlink" title="常见索引失效"></a>常见索引失效</h2><ol>
+<li><p>模糊查询非前缀</p>
+</li>
+<li><p>对索引使用函数。因为索引保存的是字段原始值，而不是经过函数计算后的值，所以使用函数计算后就无法再使用索引了。</p>
+<blockquote>
+<p>MySQL8.0开始增加了函数索引，即可以对函数计算后的值建立索引。</p>
+<p>如：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> t_user <span class="keyword">add</span> key idx_name_length ((length(name)));</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+<li><p>对索引进行表达式计算，原因类似使用函数</p>
+</li>
+<li><p>对索引进行隐式类型转换</p>
+<blockquote>
+<p>如：phone字段定义的为varchar，但是查询时：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">&gt;</span><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> phone <span class="operator">=</span> <span class="number">12345678901</span>;</span><br></pre></td></tr></table></figure>
+
+<p>则会走全表扫描。</p>
+<p>因为其等价于：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">&gt;</span><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> <span class="built_in">CAST</span>(phone <span class="keyword">AS</span> signed <span class="type">int</span>) <span class="operator">=</span> <span class="number">12345678901</span>;</span><br></pre></td></tr></table></figure>
+
+<p>则<strong>相当于对索引字段使用了函数。</strong></p>
+<p><strong>但是</strong>，id字段定义为int，查询：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">&gt;</span><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> id <span class="operator">=</span> <span class="string">&#x27;1&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>会正常使用索引。</p>
+<p>为什么？</p>
+<p>MySQL会自动将字符串转为数字。</p>
+<p>其等价于：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">&gt;</span><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> id <span class="operator">=</span> <span class="built_in">CAST</span>(<span class="string">&#x27;1&#x27;</span> <span class="keyword">AS</span> signed <span class="type">int</span>);</span><br></pre></td></tr></table></figure>
+
+<p>CAST 函数是用在了输入参数，因此是可以走索引扫描的。</p>
+</blockquote>
+</li>
+<li><p>联合索引非最左匹配【见最左匹配部分】</p>
+</li>
+<li><p><code>WHERE</code>子句中的<code>OR</code></p>
+<blockquote>
+<p>在 WHERE 子句中，如果在 OR 前的条件列是索引列，而在 OR 后的条件列不是索引列，那么索引会失效。</p>
+<p>因为 OR 的含义就是两个只要满足一个即可，因此只有一个条件列是索引列是没有意义的，只要有条件列不是索引列，就会进行全表扫描。</p>
+<p>解决方案：增加索引列</p>
+</blockquote>
+</li>
+</ol>
+<h2 id="索引下推"><a href="#索引下推" class="headerlink" title="索引下推"></a>索引下推</h2><p>index condition pushdown，ICP，全称为索引条件下推优化。MySQL5.6推出，默认开启，用于优化查询。</p>
+<p>使用索引下推的表示：explain 结果中的Extra值为Using index condition</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>MySQL架构：</p>
+<ul>
+<li>Client</li>
+<li>Server</li>
+<li>存储引擎</li>
+</ul>
+<p><strong>未使用ICP时，MySQL如何查询？</strong></p>
+<ol>
+<li>存储引擎读取索引记录</li>
+<li>根据索引中的主键值，定位并读取完整的行记录</li>
+<li>存储引擎把记录交给<code>Server</code>层去检测该记录是否满足<code>WHERE</code>条件</li>
+</ol>
+<p><strong>使用ICP后，查询过程为：</strong></p>
+<ol>
+<li>存储引擎读取索引记录（不是完整的行记录）</li>
+<li>判断<code>WHERE</code>条件部分是否能用索引中的列来做检查【即做一次筛选过滤】<ul>
+<li>条件不满足则处理下一条索引记录</li>
+<li>条件满足，回表读取完整行记录</li>
+</ul>
+</li>
+<li>存储引擎把记录交给<code>Server</code>层，<code>Server</code>层检测该记录是否满足<code>WHERE</code>条件的其余部分</li>
+</ol>
+<h3 id="使用条件"><a href="#使用条件" class="headerlink" title="使用条件"></a>使用条件</h3><ul>
+<li><p>只能用于<code>range</code>, <code>ref</code>, <code>eq_ref</code>, <code>ref_or_null</code>访问方法</p>
+</li>
+<li><p>只能用于InnoDB和MyISAM存储引擎及其分区表</p>
+</li>
+<li><p>对InnoDB而言，ICP只适用于二级索引</p>
+<blockquote>
+<p>为什么？</p>
+<p>因为ICP的目的是<strong>减少回表次数</strong>，而对聚簇索引而言，其完整的行记录已经在缓存区，ICP无意义。</p>
+</blockquote>
+</li>
+<li><p>引用了子查询的条件不能下推</p>
+</li>
+<li><p>引用了存储函数的条件不能下推，因为存储引擎无法调用存储函数。</p>
+</li>
+</ul>
+<h2 id="count-性能问题"><a href="#count-性能问题" class="headerlink" title="count()性能问题"></a>count()性能问题</h2><h3 id="count-作用"><a href="#count-作用" class="headerlink" title="count()作用"></a>count()作用</h3><p>count()作用：统计符合查询条件的记录中，函数指定的参数不为 NULL 的记录有多少个。</p>
+<ul>
+<li>count(name)：统计表中name不为空的记录条数</li>
+<li>count(1)：在当前表中，1永远不为空，所以统计的为当前表的记录总数</li>
+<li>count(*)：当前表中记录总数</li>
+</ul>
+<h3 id="count-primary-key-执行过程"><a href="#count-primary-key-执行过程" class="headerlink" title="count(primary key)执行过程"></a>count(primary key)执行过程</h3><ol>
+<li>Server层维护名为count的变量</li>
+<li>Server层循环向InnoDB中读取一条记录，id不为NULL，则count +&#x3D; 1</li>
+<li>所有记录读取完毕，退出循环，将count变量值发送给Client</li>
+</ol>
+<p>InnoDB遍历选择：</p>
+<ul>
+<li>无二级索引：遍历聚簇索引</li>
+<li>有二级索引：遍历二级索引【树更小】【优化器选择】</li>
+</ul>
+<h3 id="count-1-执行过程"><a href="#count-1-执行过程" class="headerlink" title="count(1)执行过程"></a>count(1)执行过程</h3><p>InnoDB遍历选择：</p>
+<ul>
+<li>无二级索引：遍历聚簇索引，但是<strong>不会读取value</strong></li>
+<li>有二级索引：遍历二级索引【树更小】【优化器选择】</li>
+</ul>
+<h3 id="count-执行过程"><a href="#count-执行过程" class="headerlink" title="count(*)执行过程"></a>count(*)执行过程</h3><p>对于<code>select *</code>而言是读取所有记录，但是对于count不是</p>
+<p><code>count(*)</code>相当于<code>count(0)</code>，所以，其执行过程与<code>count(1)</code>相同</p>
+<h3 id="count-字段-执行过程"><a href="#count-字段-执行过程" class="headerlink" title="count(字段)执行过程"></a>count(字段)执行过程</h3><p>如<code>count(name)</code>，name不为索引</p>
+<p>会采用全表扫描的方式，所以效率很低。</p>
+<h3 id="性能对比"><a href="#性能对比" class="headerlink" title="性能对比"></a>性能对比</h3><p>count(1) &#x3D; count(*) &gt; count(primary key) &gt; count(字段)</p>
+<h3 id="count-优化"><a href="#count-优化" class="headerlink" title="count(*)优化"></a>count(*)优化</h3><p>数据量过大时，count(*)也很耗时，如何优化？</p>
+<ol>
+<li><p>近似值：当无需精确值统计时，可以使用近似值，如使用<code>show table status</code>或<code>explain</code>来估算</p>
+</li>
+<li><p>额外表保存字段：如果是想精确的获取表的记录总数，我们可以将这个计数值保存到单独的一张计数表中。</p>
+<p>当我们在数据表插入一条记录的同时，将计数表中的计数字段 + 1。也就是说，在新增和删除操作时，都需要额外维护这个计数表。</p>
+</li>
+</ol>
+<p>参考：</p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/7028851379078692895">【MySQL】索引进阶(B+树，前缀索引，聚簇索引等)</a></p>
+<p><a target="_blank" rel="noopener" href="https://dbaplus.cn/news-11-4972-1.html">MySQL一个全网都在说的错误结论</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/31ceadace535">一文读懂什么是MySQL索引下推（ICP）</a></p>
+
+    </div>
+
+    
+    
+    
+
+    
+      <div>
+       <div>
+    
+        <div style="text-align:center;color: #3F92A4;font-size:15px;">-------------END OF TEXT <i class="fa fa-tree"></i> Thanks for reading(●'◡'●)-------------</div>
+    
+</div>
+      </div>
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Mooyi
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://mooyi646.github.io/post/43a71ae4.html" title="MySQL索引">https://mooyi646.github.io/post/43a71ae4.html</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+              <a href="/tags/%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/" rel="tag"># 存储引擎</a>
+              <a href="/tags/%E7%B4%A2%E5%BC%95/" rel="tag"># 索引</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/post/da4a5ffe.html" rel="prev" title="数位DP思路">
+      <i class="fa fa-chevron-left"></i> 数位DP思路
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/post/5d4053e7.html" rel="next" title="容器与集合">
+      容器与集合 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the comments powered by Disqus.</noscript>
+    </div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="nav-number">1.</span> <span class="nav-text">存储引擎</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95"><span class="nav-number">2.</span> <span class="nav-text">索引</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E5%88%A4%E6%96%AD"><span class="nav-number">2.1.</span> <span class="nav-text">索引判断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E7%BB%93%E6%9E%84"><span class="nav-number">2.2.</span> <span class="nav-text">索引结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%AE%E9%A2%98"><span class="nav-number">2.2.1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B%E6%A0%91"><span class="nav-number">2.2.2.</span> <span class="nav-text">B树</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B-%E6%A0%91"><span class="nav-number">2.2.3.</span> <span class="nav-text">B+树</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.3.</span> <span class="nav-text">索引设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E7%BC%80%E7%B4%A2%E5%BC%95"><span class="nav-number">2.3.1.</span> <span class="nav-text">前缀索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%9A%E7%B0%87-x2F-%E9%9D%9E%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95"><span class="nav-number">2.3.2.</span> <span class="nav-text">聚簇 &#x2F; 非聚簇索引</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95"><span class="nav-number">2.3.2.1.</span> <span class="nav-text">聚簇索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9D%9E%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95"><span class="nav-number">2.3.2.2.</span> <span class="nav-text">非聚簇索引</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E8%A6%86%E7%9B%96"><span class="nav-number">2.3.3.</span> <span class="nav-text">索引覆盖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%94%E5%90%88%E7%B4%A2%E5%BC%95"><span class="nav-number">2.3.4.</span> <span class="nav-text">联合索引</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%80%E5%B7%A6%E5%8C%B9%E9%85%8D%E5%8E%9F%E5%88%99"><span class="nav-number">2.3.4.1.</span> <span class="nav-text">最左匹配原则</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88"><span class="nav-number">2.4.</span> <span class="nav-text">常见索引失效</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E4%B8%8B%E6%8E%A8"><span class="nav-number">2.5.</span> <span class="nav-text">索引下推</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">2.5.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%9D%A1%E4%BB%B6"><span class="nav-number">2.5.2.</span> <span class="nav-text">使用条件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#count-%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98"><span class="nav-number">2.6.</span> <span class="nav-text">count()性能问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#count-%E4%BD%9C%E7%94%A8"><span class="nav-number">2.6.1.</span> <span class="nav-text">count()作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#count-primary-key-%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B"><span class="nav-number">2.6.2.</span> <span class="nav-text">count(primary key)执行过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#count-1-%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B"><span class="nav-number">2.6.3.</span> <span class="nav-text">count(1)执行过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#count-%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B"><span class="nav-number">2.6.4.</span> <span class="nav-text">count(*)执行过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#count-%E5%AD%97%E6%AE%B5-%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B"><span class="nav-number">2.6.5.</span> <span class="nav-text">count(字段)执行过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E5%AF%B9%E6%AF%94"><span class="nav-number">2.6.6.</span> <span class="nav-text">性能对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#count-%E4%BC%98%E5%8C%96"><span class="nav-number">2.6.7.</span> <span class="nav-text">count(*)优化</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Mooyi"
+      src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202309281528071.png">
+  <p class="site-author-name" itemprop="name">Mooyi</p>
+  <div class="site-description" itemprop="description">Live with fun</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">54</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Mooyi646" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Mooyi646" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/mooyixh@gmail.com" title="E-Mail → mooyixh@gmail.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.facebook.com/LuoMooyi" title="FB Page → https:&#x2F;&#x2F;www.facebook.com&#x2F;LuoMooyi" rel="noopener" target="_blank"><i class="fab fa-facebook fa-fw"></i>FB Page</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://instagram.com/m00y1h" title="Instagram → https:&#x2F;&#x2F;instagram.com&#x2F;m00y1h" rel="noopener" target="_blank"><i class="fab fa-instagram fa-fw"></i>Instagram</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="Link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://google.com/" title="http:&#x2F;&#x2F;google.com" rel="noopener" target="_blank">Google</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://bing.com/" title="http:&#x2F;&#x2F;bing.com" rel="noopener" target="_blank">Bing</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022-07 – 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Mooyi</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="Symbols count total">152k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">2:19</span>
+</div>
+
+<!--
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+<script>
+  function loadCount() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://mooyi.disqus.com/count.js';
+    s.id = 'dsq-count-scr';
+    (d.head || d.body).appendChild(s);
+  }
+  // defer loading until the whole page loading is completed
+  window.addEventListener('load', loadCount, false);
+</script>
+<script>
+  var disqus_config = function() {
+    this.page.url = "https://mooyi646.github.io/post/43a71ae4.html";
+    this.page.identifier = "post/43a71ae4.html";
+    this.page.title = "MySQL索引";
+    };
+  NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
+    if (window.DISQUS) {
+      DISQUS.reset({
+        reload: true,
+        config: disqus_config
+      });
+    } else {
+      var d = document, s = d.createElement('script');
+      s.src = 'https://mooyi.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', '' + +new Date());
+      (d.head || d.body).appendChild(s);
+    }
+  });
+</script>
+
+</body>
+</html>
