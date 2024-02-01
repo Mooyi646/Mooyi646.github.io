@@ -27,25 +27,25 @@
 <meta property="og:site_name" content="Mooyi&#39;s Blog">
 <meta property="og:description" content="三大日志binlog, redo log, undo log  redo log重做日志作用：使MySQL拥有崩溃恢复能力。是InnoDB独有的。 更新表数据时，在buffer pool存在要更新的数据时，直接在Buffer Pool更新数据所在页，然后将其设置为脏页。 然后将“在某个数据页做了什么修改”记录到redo log buffer中，接着刷盘到redo log文件中。是物理日志。  每条">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://oss.javaguide.cn/github/javaguide/01.png">
-<meta property="og:image" content="https://oss.javaguide.cn/github/javaguide/03.png">
-<meta property="og:image" content="https://oss.javaguide.cn/github/javaguide/06.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011432181.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011432927.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011432974.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401071355264.png">
-<meta property="og:image" content="https://oss.javaguide.cn/github/javaguide/09.png">
-<meta property="og:image" content="https://oss.javaguide.cn/github/javaguide/05.png">
-<meta property="og:image" content="https://oss.javaguide.cn/github/javaguide/10.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011433456.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011433836.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011433819.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401071355262.png">
-<meta property="og:image" content="https://oss.javaguide.cn/github/javaguide/01-20220305234816065.png">
-<meta property="og:image" content="https://oss.javaguide.cn/github/javaguide/04-20220305234956774.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011434621.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011434146.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401071355068.png">
 <meta property="article:published_time" content="2024-01-07T05:54:47.165Z">
-<meta property="article:modified_time" content="2024-02-01T06:32:11.293Z">
+<meta property="article:modified_time" content="2024-02-01T06:34:46.939Z">
 <meta property="article:author" content="Mooyi">
 <meta property="article:tag" content="MySQL">
 <meta property="article:tag" content="MVCC">
 <meta property="article:tag" content="Log">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://oss.javaguide.cn/github/javaguide/01.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011432181.png">
 
 <link rel="canonical" href="https://mooyi646.github.io/post/e921d68a.html">
 
@@ -235,7 +235,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-02-01 14:32:11" itemprop="dateModified" datetime="2024-02-01T14:32:11+08:00">2024-02-01</time>
+                <time title="Modified: 2024-02-01 14:34:46" itemprop="dateModified" datetime="2024-02-01T14:34:46+08:00">2024-02-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -290,7 +290,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="三大日志binlog-redo-log-undo-log"><a href="#三大日志binlog-redo-log-undo-log" class="headerlink" title="三大日志binlog, redo log, undo log"></a>三大日志binlog, redo log, undo log</h1><img src="https://oss.javaguide.cn/github/javaguide/01.png" alt="img" style="zoom:50%;" />
+        <h1 id="三大日志binlog-redo-log-undo-log"><a href="#三大日志binlog-redo-log-undo-log" class="headerlink" title="三大日志binlog, redo log, undo log"></a>三大日志binlog, redo log, undo log</h1><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011432181.png" alt="img" style="zoom:50%;" />
 
 <h2 id="redo-log重做日志"><a href="#redo-log重做日志" class="headerlink" title="redo log重做日志"></a>redo log重做日志</h2><p>作用：使MySQL拥有崩溃恢复能力。是InnoDB独有的。</p>
 <p>更新表数据时，在buffer pool存在要更新的数据时，直接在Buffer Pool更新数据所在页，然后将其设置为脏页。</p>
@@ -298,7 +298,7 @@
 <blockquote>
 <p>每条 redo 记录由“<strong>表空间号+数据页号+偏移量+修改数据长度+具体修改的数据</strong>”组成</p>
 </blockquote>
-<p><img src="https://oss.javaguide.cn/github/javaguide/03.png" alt="img"></p>
+<p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011432927.png" alt="img"></p>
 <h3 id="Buffer-Pool"><a href="#Buffer-Pool" class="headerlink" title="Buffer Pool"></a>Buffer Pool</h3><p><strong>Q: Why Buffer Pool?</strong></p>
 <p><strong>A</strong>：以通常思维来看数据修改。</p>
 <ol>
@@ -331,7 +331,7 @@
 <ul>
 <li><p><strong>0</strong>：每次事务提交时不进行刷盘操作。【后台线程1s刷】</p>
 <p>性能最高，但最不安全。MySQL挂了或宕机可能丢失最近1s的事务。</p>
-<p><img src="https://oss.javaguide.cn/github/javaguide/06.png" alt="img"></p>
+<p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011432974.png" alt="img"></p>
 </li>
 <li><p><strong>1</strong>：每次事务提交时都进行刷盘操作。</p>
 <p>性能最低，但是最安全。不会有数据丢失。【为保证事务一致性，需使用1】</p>
@@ -339,16 +339,16 @@
 </li>
 <li><p><strong>2</strong>：每次事务提交时，只把log buffer中的redo log写入page cache（操作系统的文件系统缓存）。</p>
 <p>性能与安全性都介于以上两种之间。MySQL挂了不会丢数据，操作系统宕机或断点可能丢1s.</p>
-<p><img src="https://oss.javaguide.cn/github/javaguide/09.png" alt="img"></p>
+<p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011433456.png" alt="img"></p>
 </li>
 </ul>
 <p>默认值：1</p>
 <p>此外，<code>InnoDB</code> 存储引擎有一个后台线程，每隔<code>1</code> 秒，就会把 <code>redo log buffer</code> 中的内容写到文件系统缓存（<code>page cache</code>），然后调用 <code>fsync</code> 刷盘。</p>
 <p>所以，无事务提交的redo log，也可能刷盘。</p>
-<p><img src="https://oss.javaguide.cn/github/javaguide/05.png" alt="img"></p>
+<p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011433836.png" alt="img"></p>
 <h3 id="日志文件组"><a href="#日志文件组" class="headerlink" title="日志文件组"></a>日志文件组</h3><p>redo log日志文件不止一个，是以日志文件组形式存在，每个redo日志文件大小一样。</p>
 <p>采用环形数组形式，从头开始写，写到末尾又回头循环写。</p>
-<img src="https://oss.javaguide.cn/github/javaguide/10.png" alt="img" style="zoom:50%;" />
+<img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011433819.png" alt="img" style="zoom:50%;" />
 
 <p>日志文件组两个重要属性：</p>
 <ul>
@@ -432,7 +432,7 @@
 <li>redo log：事务<strong>执行过程中</strong>可以不断写入</li>
 <li>binlog：<strong>提交事务时</strong>写入</li>
 </ul>
-<img src="https://oss.javaguide.cn/github/javaguide/01-20220305234816065.png" alt="img" style="zoom:50%;" />
+<img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011434621.png" alt="img" style="zoom:50%;" />
 
 <p><strong>Q：redo log 与 binlog之间的逻辑不一致会造成的问题？</strong></p>
 <p><strong>A</strong>：假设场景为：redo log写完后，在写binlog的过程中出现异常</p>
@@ -444,7 +444,7 @@
 <li>prepare</li>
 <li>commit</li>
 </ol>
-<img src="https://oss.javaguide.cn/github/javaguide/04-20220305234956774.png" alt="img" style="zoom:50%;" />
+<img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011434146.png" alt="img" style="zoom:50%;" />
 
 <p>此时若发生binlog写入异常：</p>
 <p>Mysql根据redo log恢复数据时，发现redo log还处于prepare阶段，且无对应的binlog日志，就会回滚事务。</p>
