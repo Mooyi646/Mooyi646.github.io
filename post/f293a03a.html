@@ -35,7 +35,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402010936562.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402010936829.png">
 <meta property="article:published_time" content="2024-01-31T09:50:40.000Z">
-<meta property="article:modified_time" content="2024-02-01T06:26:20.621Z">
+<meta property="article:modified_time" content="2024-02-01T06:58:13.350Z">
 <meta property="article:author" content="Mooyi">
 <meta property="article:tag" content="LLM">
 <meta property="article:tag" content="prompt">
@@ -233,7 +233,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-02-01 14:26:20" itemprop="dateModified" datetime="2024-02-01T14:26:20+08:00">2024-02-01</time>
+                <time title="Modified: 2024-02-01 14:58:13" itemprop="dateModified" datetime="2024-02-01T14:58:13+08:00">2024-02-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -290,14 +290,14 @@
       
         <h1 id="大模型如何完成工作？"><a href="#大模型如何完成工作？" class="headerlink" title="大模型如何完成工作？"></a>大模型如何完成工作？</h1><h2 id="内在模型与提示词"><a href="#内在模型与提示词" class="headerlink" title="内在模型与提示词"></a>内在模型与提示词</h2><span id="more"></span>
 
-<p>**Q1:**如何让大模型能够完成某个领域场景的实际工作，并且能够提升和干预效果？</p>
+<p><strong>Q1:</strong> 如何让大模型能够完成某个领域场景的实际工作，并且能够提升和干预效果？</p>
 <p><strong>A1</strong>：从影响大模型的能力和效果的两个因素入手：</p>
 <ul>
 <li><p><strong>模型</strong>（内在）：可以理解为知识和能力的混合体。</p>
 <p>经过微调的模型包含了学到的知识、逻辑，也包含执行具体某个任务的能力。</p>
 <p>缺点：训练与更新需要大量的随时间和成本 -&gt; 导致模型知识不够及时，变更困难，黑盒难控制，能力扩展难度高。</p>
 </li>
-<li><p>**提示词(prompt)**（外在）：可以理解为知识和指令的混合体</p>
+<li><p><strong>提示词(prompt)</strong> （外在）：可以理解为知识和指令的混合体</p>
 <p>prompt作用：</p>
 <ul>
 <li>prompt可以给大模型直接表达需求**(zero-shot)**</li>
@@ -309,7 +309,7 @@
 <p>但是，受限于大模型性能与成本，<strong>prompt的大小有限</strong>，加上每次请求都要携带大量信息来维持状态，在性能上也有一定缺陷。</p>
 </li>
 </ul>
-<p>针对以上两个因素，可以做什么来<strong>干预模型</strong>呢？</p>
+<p>针对以上两个因素，可以做什么来 <strong>干预模型</strong> 呢？</p>
 <ul>
 <li><p>针对模型本身：fine-tune，微调，影响的是模型的权重</p>
 <p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401251355775.png" alt="image-20240125135244030"></p>
@@ -318,8 +318,8 @@
 <p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401251355039.png" alt="image-20240125135530980"></p>
 </li>
 </ul>
-<h2 id="引入检索"><a href="#引入检索" class="headerlink" title="引入检索"></a>引入检索</h2><p>**Q2: **目前提示词中包含很多内容，如何让大模型在海量的文章中总结回答？</p>
-<p>**A2: **问题分析：</p>
+<h2 id="引入检索"><a href="#引入检索" class="headerlink" title="引入检索"></a>引入检索</h2><p>**Q2: ** 目前提示词中包含很多内容，如何让大模型在海量的文章中总结回答？</p>
+<p>**A2: ** 问题分析：</p>
 <ol>
 <li>提示词包含很多内容 -&gt; 受限与token大小</li>
 <li>海量文章 -&gt; 相应时间过长</li>
@@ -334,7 +334,7 @@
 <li>给大模型界定了范围，一定程度上使得大模型能够在更可靠的知识内容基础上总结推理，提高了输入的可信度</li>
 <li>从提升模型返回角度上来看，增加检索流程，可以对提示词进行检索增强(RAG)，比如对接知识图谱，业务知识库，能够提高输出的质量</li>
 </ul>
-<h2 id="检索方式选择"><a href="#检索方式选择" class="headerlink" title="检索方式选择"></a>检索方式选择</h2><p>目前业内主流的方式是采用<strong>向量检索</strong>来做检索增强。</p>
+<h2 id="检索方式选择"><a href="#检索方式选择" class="headerlink" title="检索方式选择"></a>检索方式选择</h2><p>目前业内主流的方式是采用 <strong>向量检索</strong> 来做检索增强。</p>
 <h2 id="基本流程与相关技术"><a href="#基本流程与相关技术" class="headerlink" title="基本流程与相关技术"></a>基本流程与相关技术</h2><h3 id="Tokenization与Embedding"><a href="#Tokenization与Embedding" class="headerlink" title="Tokenization与Embedding"></a>Tokenization与Embedding</h3><h4 id="Tokenization"><a href="#Tokenization" class="headerlink" title="Tokenization"></a>Tokenization</h4><p>token：作为模型的原始输入，是语义风格的最小单位。</p>
 <p>token可以是：一个单词，一个词根，一个标点等等</p>
 <p>对于LLM而言，外部输入或者训练的数据都是文本或文档，将其token化的过程就是tokenization.</p>
@@ -343,7 +343,7 @@
 <p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202401251440064.png" alt="image-20240125144002015"></p>
 <p>对于英文，一个token一般对应4个字符或四分之三个单词；</p>
 <p>对于中文，token一般对应一个或半个词。</p>
-<p>不同的模型有不同的<strong>token限制</strong>，需要<strong>注意</strong>的是，此处的token限制，是<strong>输入的prompt和模型输出(completion)的token数之和</strong>，因此输入的prompt越长，输出的上限就越低。</p>
+<p>不同的模型有不同的 <strong>token限制</strong> ，需要 <strong>注意</strong> 的是，此处的token限制，是 <strong>输入的prompt和模型输出(completion)的token数之和</strong> ，因此输入的prompt越长，输出的上限就越低。</p>
 <p><strong>temperature与token</strong></p>
 <p>temperature：即准确性概率。想要高准确性则将其尽可能置小，需要创造性就可以调高，范围为[0-1]</p>
 <p>当我们不一定想选概率最大的token时，可以通过temperature来控制</p>
@@ -376,8 +376,8 @@
 <li>上游任务(upstream task)：无监督学习时做的任务</li>
 <li>下游任务(downstream task)：如情感分析，主体分类，文本生成</li>
 </ul>
-<p>**Q: **如何弥合上下游任务之间的gap，对齐大模型能力和用户实际需求？</p>
-<p>**A: **根据大模型的特点：如训练成本高，以及利用大模型学习到的知识的初衷，有一个较直接的做法是：</p>
+<p>**Q: ** 如何弥合上下游任务之间的gap，对齐大模型能力和用户实际需求？</p>
+<p>**A: ** 根据大模型的特点：如训练成本高，以及利用大模型学习到的知识的初衷，有一个较直接的做法是：</p>
 <p>设计不同目标的下游任务来和大模型组合起来一起完成具体的任务。该过程即为：目标函数挖掘(Object Engineering)。</p>
 <p>根据此思路：</p>
 <ol>
@@ -386,10 +386,10 @@
 <li>即将大模型的参数作为初始参数来学习，从而使其在保留历史知识和能力的基础上，又能适配下游任务具体的要求。此过程即为<strong>微调(finetune)</strong></li>
 </ol>
 <p>即整体过程为：预训练(pretrain) + 微调(finetune)</p>
-<p>微调的<strong>本质作用</strong>即为：通过调整模型的权重来更好地拟合数据，从何提高LLM在特定任务或领域的性能。</p>
-<p><strong>问题</strong>：每种任务都做一个适配任务，太麻烦</p>
-<p>**Q: **能否改变大模型适配下游任务的路线，让任务适配大模型，采用统一的模式处理不同任务？</p>
-<p>**A: **通过构建合适的prompt来适配大模型做不同任务。</p>
+<p>微调的<strong>本质作用</strong> 即为：通过调整模型的权重来更好地拟合数据，从何提高LLM在特定任务或领域的性能。</p>
+<p><strong>问题</strong> ：每种任务都做一个适配任务，太麻烦</p>
+<p>**Q: ** 能否改变大模型适配下游任务的路线，让任务适配大模型，采用统一的模式处理不同任务？</p>
+<p>**A:  ** 通过构建合适的prompt来适配大模型做不同任务。</p>
 <p>以GPT(Generative Pre-trained Transformer)为例，可以将具体问题变成大模型的文字接龙的方式来激发模型完成任务。</p>
 <p>如：情感分析问题，输入：</p>
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">I love this movie. It is [MASK]</span><br></pre></td></tr></table></figure>
@@ -428,7 +428,7 @@
 <p>对于模型来讲，我们仍然可以以这样人类熟悉的方式与模型进行交互，让它按照我们的预期工作，这就是上下文学习（In-Context-Learning），缩写为ICL。</p>
 <p>上下文学习是一种智能涌现(emergence)，其发生的前提是它拥有了和人类似的思维模式。</p>
 <p>模型发生智能涌现可能的原因是当学习的资料及模型参数规模大到一定程度（10B以上），引发了质变，从而将模型中本来蕴含的知识和逻辑激发出来，表现出了智能。</p>
-<p>总体而言，ICL的<strong>作用</strong>为：允许语言模型通过以演示的形式组织若干个示例或指定来学习任务。即类比学习。</p>
+<p>总体而言，ICL的<strong>作用</strong> 为：允许语言模型通过以演示的形式组织若干个示例或指定来学习任务。即类比学习。</p>
 <p>形式：</p>
 <ul>
 <li><p><strong>zero-shot</strong>：不提供上下文，只提供问题或 需求</p>
@@ -455,8 +455,8 @@
 </blockquote>
 </li>
 </ul>
-<p><strong>Q：</strong>如何提高In-context learning的学习能力？</p>
-<p><strong>A：</strong>指令学习(Instruct learning)，主要又有两方面可以提升：</p>
+<p><strong>Q：</strong> 如何提高In-context learning的学习能力？</p>
+<p>**A： ** 指令学习(Instruct learning)，主要又有两方面可以提升：</p>
 <ol>
 <li>提升模型的zero-shot能力，即不提供例子也能智能回答</li>
 <li>让模型识别更多任务类型以及回答方式</li>
@@ -468,10 +468,10 @@
 <h4 id="Chain-of-Thought-COT"><a href="#Chain-of-Thought-COT" class="headerlink" title="Chain of Thought(COT)"></a>Chain of Thought(COT)</h4><p>使用场景：无需大模型一次性完成任务，而是通过一步步分解，推理来完成任务。</p>
 <p>作用：能使大型语言模型解决算术推理（arithmetic Arithmetic）、常识推理（commonsense Reasoning）和符号推理（ symbolic reasoning）等类型的复杂任务</p>
 <p>触发COT：不一定非要提供推理步骤示例，zero-shot同样管用，最简单的额方式是在prompt中增加”Let’s think step by step”等相关字句即可。</p>
-<h4 id="Self-consistency-COT"><a href="#Self-consistency-COT" class="headerlink" title="Self-consistency COT"></a>Self-consistency COT</h4><p>利用”自一致性”（self-consistency）的解码策略，以取代在思维链提示中使用的贪婪解码策略，也就是说让大模型通过<strong>多种方式去生产答案</strong>，最后根据<strong>多次输出进行加权投票</strong>的方式选择一种最靠谱的答案。</p>
+<h4 id="Self-consistency-COT"><a href="#Self-consistency-COT" class="headerlink" title="Self-consistency COT"></a>Self-consistency COT</h4><p>利用”自一致性”（self-consistency）的解码策略，以取代在思维链提示中使用的贪婪解码策略，也就是说让大模型通过<strong>多种方式去生产答案</strong> ，最后根据 <strong>多次输出进行加权投票</strong> 的方式选择一种最靠谱的答案。</p>
 <p>缺点：速度慢，资源消耗量大</p>
 <h4 id="Least-to-Most"><a href="#Least-to-Most" class="headerlink" title="Least-to-Most"></a>Least-to-Most</h4><p>思路：它在解决复杂问题时，先引导模型把问题拆分成子问题；然后再让大模型逐一回答子问题，并把子问题的回答作为下一个问题回答的上文，直到给出最终答案。</p>
-<p>即是一种<strong>循序渐进</strong>引导大模型解决问题的方式。</p>
+<p>即是一种 <strong>循序渐进</strong> 引导大模型解决问题的方式。</p>
 <p>使用：可以在prompt中增加如”what subproblems must be solved before answering this inquiry”之类的提示</p>
 <h4 id="Self-Ask"><a href="#Self-Ask" class="headerlink" title="Self-Ask"></a>Self-Ask</h4><p>与Least-To-Most类似，对于一个大模型没有在训练时直接见到的问题，通过诱导大模型以自我提问的问题，将问题分解为更小的后续问题，而这些问题可能在训练数据中见到过，这样就可以通过自问自答的方式，最终获得正确答案。</p>
 <p>使用：通过构建prompt示例，给出所有的follow up questions</p>
@@ -482,7 +482,7 @@
 <p>基本思路：</p>
 <ol>
 <li>基于问题让大模型给出问题的相关知识</li>
-<li>再将知识整合到问题中，从而让大模型给予<strong>更细致有针对性</strong>的回答。</li>
+<li>再将知识整合到问题中，从而让大模型给予 <strong>更细致有针对性</strong> 的回答。</li>
 </ol>
 <h4 id="Iterative-Prompting"><a href="#Iterative-Prompting" class="headerlink" title="Iterative Prompting"></a>Iterative Prompting</h4><p>迭代型提示：与大模型交互时，不要将其看作时独立的过程，而是将前一次的回答作为上下文提供给大模型。</p>
 <p>作用：可以有效提高模型信息的挖掘能力，并消除一些无关的幻觉。</p>
