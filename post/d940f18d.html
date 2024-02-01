@@ -27,12 +27,15 @@
 <meta property="og:site_name" content="Mooyi&#39;s Blog">
 <meta property="og:description" content="锁">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011526617.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011528034.png">
 <meta property="article:published_time" content="2024-01-10T03:44:16.809Z">
-<meta property="article:modified_time" content="2024-02-01T06:32:11.296Z">
+<meta property="article:modified_time" content="2024-02-01T07:30:53.764Z">
 <meta property="article:author" content="Mooyi">
 <meta property="article:tag" content="MySQL">
 <meta property="article:tag" content="锁">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011526617.png">
 
 <link rel="canonical" href="https://mooyi646.github.io/post/d940f18d.html">
 
@@ -222,7 +225,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-02-01 14:32:11" itemprop="dateModified" datetime="2024-02-01T14:32:11+08:00">2024-02-01</time>
+                <time title="Modified: 2024-02-01 15:30:53" itemprop="dateModified" datetime="2024-02-01T15:30:53+08:00">2024-02-01</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -277,9 +280,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h1><span id="more"></span>
+        <h1 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h1><p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011526617.png" alt="image-20240201152603455"></p>
+<span id="more"></span>
 
-<p>【MYSQL锁】</p>
 <h2 id="按粒度"><a href="#按粒度" class="headerlink" title="按粒度"></a>按粒度</h2><h3 id="全局锁"><a href="#全局锁" class="headerlink" title="全局锁"></a>全局锁</h3><p><strong>定义</strong>：即对整个数据库实例加锁</p>
 <p><strong>应用场景</strong>：全库逻辑备份(<code>mysqldump</code>)</p>
 <p><strong>实现方式</strong>：mysql提供了全局加<strong>读锁</strong>的方法，<code>FLUSH TABLES WITH RED LOCK</code>(FTWRL),，当需要整个库处于<strong>只读</strong>状态时，可以使用以上命令。使用后其他线程的更新类语句会被阻塞。</p>
@@ -346,7 +349,7 @@
 <p>该命令会返回一系列信息，包括：</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 事务状态</span><br><span class="line">trx_state：<span class="keyword">RUNNING</span></span><br><span class="line"># 事务开始时间</span><br><span class="line">trx_started: <span class="number">2019</span><span class="number">-06</span><span class="number">-21</span> <span class="number">12</span>:<span class="number">44</span>:<span class="number">22</span></span><br><span class="line"># 执行事务的线程id</span><br><span class="line">trx_mysql_thread_id: <span class="number">17</span></span><br><span class="line"></span><br><span class="line"># 然后通过线程id定位</span><br><span class="line"># 查看所有线程</span><br><span class="line">mysql<span class="operator">&gt;</span> <span class="keyword">show</span> <span class="keyword">full</span> processlist;</span><br></pre></td></tr></table></figure>
 
-<p>【以上操作】</p>
+<p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011528034.png" alt="image-20240201152854924"></p>
 <p>先查看host字段，查看到底是谁连接了数据库，然后进去commit（提交事务）或者rollback ,哪如果不是localhost 环境，是程序连接了，这时候就要kill掉了。</p>
 <p>即整体解决方案为：</p>
 <ol>
@@ -462,6 +465,10 @@
 <p>行级锁种类只有记录锁。</p>
 <p><strong>2. RR可重复读</strong></p>
 <p>行级锁种类除记录锁外还有间隙锁与临键锁，不同场景下加锁不同。</p>
+<p>参考：</p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6931752749545553933#heading-8">史上最全MySQL各种锁详解</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/keme/p/11065025.html#222-%E6%88%91%E8%BA%AB%E4%B8%8A%E5%8F%91%E7%94%9F%E7%9A%84%E8%B6%A3%E4%BA%8B">MySQL 全局锁和表锁</a></p>
+<p><a target="_blank" rel="noopener" href="https://xiaolincoding.com/mysql/lock/mysql_lock.html">小林Coding MySQL 有哪些锁？</a></p>
 
     </div>
 
@@ -676,7 +683,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">2:19</span>
+    <span title="Reading time total">2:18</span>
 </div>
 
 <!--

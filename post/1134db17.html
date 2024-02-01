@@ -27,12 +27,20 @@
 <meta property="og:site_name" content="Mooyi&#39;s Blog">
 <meta property="og:description" content="Garbage Collection(GC)回收无任何对象引用的对象占据的内容空间，即不会再被使用的对象的内容空间。 引用：若Reference类型的数据中存储的数值代表另一块内容的起始地址，则称这块内存为一个引用 垃圾：无任何对象引用的对象 回收：清理垃圾占用的内存空间而非对象本身 发生地点：一般在堆内存中，因为大部分对象都储存在堆内存中 发生时间：程序空闲时不定时回收">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011551789.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011553289.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011557375.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011559574.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011720503.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011721343.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011721271.png">
 <meta property="article:published_time" content="2023-12-13T11:10:58.000Z">
-<meta property="article:modified_time" content="2023-12-13T11:18:16.208Z">
+<meta property="article:modified_time" content="2024-02-01T09:22:03.739Z">
 <meta property="article:author" content="Mooyi">
 <meta property="article:tag" content="Java">
 <meta property="article:tag" content="GC垃圾回收">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011551789.png">
 
 <link rel="canonical" href="https://mooyi646.github.io/post/1134db17.html">
 
@@ -214,10 +222,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2023-12-13 19:10:58 / Modified: 19:18:16" itemprop="dateCreated datePublished" datetime="2023-12-13T19:10:58+08:00">2023-12-13</time>
+              <time title="Created: 2023-12-13 19:10:58" itemprop="dateCreated datePublished" datetime="2023-12-13T19:10:58+08:00">2023-12-13</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-02-01 17:22:03" itemprop="dateModified" datetime="2024-02-01T17:22:03+08:00">2024-02-01</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -252,7 +266,7 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">Symbols count in article: </span>
-              <span>7.3k</span>
+              <span>7.2k</span>
             </span>
             <span class="post-meta-item" title="Reading time">
               <span class="post-meta-item-icon">
@@ -339,7 +353,7 @@
 </ol>
 <p>目前使用此方法判断对象是否存活。</p>
 <p>标记可达对象：</p>
-<p>【标记可达对象】</p>
+<p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011551789.png" alt="image-20240201155116603"></p>
 <p>标记注意事项：</p>
 <ul>
 <li><p>开始标记前需暂停应用线程，若对象图一直处于变化状态则无法真正遍历。暂停线程以便JVM操作的情况称为安全点（Safe Point），会触发一次<code>Stop The World(STW)</code>暂停。垃圾回收是最常见的触发安全点的原因。</p>
@@ -380,9 +394,9 @@
 <p>缺点：</p>
 <p>GC暂停时间增长，因为需要将所有对象拷贝到新的地方，还得更新其引用地址</p>
 <p><code>mark-sweep</code>与<code>mark-compact</code>图示：</p>
-<p>【标记清除&#x2F;标记整理图示】</p>
+<p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011553289.png" alt="image-20240201155300115"></p>
 <h3 id="复制算法Copying"><a href="#复制算法Copying" class="headerlink" title="复制算法Copying"></a>复制算法Copying</h3><p>将内存按容量分为大小相等的两块，每次只是用其中一块（对象面），当这块内存用完，将还存活的对象复制到另一块内存上（空闲面），然后将已使用过的内存空间一次性清理。</p>
-<p>【复制算法】</p>
+<p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011557375.png" alt="image-20240201155757290"></p>
 <p>适用于：新生代（短生存期的对象），在老年代，即长生存期的对象中，其对象存活率较高，会执行较多的复制操作，效率会降低。所以老年代一般选用其他算法，如标记-整理算法</p>
 <p>一种典型的基于Coping算法的垃圾回收是<code>stop-and-copy</code>算法，它将堆分成对象区和空闲区，在对象区与空闲区的切换过程中，程序暂停执行</p>
 <p>优点：</p>
@@ -408,7 +422,7 @@
 <li>老年代Old</li>
 <li>持久代Permanent</li>
 </ul>
-<p>【hotspot heap structure】</p>
+<p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011559574.png" alt="image-20240201155903481"></p>
 <p>所有<code>new</code>创建的对象内存都在堆中分配，其大小可以通过<code>Xmx</code>和<code>-Xms</code>来控制</p>
 <h3 id="堆内存分配区域"><a href="#堆内存分配区域" class="headerlink" title="堆内存分配区域"></a>堆内存分配区域</h3><h4 id="新生代Young-Generation"><a href="#新生代Young-Generation" class="headerlink" title="新生代Young Generation"></a>新生代Young Generation</h4><p>几乎所有新生成的对象都放于此。</p>
 <p>新生代按$8:1:1$分为<code>Eden</code>,<code>S0</code>,<code>S1</code>。大部分对象都在<code>Eden</code>区生成。</p>
@@ -449,7 +463,7 @@
 <p>回收主要由两部分内容：废弃常量和无用类</p>
 <p>永久代空间在Java SE8特性中已经被移除。取而代之的是元空间（<code>MetaSpace</code>）。因此不会再出现<code>java.lang.OutOfMemoryError: PermGen error</code>错误。</p>
 <h2 id="垃圾回收器"><a href="#垃圾回收器" class="headerlink" title="垃圾回收器"></a>垃圾回收器</h2><p>按执行机制分为四种垃圾回收器：</p>
-<p>【四种垃圾回收器】</p>
+<p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011720503.png" alt="image-20240201172019392"></p>
 <ul>
 <li>串行垃圾回收器（Serial Garbage Collector）</li>
 <li>并行垃圾回收器（Parallel Garbage Collector）</li>
@@ -533,7 +547,7 @@
 <td align="left">持久代最大容量</td>
 </tr>
 </tbody></table>
-<h2 id="Hotspot所提供的回收器"><a href="#Hotspot所提供的回收器" class="headerlink" title="Hotspot所提供的回收器"></a>Hotspot所提供的回收器</h2><p>【hotspot提供的收集器】</p>
+<h2 id="Hotspot所提供的回收器"><a href="#Hotspot所提供的回收器" class="headerlink" title="Hotspot所提供的回收器"></a>Hotspot所提供的回收器</h2><p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011721343.png" alt="image-20240201172120200"></p>
 <p>两个收集器之间存在连线，那说明它们可以搭配使用。虚拟机所处的区域说明它是属于新生代收集器还是老年代收集器。</p>
 <h3 id="1-Serial（SerialMSC）（Copying算法）"><a href="#1-Serial（SerialMSC）（Copying算法）" class="headerlink" title="1. Serial（SerialMSC）（Copying算法）"></a>1. Serial（SerialMSC）（Copying算法）</h3><p>Serial收集器是最基本最古老的收集器，它是一个单线程收集器，并且在它进行垃圾收集时，必须暂停所有用户线程（STW）。</p>
 <p>Serial收集器是针对新生代的收集器，采用的是Copying算法。</p>
@@ -552,7 +566,7 @@
 <li>并发清除，回收内存空间，时间很长。</li>
 </ol>
 <p>其中，并发标记与并发清除小号时间长，但是可以和用户线程并发执行。如下图：</p>
-<p>【CMS收集器】</p>
+<p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011721271.png" alt="image-20240201172154141"></p>
 <p>高并发、低停顿，追求最短GC回收停顿时间，CPU占用比较高。响应时间快，停顿时间短，多核CPU 追求高响应时间的选择。</p>
 <p>缺点：</p>
 <ul>
@@ -632,8 +646,8 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/post/4b1b8bf7.html" rel="prev" title="多线程与锁">
-      <i class="fa fa-chevron-left"></i> 多线程与锁
+    <a href="/post/4b1b8bf7.html" rel="prev" title="论文阅读学习">
+      <i class="fa fa-chevron-left"></i> 论文阅读学习
     </a></div>
       <div class="post-nav-item">
     <a href="/post/f8355b15.html" rel="next" title="leetcode记录">
@@ -800,7 +814,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">2:19</span>
+    <span title="Reading time total">2:18</span>
 </div>
 
 <!--

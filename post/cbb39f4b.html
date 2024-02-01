@@ -27,12 +27,14 @@
 <meta property="og:site_name" content="Mooyi&#39;s Blog">
 <meta property="og:description" content="Helm0 概述为什么使用Helm? K8s能够很好地组织和编排容器，但是缺少一个更高层次的应用打包工具。">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011724226.png">
 <meta property="article:published_time" content="2023-12-13T11:16:00.000Z">
-<meta property="article:modified_time" content="2023-12-13T11:18:16.211Z">
+<meta property="article:modified_time" content="2024-02-01T09:25:03.804Z">
 <meta property="article:author" content="Mooyi">
 <meta property="article:tag" content="k8s">
 <meta property="article:tag" content="Helm Chart">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011724226.png">
 
 <link rel="canonical" href="https://mooyi646.github.io/post/cbb39f4b.html">
 
@@ -214,10 +216,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2023-12-13 19:16:00 / Modified: 19:18:16" itemprop="dateCreated datePublished" datetime="2023-12-13T19:16:00+08:00">2023-12-13</time>
+              <time title="Created: 2023-12-13 19:16:00" itemprop="dateCreated datePublished" datetime="2023-12-13T19:16:00+08:00">2023-12-13</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2024-02-01 17:25:03" itemprop="dateModified" datetime="2024-02-01T17:25:03+08:00">2024-02-01</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -422,7 +430,7 @@
 <li><code>post-rollback</code>： 在所有资源被修改之后执行一个回滚请求</li>
 <li><code>test</code>：调用<code>helm test</code>子命令执行</li>
 </ul>
-<p>【可用的hook】</p>
+<p><img src="https://raw.githubusercontent.com/Mooyi646/ImageSaver/main/202402011724226.png" alt="image-20240201172451016"></p>
 <h3 id="5-2-钩子和发布生命周期"><a href="#5-2-钩子和发布生命周期" class="headerlink" title="5.2 钩子和发布生命周期"></a>5.2 钩子和发布生命周期</h3><p>如为install定义的两个钩子：<code>pre-install</code>, <code>post-install</code>，在chart开发时两个钩子都执行，则整个<code>install</code>周期会变为：</p>
 <ol>
 <li>用户执行 <code>helm install foo</code></li>
@@ -686,7 +694,7 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="Reading time total">2:19</span>
+    <span title="Reading time total">2:18</span>
 </div>
 
 <!--
